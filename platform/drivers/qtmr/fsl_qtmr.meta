@@ -1,0 +1,14 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<metadata>
+  <components>
+    <component name="platform.drivers.qtmr.support" requires="devices.modules.DriverType_TMR"/>
+    <component name="platform.drivers.qtmr.support.ip" requires="devices.modules.D_IP_TMR_SYN_013"/>
+    <component description="QTMR Driver" name="platform.drivers.qtmr" provides="platform.drivers" requires="platform.drivers.qtmr.support" type="driver" version="2.0.0">
+      <source path="./">
+        <files mask="*.meta"/>
+        <files mask="fsl_qtmr.c"/>
+        <files mask="fsl_qtmr.h"/>
+      </source>
+    </component>
+  </components>
+</metadata>

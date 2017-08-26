@@ -1,0 +1,114 @@
+/*!
+@defgroup dac32 DAC32: Digital-to-Analog Converter
+@details The KSDK provides a peripheral driver for the Digital-to-Analog Converter (DAC32)
+         module of Kinetis devices.
+
+The DAC32 driver includes a basic DAC32 module (converter) and DAC32 buffer.
+
+The basic DAC32 module supports operations unique to the DAC converter in each DAC32 instance. The APIs in this part
+are used in the initialization phase, which is necessary for enabling the DAC32 module in the application. The APIs
+enable/disable the clock, enable/disable the module, and configure the converter. Call the initial APIs to
+prepare the DAC32 module for the application.
+
+The DAC32 buffer operates the DAC32 hardware buffer. The DAC32 module supports a hardware buffer to
+keep a group of DAC values to be converted. This feature supports updating the DAC output value automatically by
+triggering the buffer read pointer to move in the buffer. Use the APIs to configure the hardware buffer's
+trigger mode, watermark, work mode, and use size. Additionally, the APIs operate the DMA, interrupts, flags,
+the pointer (index of buffer), item values, and so on.
+
+The DAC32 buffer plays a major part when using the DAC module, as the most functional features are designed for the DAC32
+hardware buffer. 
+
+# Function groups {#DAC32FuncGrps}
+
+## Initialization and deinitialization {#DAC32Init}
+
+This function group implements APIs for the basic DAC module (converter).
+
+## Buffer {#DAC32Buf}
+
+This function group implements APIs for the DAC buffer.
+
+# Typical use case {#DAC32TypUC}
+
+## Working as a basic DAC without the hardware buffer feature. {#DAC32WithoutHBuf}
+
+~~~~~{.c}
+
+    dac32_config_t dac32ConfigStruct;
+
+    // ...
+    
+    // Configures the DAC32.
+    DAC32_GetDefaultConfig(&dac32ConfigStruct);
+    DAC32_Init(DEMO_DAC32_INSTANCE, &dac32ConfigStruct);
+    DAC32_SetBufferReadPointer(DEMO_DAC32_INSTANCE, 0U);
+    DAC32_EnableBufferOutput(DEMO_DAC32_INSTANCE, true); // Enable the output of DAC.
+
+    // ...
+    
+    DAC32_SetBufferValue(DEMO_DAC32_INSTANCE, 0U, dacValue);
+    
+~~~~~
+
+## Working with the hardware buffer. {#DAC32WithHBuf}
+
+~~~~~{.c}
+
+    dac32_config_t dac32ConfigStruct;
+    dac32_buffer_config_t dac32BufferConfigStruct;
+
+    // ...
+
+    EnableIRQ(DEMO_DAC32_IRQ_ID);
+
+    // ...
+
+    // Configures the DAC32.
+    DAC32_GetDefaultConfig(&dac32ConfigStruct);
+    DAC32_Init(DEMO_DAC32_INSTANCE, &dac32ConfigStruct);
+
+    // Configures the DAC32 buffer.
+    DAC32_GetDefaultBufferConfig(&dac32BufferConfigStruct);
+    DAC32_SetBufferConfig(DEMO_DAC32_INSTANCE, &dac32BufferConfigStruct);
+    DAC32_SetBufferReadPointer(DEMO_DAC32_INSTANCE, 0U); // Make sure the read pointer to the start.
+    for (index = 0U, dacValue = 0; index < DEMO_DAC32_USED_BUFFER_SIZE; index++, dacValue += (0xFFFU / DEMO_DAC_USED_BUFFER_SIZE))
+    {
+        DAC32_SetBufferValue(DEMO_DAC32_INSTANCE, index, dacValue);
+    }
+    // Clears flags.
+    g_Dac32BufferWatermarkInterruptFlag = false;
+    g_Dac32BufferReadPointerTopPositionInterruptFlag = false;
+    g_Dac32BufferReadPointerBottomPositionInterruptFlag = false;
+
+    // Enables interrupts.
+    mask = kDAC32_BufferWatermarkInterruptEnable |
+           kDAC32_BufferReadPointerTopInterruptEnable |
+           kDAC_BufferReadPointerBottomInterruptEnable;
+    DAC32_EnableBuffer(DEMO_DAC32_INSTANCE, true); // Enable the buffer to be triggered.
+    DAC32_EnableBufferOutput(DEMO_DAC32_INSTANCE, true); // Enable the output of DAC.
+    DAC32_EnableBufferInterrupts(DEMO_DAC32_INSTANCE, mask);
+
+// ISR for the DAC interrupt.
+void DEMO_DAC32_IRQ_HANDLER_FUNC(void)
+{
+    uint32_t flags = DAC32_GetBufferStatusFlags(DEMO_DAC32_INSTANCE);
+
+    if (kDAC32_BufferWatermarkFlag == (kDAC32_BufferWatermarkFlag & flags))
+    {
+        g_Dac32BufferWatermarkInterruptFlag = true;
+    }
+    if (kDAC32_BufferReadPointerTopPositionFlag == (kDAC32_BufferReadPointerTopPositionFlag & flags))
+    {
+        g_Dac32BufferReadPointerTopPositionInterruptFlag = true;
+    }
+    if (kDAC32_BufferReadPointerBottomPositionFlag == (kDAC32_BufferReadPointerBottomPositionFlag & flags))
+    {
+        g_Dac32BufferReadPointerBottomPositionInterruptFlag = true;
+    }
+    DAC32_ClearBufferStatusFlags(DEMO_DAC_INSTANCE, flags); /* Clear flags. */
+}
+
+~~~~~
+
+*/

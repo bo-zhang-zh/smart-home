@@ -1,0 +1,16 @@
+/*!
+@page driver_log Driver Change Log
+
+@section spi SPI
+  Current SPI driver version is 2.0.1
+
+  - 2.0.0
+    - Initial version.
+  - 2.0.1
+    - Bug fix:
+      - Fix SPI_Enable function parameter error.
+      - Set the s_dummy variable as static variable in fsl_spi_dma.c
+    - Optimazation:
+      - Optimize the code size while not use transactional API.
+      - Improve performance in polling method.
+*/

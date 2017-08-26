@@ -1,0 +1,24 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<metadata>
+  <components>
+    <component name="platform.drivers.smc.support" requires="devices.modules.DriverType_SMC"/>
+    <component name="platform.drivers.smc.support.ip" requires="devices.modules.D_IP_SMC_SYN_045"/>
+    <component name="platform.drivers.smc.support.ip" requires="devices.modules.D_IP_SMC_SYN_033"/>
+    <component name="platform.drivers.smc.support.ip" requires="devices.modules.D_IP_SMC_SYN_037"/>
+    <component name="platform.drivers.smc.support.ip" requires="devices.modules.D_IP_SMC_SYN_052"/>
+    <component name="platform.drivers.smc.support.ip" requires="devices.modules.D_IP_SMC_SYN_051"/>
+    <component name="platform.drivers.smc.support.ip" requires="devices.modules.D_IP_SMC_SYN_036"/>
+    <component name="platform.drivers.smc.support.ip" requires="devices.modules.D_IP_SMC_SYN_044"/>
+    <component name="platform.drivers.smc.support.ip" requires="devices.modules.D_IP_SMC_SYN_048"/>
+    <component name="platform.drivers.smc.support.ip" requires="devices.modules.D_IP_SMC_SYN_049"/>
+    <component name="platform.drivers.smc.support.ip" requires="devices.modules.D_IP_SMC_SYN_047"/>
+    <component name="platform.drivers.smc.support.ip" requires="devices.modules.D_IP_SMC_SYN_057"/>
+    <component description="SMC Driver" name="platform.drivers.smc" provides="platform.drivers" requires="platform.drivers.smc.support" type="driver" version="2.0.2">
+      <source path="./">
+        <files mask="*.meta"/>
+        <files mask="fsl_smc.c"/>
+        <files mask="fsl_smc.h"/>
+      </source>
+    </component>
+  </components>
+</metadata>

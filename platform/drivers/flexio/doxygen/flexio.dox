@@ -1,0 +1,13 @@
+/*!
+@defgroup flexio FlexIO: FlexIO Driver
+@details The KSDK provides a generic driver for the FlexIO module of Kinetis devices, as well as
+multiple protocol-specific FlexIO drivers.
+
+*/
+
+/*!
+@defgroup flexio_driver FlexIO Driver
+@ingroup flexio
+
+*/
+

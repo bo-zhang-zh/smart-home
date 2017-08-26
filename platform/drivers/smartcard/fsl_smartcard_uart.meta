@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<metadata>
+  <components>
+    <component name="platform.drivers.smartcard_uart.support" requires="devices.modules.D_IP_HiSpd_SCI_SYN_022"/>
+    <component name="platform.drivers.smartcard_uart.support" requires="devices.modules.D_IP_HiSpd_SCI_SYN_011"/>
+    <component name="platform.drivers.smartcard_uart.support" requires="devices.modules.D_IP_HiSpd_SCI_SYN_013"/>
+    <component name="platform.drivers.smartcard_uart.support" requires="devices.modules.D_IP_HiSpd_SCI_SYN_024"/>
+    <component name="platform.drivers.smartcard_uart.support" requires="devices.modules.D_IP_HiSpd_SCI_SYN_019"/>
+    <component name="platform.drivers.smartcard_uart.support" requires="devices.modules.D_IP_HiSpd_SCI_SYN_025"/>
+    <component name="platform.drivers.smartcard_uart_pit.support" requires="devices.modules.pit_rti_038"/>
+    <component name="platform.drivers.smartcard_uart_pit.support" requires="devices.modules.pit_rti_030"/>
+    <component name="platform.drivers.smartcard_uart_pit.support" requires="devices.modules.pit_rti_037"/>
+    <component name="platform.drivers.smartcard_uart_pit.support" requires="devices.modules.pit_rti_040"/>
+    <component name="platform.drivers.smartcard_uart_pit.support" requires="devices.modules.pit_rti_039"/>
+    <component name="platform.drivers.smartcard_uart_pit.support" requires="devices.modules.pit_rti_032"/>
+    <component name="platform.drivers.smartcard_uart_pit.support" requires="devices.modules.pit_rti_033"/>
+    <component name="platform.drivers.smartcard_uart.platform.support" requires="devices.modules.P_IP_RPP_CM4_K20_1024_SYN_008"/>
+    <component name="platform.drivers.smartcard_uart.platform.support" requires="devices.modules.P_IP_RPP_CM4_KS22_SYN_001"/>
+    <component description="SMARTCARD Driver" name="platform.drivers.smartcard_uart" provides="platform.drivers" requires="platform.drivers.smartcard_uart.support platform.drivers.smartcard_uart_pit.support platform.drivers.smartcard_uart.platform.support" type="driver" version="2.1.1">
+      <source path="./">
+        <files mask="*.meta"/>
+        <files mask="fsl_smartcard_uart.c"/>
+        <files mask="fsl_smartcard_uart.h"/>
+      </source>
+    </component>
+  </components>
+</metadata>

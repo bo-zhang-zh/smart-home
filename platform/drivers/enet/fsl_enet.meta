@@ -1,0 +1,16 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<metadata>
+  <components>
+    <component name="platform.drivers.enet.support" requires="devices.modules.DriverType_ENET"/>
+    <component name="platform.drivers.enet.support.ip" requires="devices.modules.D_IP_enet1GMAC_SYN_010"/>
+    <component name="platform.drivers.enet.support.ip" requires="devices.modules.D_IP_enet1GMAC_SYN_027"/>
+    <component name="platform.drivers.enet.support.ip" requires="devices.modules.D_IP_enet1GMAC_SYN_057"/>
+    <component description="ENET Driver" name="platform.drivers.enet" provides="platform.drivers" requires="platform.drivers.enet.support" type="driver" version="2.0.1">
+      <source path="./">
+        <files mask="*.meta"/>
+        <files mask="fsl_enet.c"/>
+        <files mask="fsl_enet.h"/>
+      </source>
+    </component>
+  </components>
+</metadata>

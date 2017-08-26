@@ -1,0 +1,41 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<metadata>
+  <components>
+    <component name="platform.drivers.i2c.support" requires="devices.modules.DriverType_I2C"/>
+    <component name="platform.drivers.i2c.support.ip" requires="devices.modules.D_IP_IIC_SKYBLUE_SYN_043"/>
+    <component name="platform.drivers.i2c.support.ip" requires="devices.modules.D_IP_IIC_SKYBLUE_SYN_032"/>
+    <component name="platform.drivers.i2c.support.ip" requires="devices.modules.D_IP_IIC_SKYBLUE_SYN_034"/>
+    <component name="platform.drivers.i2c.support.ip" requires="devices.modules.D_IP_IIC_SKYBLUE_SYN_041"/>
+    <component name="platform.drivers.i2c.support.ip" requires="devices.modules.D_IP_IIC_SKYBLUE_SYN_038"/>
+    <component name="platform.drivers.i2c.support.ip" requires="devices.modules.D_IP_IIC_SKYBLUE_SYN_046"/>
+    <component name="platform.drivers.i2c.support.ip" requires="devices.modules.D_IP_IIC_SKYBLUE_SYN_062"/>
+    <component name="platform.drivers.i2c.support.ip" requires="devices.modules.D_IP_IIC_SKYBLUE_SYN_033"/>
+    <component name="platform.drivers.i2c.support.ip" requires="devices.modules.D_IP_IIC_SKYBLUE_SYN_050"/>
+    <component name="platform.drivers.i2c.support.ip" requires="devices.modules.D_IP_IIC_SKYBLUE_SYN_057"/>
+    <component name="platform.drivers.i2c.support.ip" requires="devices.modules.D_IP_IIC_SKYBLUE_SYN_030"/>
+    <component name="platform.drivers.i2c.support.ip" requires="devices.modules.D_IP_IIC_SKYBLUE_SYN_040"/>
+    <component name="platform.drivers.i2c.support.ip" requires="devices.modules.D_IP_IIC_SKYBLUE_SYN_064"/>
+    <component name="platform.drivers.i2c.support.ip" requires="devices.modules.D_IP_IIC_SKYBLUE_SYN_059"/>
+    <component name="platform.drivers.i2c.support.ip" requires="devices.modules.D_IP_IIC_SKYBLUE_SYN_055"/>
+    <component name="platform.drivers.i2c.support.ip" requires="devices.modules.D_IP_IIC_SKYBLUE_SYN_061"/>
+    <component name="platform.drivers.i2c.support.ip" requires="devices.modules.D_IP_IIC_SKYBLUE_SYN_035"/>
+    <component name="platform.drivers.i2c.support.ip" requires="devices.modules.D_IP_IIC_SKYBLUE_SYN_066"/>
+    <component description="I2C Driver" name="platform.drivers.i2c" provides="platform.drivers" requires="platform.drivers.i2c.support" type="driver" version="2.0.1">
+      <source path="./">
+        <files mask="*.meta"/>
+        <files mask="fsl_i2c.c"/>
+        <files mask="fsl_i2c.h"/>
+        <files mask="fsl_i2c_dma.c" requires="platform.drivers.dma"/>
+        <files mask="fsl_i2c_dma.h" requires="platform.drivers.dma"/>
+        <files mask="fsl_i2c_edma.c" requires="platform.drivers.edma"/>
+        <files mask="fsl_i2c_edma.h" requires="platform.drivers.edma"/>
+        <files mask="fsl_i2c_freertos.c" requires="middleware.freertos"/>
+        <files mask="fsl_i2c_freertos.h" requires="middleware.freertos"/>
+        <files mask="fsl_i2c_ucosii.c" requires="middleware.ucosii"/>
+        <files mask="fsl_i2c_ucosii.h" requires="middleware.ucosii"/>
+        <files mask="fsl_i2c_ucosiii.c" requires="middleware.ucosiii"/>
+        <files mask="fsl_i2c_ucosiii.h" requires="middleware.ucosiii"/>
+      </source>
+    </component>
+  </components>
+</metadata>

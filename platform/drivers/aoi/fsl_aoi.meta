@@ -1,0 +1,14 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<metadata>
+  <components>
+    <component name="platform.drivers.aoi.support" requires="devices.modules.DriverType_AOI"/>
+    <component name="platform.drivers.aoi.support.ip" requires="devices.modules.D_SSL_AOI_DSC_SYN_001"/>
+    <component description="AOI Driver" name="platform.drivers.aoi" provides="platform.drivers" requires="platform.drivers.aoi.support" type="driver" version="2.0.0">
+      <source path="./">
+        <files mask="*.meta"/>
+        <files mask="fsl_aoi.c"/>
+        <files mask="fsl_aoi.h"/>
+      </source>
+    </component>
+  </components>
+</metadata>

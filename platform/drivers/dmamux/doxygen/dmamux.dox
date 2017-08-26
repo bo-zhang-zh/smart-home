@@ -1,0 +1,20 @@
+/*!
+@defgroup dmamux DMAMUX: Direct Memory Access Multiplexer Driver
+@details The KSDK provides a peripheral driver for the Direct Memory Access Multiplexer(DMAMUX)
+         of Kinetis devices.
+
+# Typical use case{#DMAMUXTypicalUseCase}
+
+## DMAMUX Operation{#DMAMUXOper}
+
+~~~~~{.c}
+    DMAMUX_Init(DMAMUX0);
+    DMAMUX_SetSource(DMAMUX0, channel, source);
+    DMAMUX_EnableChannel(DMAMUX0, channel);
+    ...
+    DMAMUX_DisableChannel(DMAMUX, channel);
+    DMAMUX_Deinit(DMAMUX0);
+~~~~~
+
+*/
+

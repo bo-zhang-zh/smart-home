@@ -1,0 +1,79 @@
+/*!
+@defgroup sdramc SDRAMC: Synchronous DRAM Controller Driver
+@details The KSDK provides a peripheral driver for the Synchronous DRAM Controller
+ block of Kinetis devices.
+
+## SDRAM Controller Basic Operation {#SDRAMCBasicOps}
+The SDRAM controller commands include the initialize MRS command, precharge command, enter/exit self-refresh command, and enable/disable auto-refresh command.
+Use the SDRAMC_SendCommand() to send these commands
+to SDRAM to initialize it.
+The SDRAMC_EnableWriteProtect() is provided to enable/disable the write protection.
+The SDRAMC_EnableOperateValid() is provided to enable/disable the operation valid.
+
+# Typical use case {#SDRAMCTpyUC}
+This example shows how to use the SDRAM Controller driver to
+initialize the external 16 bit port-size 8-column SDRAM chip.
+Initialize the SDRAM controller and run the initialization sequence. The external SDRAM is initialized and the SDRAM read
+and write is available.
+
+First, initialize the SDRAM Controller.
+~~~~~{.c}
+
+    sdramc_config_t config;
+    uint32_t clockSrc;
+
+    // SDRAM refresh timing configuration.
+    clockSrc = CLOCK_GetFreq(kCLOCK_BusClk);
+    sdramc_refresh_config_t refConfig =
+    {
+       kSDRAMC_RefreshThreeClocks,
+       15625,    // SDRAM: 4096 rows/ 64ms.
+       clockSrc,
+    };
+    // SDRAM controller configuration.
+    sdramc_blockctl_config_t ctlConfig =
+    {
+        kSDRAMC_Block0,
+        kSDRAMC_PortSize16Bit,
+        kSDRAMC_Commandbit19,
+        kSDRAMC_LatencyOne,
+        SDRAM_START_ADDRESS,
+        0x7c0000,
+    };
+
+    config.refreshConfig = &refConfig;
+    config.blockConfig = &ctlConfig;
+    config.numBlockConfig = 1;
+
+    // SDRAM controller initialization.
+    SDRAMC_Init(base, &config);
+~~~~~
+
+Then, run the initialization sequence.
+
+~~~~~{.c}
+
+    // Issues a PALL command.
+    SDRAMC_SendCommand(base, whichBlock, kSDRAMC_PrechargeCommand);
+
+    // Accesses an SDRAM location.
+    *(uint8_t *)(SDRAM_START_ADDRESS) = SDRAM_COMMAND_ACCESSVALUE;
+
+    // Enables the refresh.
+    SDRAMC_SendCommand(base, whichBlock, kSDRAMC_AutoRefreshEnableCommand);
+
+    // Waits for 8 refresh cycles less than one microsecond.
+    delay;
+
+    // Issues the MSR command.
+    SDRAMC_SendCommand(base, whichBlock, kSDRAMC_ImrsCommand);
+
+    // Puts the correct value on the SDRAM address bus for the SDRAM mode register.
+    addr = ....;
+
+    // Set MRS register.
+    mrsAddr = (uint8_t *)(SDRAM_START_ADDRESS + addr);
+    *mrsAddr = SDRAM_COMMAND_ACCESSVALUE;
+~~~~~
+
+*/

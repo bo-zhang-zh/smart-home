@@ -1,0 +1,153 @@
+/*!
+@defgroup pdb PDB: Programmable Delay Block
+@details The KSDK provides a peripheral driver for the Programmable Delay Block (PDB)
+         module of Kinetis devices.
+
+
+The PDB driver includes a basic PDB counter, trigger generators for ADC, DAC, and pulse-out.
+
+The basic PDB counter can be used as a general programmable time with an interrupt.
+The counter increases automatically with the divided clock signal after it is triggered to start by an external trigger input or the software trigger.
+There are "milestones" for output trigger event. When the counter is equal to any of these "milestones",
+the corresponding trigger is generated and sent out to other modules. These "milestones" are for the following:
+ - Counter delay interrupt, which is the interrupt for the PDB module
+ - ADC pre-trigger to trigger the ADC conversion
+ - DAC interval trigger to trigger the DAC buffer and move the buffer read pointer
+ - Pulse-out triggers to generate a single of rising and falling edges, which can be assembled to a window.
+
+The "milestone" values have a flexible load mode.
+To call the APIs to set these value is equivalent to writing data to their buffer.
+The loading event occurs as the load mode describes.
+This design ensures that all "milestones" can be updated at the same time.
+
+# Typical use case {#PDBTypUC}
+
+## Working as basic DPB counter with a PDB interrupt. {#PDBInt}
+
+~~~~~{.c}
+
+int main(void)
+{
+    // ...
+    EnableIRQ(DEMO_PDB_IRQ_ID);
+
+    // ...
+    // Configures the PDB counter.
+    PDB_GetDefaultConfig(&pdbConfigStruct);
+    PDB_Init(DEMO_PDB_INSTANCE, &pdbConfigStruct);
+
+    // Configures the delay interrupt.
+    PDB_SetModulusValue(DEMO_PDB_INSTANCE, 1000U);
+    PDB_SetCounterDelayValue(DEMO_PDB_INSTANCE, 1000U); // The available delay value is less than or equal to the modulus value.
+    PDB_EnableInterrupts(DEMO_PDB_INSTANCE, kPDB_DelayInterruptEnable);
+    PDB_DoLoadValues(DEMO_PDB_INSTANCE);
+
+    while (1)
+    {
+        // ...
+        g_PdbDelayInterruptFlag = false;
+        PDB_DoSoftwareTrigger(DEMO_PDB_INSTANCE);
+        while (!g_PdbDelayInterruptFlag)
+        {
+        }
+    }
+ }
+
+void DEMO_PDB_IRQ_HANDLER_FUNC(void)
+{
+    // ...
+    g_PdbDelayInterruptFlag = true;
+    PDB_ClearStatusFlags(DEMO_PDB_INSTANCE, kPDB_DelayEventFlag);
+}
+
+~~~~~
+
+## Working with an additional trigger. The ADC trigger is used as an example. {#PDBTrig}
+
+~~~~~{.c}
+
+void DEMO_PDB_IRQ_HANDLER_FUNC(void)
+{
+    PDB_ClearStatusFlags(DEMO_PDB_INSTANCE, kPDB_DelayEventFlag);
+    g_PdbDelayInterruptCounter++;
+    g_PdbDelayInterruptFlag = true;
+}
+
+void DEMO_PDB_InitADC(void)
+{
+    adc16_config_t adc16ConfigStruct;
+    adc16_channel_config_t adc16ChannelConfigStruct;
+
+    ADC16_GetDefaultConfig(&adc16ConfigStruct);
+    ADC16_Init(DEMO_PDB_ADC_INSTANCE, &adc16ConfigStruct);
+#if defined(FSL_FEATURE_ADC16_HAS_CALIBRATION) && FSL_FEATURE_ADC16_HAS_CALIBRATION
+    ADC16_EnableHardwareTrigger(DEMO_PDB_ADC_INSTANCE, false);
+    ADC16_DoAutoCalibration(DEMO_PDB_ADC_INSTANCE);
+#endif /* FSL_FEATURE_ADC16_HAS_CALIBRATION */
+    ADC16_EnableHardwareTrigger(DEMO_PDB_ADC_INSTANCE, true);
+
+    adc16ChannelConfigStruct.channelNumber = DEMO_PDB_ADC_USER_CHANNEL;
+    adc16ChannelConfigStruct.enableInterruptOnConversionCompleted = true; /* Enable the interrupt. */
+#if defined(FSL_FEATURE_ADC16_HAS_DIFF_MODE) && FSL_FEATURE_ADC16_HAS_DIFF_MODE
+    adc16ChannelConfigStruct.enableDifferentialConversion = false;
+#endif /* FSL_FEATURE_ADC16_HAS_DIFF_MODE */
+    ADC16_SetChannelConfig(DEMO_PDB_ADC_INSTANCE, DEMO_PDB_ADC_CHANNEL_GROUP, &adc16ChannelConfigStruct);
+}
+
+void DEMO_PDB_ADC_IRQ_HANDLER_FUNCTION(void)
+{
+    uint32_t tmp32;
+
+    tmp32 = ADC16_GetChannelConversionValue(DEMO_PDB_ADC_INSTANCE, DEMO_PDB_ADC_CHANNEL_GROUP); /* Read to clear COCO flag. */
+    g_AdcInterruptCounter++;
+    g_AdcInterruptFlag = true;
+}
+
+int main(void)
+{
+    // ...
+
+    EnableIRQ(DEMO_PDB_IRQ_ID);
+    EnableIRQ(DEMO_PDB_ADC_IRQ_ID);
+
+    // ...
+
+    // Configures the PDB counter.
+    PDB_GetDefaultConfig(&pdbConfigStruct);
+    PDB_Init(DEMO_PDB_INSTANCE, &pdbConfigStruct);
+
+    // Configures the delay interrupt.
+    PDB_SetModulusValue(DEMO_PDB_INSTANCE, 1000U);
+    PDB_SetCounterDelayValue(DEMO_PDB_INSTANCE, 1000U); // The available delay value is less than or equal to the modulus value.
+    PDB_EnableInterrupts(DEMO_PDB_INSTANCE, kPDB_DelayInterruptEnable);
+
+    // Configures the ADC pre-trigger.
+    pdbAdcPreTriggerConfigStruct.enablePreTriggerMask = 1U << DEMO_PDB_ADC_PRETRIGGER_CHANNEL;
+    pdbAdcPreTriggerConfigStruct.enableOutputMask = 1U << DEMO_PDB_ADC_PRETRIGGER_CHANNEL;
+    pdbAdcPreTriggerConfigStruct.enableBackToBackOperationMask = 0U;
+    PDB_SetADCPreTriggerConfig(DEMO_PDB_INSTANCE, DEMO_PDB_ADC_TRIGGER_CHANNEL, &pdbAdcPreTriggerConfigStruct);
+    PDB_SetADCPreTriggerDelayValue(DEMO_PDB_INSTANCE,
+                                   DEMO_PDB_ADC_TRIGGER_CHANNEL, DEMO_PDB_ADC_PRETRIGGER_CHANNEL, 200U);
+                        // The available pre-trigger delay value is less than or equal to the modulus value.
+
+    PDB_DoLoadValues(DEMO_PDB_INSTANCE);
+
+    // Configures the ADC.
+    DEMO_PDB_InitADC();
+
+    while (1)
+    {
+        g_PdbDelayInterruptFlag = false;
+        g_AdcInterruptFlag = false;
+        PDB_DoSoftwareTrigger(DEMO_PDB_INSTANCE);
+        while ((!g_PdbDelayInterruptFlag) || (!g_AdcInterruptFlag))
+        {
+        }
+        // ...
+    }
+}
+
+~~~~~
+
+*/
+

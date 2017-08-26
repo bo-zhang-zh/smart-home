@@ -1,0 +1,20 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<metadata>
+  <components>
+    <component name="platform.drivers.llwu.support" requires="devices.modules.DriverType_LLWU"/>
+    <component name="platform.drivers.llwu.support.ip" requires="devices.modules.D_IP_LLWU_SYN_014"/>
+    <component name="platform.drivers.llwu.support.ip" requires="devices.modules.D_IP_LLWU_SYN_009"/>
+    <component name="platform.drivers.llwu.support.ip" requires="devices.modules.D_IP_LLWU_SYN_012"/>
+    <component name="platform.drivers.llwu.support.ip" requires="devices.modules.D_IP_LLWU_SYN_013"/>
+    <component name="platform.drivers.llwu.support.ip" requires="devices.modules.D_IP_LLWU_SYN_011"/>
+    <component name="platform.drivers.llwu.support.ip" requires="devices.modules.D_IP_LLWU_SYN_017"/>
+    <component name="platform.drivers.llwu.support.ip" requires="devices.modules.D_IP_LLWU_SYN_018"/>
+    <component description="LLWU Driver" name="platform.drivers.llwu" provides="platform.drivers" requires="platform.drivers.llwu.support" type="driver" version="2.0.1">
+      <source path="./">
+        <files mask="*.meta"/>
+        <files mask="fsl_llwu.c"/>
+        <files mask="fsl_llwu.h"/>
+      </source>
+    </component>
+  </components>
+</metadata>

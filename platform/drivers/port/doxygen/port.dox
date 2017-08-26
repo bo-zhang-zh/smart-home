@@ -1,0 +1,43 @@
+/*!
+@defgroup port PORT: Port Control and Interrupts
+@details The KSDK provides a driver for the Port Control and Interrupts (PORT)
+module of Kinetis devices.
+
+# Typical configuration use case {#PORTpyConfig}
+
+## Input PORT configuration {#PORTInConfig}
+
+~~~~~{.c}
+  /* Input pin PORT configuration */
+  port_pin_config_t config = {
+      kPORT_PullUp,
+      kPORT_FastSlewRate,
+      kPORT_PassiveFilterDisable,
+      kPORT_OpenDrainDisable,
+      kPORT_LowDriveStrength,
+      kPORT_MuxAsGpio,
+      kPORT_UnLockRegister,
+  };
+  /*  Sets the configuration */
+  PORT_SetPinConfig(PORTA, 4, &config);
+~~~~~
+
+## I2C PORT Configuration {#I2CPORTConfig}
+
+~~~~~{.c}
+  /*  I2C pin PORTconfiguration */
+  port_pin_config_t config = {
+      kPORT_PullUp,
+      kPORT_FastSlewRate,
+      kPORT_PassiveFilterDisable,
+      kPORT_OpenDrainEnable,
+      kPORT_LowDriveStrength,
+      kPORT_MuxAlt5,
+      kPORT_UnLockRegister,
+  };
+  PORT_SetPinConfig(PORTE,24u,&config);
+  PORT_SetPinConfig(PORTE,25u,&config);
+~~~~~
+
+*/
+

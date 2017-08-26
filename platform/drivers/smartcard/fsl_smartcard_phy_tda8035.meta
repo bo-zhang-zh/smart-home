@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<metadata>
+  <components>
+    <component name="platform.drivers.smartcard_phy_tda8035.support" requires="devices.modules.D_IP_FlexTimer32_SYN_025"/>
+    <component name="platform.drivers.smartcard_phy_tda8035.support" requires="devices.modules.D_IP_FlexTimer32_SYN_018"/>
+    <component name="platform.drivers.smartcard_phy_tda8035.support" requires="devices.modules.D_IP_FlexTimer32_SYN_022"/>
+    <component name="platform.drivers.smartcard_phy_tda8035.support" requires="devices.modules.D_IP_FlexTimer32_SYN_024"/>
+    <component name="platform.drivers.smartcard_phy_tda8035.support" requires="devices.modules.D_IP_FlexTimer32_SYN_027"/>
+    <component name="platform.drivers.smartcard_phy_tda8035.support" requires="devices.modules.D_IP_LPTPM_SYN_020"/>
+    <component name="platform.drivers.smartcard_phy_tda8035.support" requires="devices.modules.D_IP_EMV_SIM_SYN_027"/>
+    <component name="platform.drivers.smartcard_phy_tda8035.support" requires="devices.modules.D_IP_EMV_SIM_SYN_029"/>
+    <component name="platform.drivers.smartcard_phy_tda8035.support" requires="devices.modules.D_IP_EMV_SIM_SYN_030"/>
+    <component name="platform.drivers.smartcard_com_tda8035.support" requires="devices.modules.D_IP_HiSpd_SCI_SYN_022"/>
+    <component name="platform.drivers.smartcard_com_tda8035.support" requires="devices.modules.D_IP_HiSpd_SCI_SYN_011"/>
+    <component name="platform.drivers.smartcard_com_tda8035.support" requires="devices.modules.D_IP_HiSpd_SCI_SYN_013"/>
+    <component name="platform.drivers.smartcard_com_tda8035.support" requires="devices.modules.D_IP_HiSpd_SCI_SYN_024"/>
+    <component name="platform.drivers.smartcard_com_tda8035.support" requires="devices.modules.D_IP_HiSpd_SCI_SYN_019"/>
+    <component name="platform.drivers.smartcard_com_tda8035.support" requires="devices.modules.D_IP_HiSpd_SCI_SYN_025"/>
+    <component name="platform.drivers.smartcard_com_tda8035.support" requires="devices.modules.D_IP_EMV_SIM_SYN_027"/>
+    <component name="platform.drivers.smartcard_com_tda8035.support" requires="devices.modules.D_IP_EMV_SIM_SYN_029"/>
+    <component name="platform.drivers.smartcard_com_tda8035.support" requires="devices.modules.D_IP_EMV_SIM_SYN_030"/>
+    <component name="platform.drivers.smartcard_phy_tda8035.platform.support" requires="devices.modules.P_IP_RPP_CM4_K20_1024_SYN_008"/>
+    <component name="platform.drivers.smartcard_phy_tda8035.platform.support" requires="devices.modules.P_IP_RPP_CM4_K80_256_SYN_008"/>
+    <component name="platform.drivers.smartcard_phy_tda8035.platform.support" requires="devices.modules.P_IP_RPP_CM4_KS22_SYN_001"/>
+    <component name="platform.drivers.smartcard_phy_tda8035.platform.support" requires="devices.modules.P_IP_RPP_CM0P_KL80_SYN_004"/>
+    <component name="platform.drivers.smartcard_phy_tda8035.platform.support" requires="devices.modules.P_IP_RPP_CM0P_BBS_SYN_020"/>
+    <component description="SMARTCARD Driver" name="platform.drivers.smartcard_phy_tda8035" provides="platform.drivers" requires="platform.drivers.smartcard_phy_tda8035.support platform.drivers.smartcard_com_tda8035.support platform.drivers.smartcard_phy_tda8035.platform.support" type="driver" version="2.1.1">
+      <source path="./">
+        <files mask="*.meta"/>
+        <files mask="fsl_smartcard_phy_tda8035.c"/>
+        <files mask="fsl_smartcard_phy_tda8035.h"/>
+      </source>
+    </component>
+  </components>
+</metadata>

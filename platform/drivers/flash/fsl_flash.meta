@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<metadata>
+  <components>
+    <component description="Flash Driver" name="platform.drivers.flash" provides="platform.drivers" type="driver" version="2.1.0">
+      <source path="./">
+        <files mask="*.meta"/>
+        <files mask="fsl_flash.c"/>
+        <files mask="fsl_flash.h"/>
+      </source>
+    </component>
+  </components>
+</metadata>

@@ -1,0 +1,16 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<metadata>
+  <components>
+    <component name="platform.drivers.ewm.support" requires="devices.modules.DriverType_EWM"/>
+    <component name="platform.drivers.ewm.support.ip" requires="devices.modules.D_IP_EWM_SYN_017"/>
+    <component name="platform.drivers.ewm.support.ip" requires="devices.modules.D_IP_EWM_SYN_011"/>
+    <component name="platform.drivers.ewm.support.ip" requires="devices.modules.D_IP_EWM_SYN_012"/>
+    <component description="EWM Driver" name="platform.drivers.ewm" provides="platform.drivers" requires="platform.drivers.ewm.support" type="driver" version="2.0.1">
+      <source path="./">
+        <files mask="*.meta"/>
+        <files mask="fsl_ewm.c"/>
+        <files mask="fsl_ewm.h"/>
+      </source>
+    </component>
+  </components>
+</metadata>

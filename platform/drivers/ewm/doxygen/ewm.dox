@@ -1,0 +1,15 @@
+/*!
+@defgroup ewm EWM: External Watchdog Monitor Driver
+@details The KSDK provides a peripheral driver for the EWM module of Kinetis devices.
+
+# Typical use case {#EWMTypUC}
+~~~~~{.c}
+    ewm_config_t config;
+    EWM_GetDefaultConfig(&config);
+    config.enableInterrupt = true;
+    config.compareLowValue = 0U;
+    config.compareHighValue = 0xAAU;
+    NVIC_EnableIRQ(WDOG_EWM_IRQn);
+    EWM_Init(base, &config);
+~~~~~
+*/

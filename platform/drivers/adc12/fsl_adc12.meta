@@ -1,0 +1,15 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<metadata>
+  <components>
+    <component name="platform.drivers.adc12.support" requires="devices.modules.DriverType_ADC12"/>
+    <component name="platform.drivers.adc12.support.ip" requires="devices.modules.DA_IP_ADC_12bSAR_C90LCTFS_018"/>
+    <component name="platform.drivers.adc12.support.ip" requires="devices.modules.DA_IP_ADC_12bSAR_C90LCTFS_022"/>
+    <component description="ADC12 Driver" name="platform.drivers.adc12" provides="platform.drivers" requires="platform.drivers.adc12.support" type="driver" version="2.0.0">
+      <source path="./">
+        <files mask="*.meta"/>
+        <files mask="fsl_adc12.c"/>
+        <files mask="fsl_adc12.h"/>
+      </source>
+    </component>
+  </components>
+</metadata>

@@ -1,0 +1,16 @@
+/*!
+@page driver_log Driver Change Log
+
+@section uart UART
+  Current UART driver version is 2.1.1
+
+  - 2.0.0
+    - Initial version.
+
+  - 2.1.0
+    - Add transactional API.
+
+  - 2.1.1
+    - Remove needless check of event flags and assert in UART_RTOS_Receive.
+    - Wait always for rx event flag in UART_RTOS_Receive.
+*/

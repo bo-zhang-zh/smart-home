@@ -1,0 +1,53 @@
+/*!
+@page driver_log Driver Change Log
+
+@section flexio_uart FLEXIO_UART
+  Current FLEXIO_UART driver version is 2.1.1
+
+  - 2.1.0
+    - New Features:
+      - Add Transfer prefix in transactional APIs
+      - Add txSize/rxSize in handle structure to record the transfer size 
+    - Bug Fix:
+      - Add error handle to handle the data count is zero or data buffer is NULL situation
+  - 2.1.1
+    - Bug Fix:
+      - Change the API name FLEXIO_UART_StopRingBuffer to FLEXIO_UART_TransferStopRingBuffer to align 
+        with the definition in C file
+
+@section flexio_i2c FLEXIO_I2C
+  Current FLEXIO_I2C driver version is 2.1.1
+
+  - 2.1.0
+    - New Features:
+      - Add Transfer prefix in transactional APIs
+      - Add transferSize in handle structure to record the transfer size
+  - 2.1.1
+    - Bug Fix:
+      - Implement the FLEXIO_I2C_MasterTransferBlocking API which defined in header flie but has no 
+        implementation in C file
+
+@section flexio_spi FLEXIO_SPI
+  Current FLEXIO_SPI driver version is 2.1.0
+
+  - 2.1.0
+    - New Features:
+      - Add Transfer prefix in transactional APIs
+      - Add transferSize in handle structure to record the transfer size
+    - Bug Fix:
+      - Fix the error register address return for 16-bit data write in FLEXIO_SPI_GetTxDataRegisterAddress
+      - Provide independent IRQHandler/transfer APIs for Master and slave to fix the baudrate limit issue
+
+@section flexio_i2s FLEXIO_I2S
+  Current FLEXIO_I2S driver version is 2.1.1
+
+  - 2.1.0
+    - New Features:
+      - Add Transfer prefix in transactional APIs
+      - Add transferSize in handle structure to record the transfer size
+  - 2.1.1
+    - Bug Fix:
+      - Fix flexio i2s rx data read error and edma address error.
+      - Fix flexio i2s slave timer compare setting error.
+
+*/

@@ -1,0 +1,8 @@
+/*!
+@page driver_log Driver Change Log
+
+@section iomuxc IOMUXC
+  Current IOMUXC driver version is 2.0.0
+     
+
+*/

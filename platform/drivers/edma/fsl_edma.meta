@@ -1,0 +1,31 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<metadata>
+  <components>
+    <component name="platform.drivers.edma.support" requires="devices.modules.DriverType_EDMA"/>
+    <component name="platform.drivers.edma.support.ip" requires="devices.modules.spp_dma2_4ch.01.01.00.17"/>
+    <component name="platform.drivers.edma.support.ip" requires="devices.modules.D_IP_SPP_DMA2_8CH_SYN_003"/>
+    <component name="platform.drivers.edma.support.ip" requires="devices.modules.P_IP_RPP_CM4_K60_1024_SYN_003"/>
+    <component name="platform.drivers.edma.support.ip" requires="devices.modules.P_IP_RPP_CM4_K20_512r_SYN_011"/>
+    <component name="platform.drivers.edma.support.ip" requires="devices.modules.P_IP_RPP_CM4_K20_128_SYN_007"/>
+    <component name="platform.drivers.edma.support.ip" requires="devices.modules.P_IP_RPP_CM4_K20_256_SYN_012"/>
+    <component name="platform.drivers.edma.support.ip" requires="devices.modules.P_IP_RPP_CM4_K20_128l_SYN_003"/>
+    <component name="platform.drivers.edma.support.ip" requires="devices.modules.P_IP_RPP_CM4_K20_1024_SYN_008"/>
+    <component name="platform.drivers.edma.support.ip" requires="devices.modules.P_IP_RPP_CM4_K60_2048_SYN_014"/>
+    <component name="platform.drivers.edma.support.ip" requires="devices.modules.P_IP_RPP_CM4_K80_256_SYN_002"/>
+    <component name="platform.drivers.edma.support.ip" requires="devices.modules.P_IP_RPP_CM4_K24S_256_SYN_006"/>
+    <component name="platform.drivers.edma.support.ip" requires="devices.modules.P_IP_RPP_CM4_K20_512_SYN_003"/>
+    <component name="platform.drivers.edma.support.ip" requires="devices.modules.P_IP_RPP_CM4_P2_SYN_015"/>
+    <component name="platform.drivers.edma.support.ip" requires="devices.modules.P_IP_RPP_CM0P_KL80_SYN"/>
+    <component name="platform.drivers.edma.support.ip" requires="devices.modules.D_IP_RPP_CM4_PLAT_S1_BKD_SYN_002"/>
+    <component name="platform.drivers.edma.support.ip" requires="devices.modules.D_IP_SPP_DMA2_SYN_002"/>
+    <component name="platform.drivers.edma.support.ip" requires="devices.modules.D_IP_DMA_CH_MUX_SYN_033"/>
+    <component description="EDMA Driver" name="platform.drivers.edma" provides="platform.drivers" requires="platform.drivers.edma.support" type="driver" version="2.0.2">
+      <source path="./">
+        <files mask="*.meta"/>
+        <files mask="fsl_edma.c"/>
+        <files mask="fsl_edma.h"/>
+        <files mask="fsl_edma_request.h"/>
+      </source>
+    </component>
+  </components>
+</metadata>

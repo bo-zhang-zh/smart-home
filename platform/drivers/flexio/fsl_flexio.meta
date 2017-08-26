@@ -1,0 +1,42 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<metadata>
+  <components>
+    <component name="platform.drivers.flexio.support" requires="devices.modules.DriverType_FLEXIO"/>
+    <component name="platform.drivers.flexio.support.ip" requires="devices.modules.D_IP_FLEXIO_SYN_018"/>
+    <component name="platform.drivers.flexio.support.ip" requires="devices.modules.D_IP_FLEXIO_SYN_016"/>
+    <component name="platform.drivers.flexio.support.ip" requires="devices.modules.D_IP_FLEXIO_SYN_012"/>
+    <component name="platform.drivers.flexio.camera.support" provides="platform.drivers" requires="devices.modules.P_IP_RPP_CM4_K80_256_SYN_008"/>
+    <component name="platform.drivers.flexio.camera.support" provides="platform.drivers" requires="devices.modules.P_IP_RPP_CM0P_KL80_SYN_004"/>
+    <component description="FLEXIO Driver" name="platform.drivers.flexio" provides="platform.drivers" requires="platform.drivers.flexio.support" type="driver" version="2.1.0">
+      <source path="./">
+        <files mask="*.meta"/>
+        <files mask="fsl_flexio.c"/>
+        <files mask="fsl_flexio.h"/>
+        <files mask="fsl_flexio_camera.c" requires="platform.drivers.flexio.camera.support"/>
+        <files mask="fsl_flexio_camera.h" requires="platform.drivers.flexio.camera.support"/>
+        <files mask="fsl_flexio_camera_edma.c" requires="platform.drivers.flexio.camera.support platform.drivers.edma"/>
+        <files mask="fsl_flexio_camera_edma.h" requires="platform.drivers.flexio.camera.support platform.drivers.edma"/>
+        <files mask="fsl_flexio_i2c_master.c"/>
+        <files mask="fsl_flexio_i2c_master.h"/>
+        <files mask="fsl_flexio_i2s.c"/>
+        <files mask="fsl_flexio_i2s.h"/>
+        <files mask="fsl_flexio_i2s_dma.c" requires="platform.drivers.dma"/>
+        <files mask="fsl_flexio_i2s_dma.h" requires="platform.drivers.dma"/>
+        <files mask="fsl_flexio_i2s_edma.c" requires="platform.drivers.edma"/>
+        <files mask="fsl_flexio_i2s_edma.h" requires="platform.drivers.edma"/>
+        <files mask="fsl_flexio_spi.c"/>
+        <files mask="fsl_flexio_spi.h"/>
+        <files mask="fsl_flexio_spi_dma.c" requires="platform.drivers.dma"/>
+        <files mask="fsl_flexio_spi_dma.h" requires="platform.drivers.dma"/>
+        <files mask="fsl_flexio_spi_edma.c" requires="platform.drivers.edma"/>
+        <files mask="fsl_flexio_spi_edma.h" requires="platform.drivers.edma"/>
+        <files mask="fsl_flexio_uart.c"/>
+        <files mask="fsl_flexio_uart.h"/>
+        <files mask="fsl_flexio_uart_dma.c" requires="platform.drivers.dma"/>
+        <files mask="fsl_flexio_uart_dma.h" requires="platform.drivers.dma"/>
+        <files mask="fsl_flexio_uart_edma.c" requires="platform.drivers.edma"/>
+        <files mask="fsl_flexio_uart_edma.h" requires="platform.drivers.edma"/>
+      </source>
+    </component>
+  </components>
+</metadata>

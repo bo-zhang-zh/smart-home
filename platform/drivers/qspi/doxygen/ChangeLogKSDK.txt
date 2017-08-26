@@ -1,0 +1,16 @@
+/*!
+@page driver_log Driver Change Log
+
+@section qspi QSPI
+  Current QSPI driver version is 2.0.1
+
+  - 2.0.0
+    - Initial version.
+  - 2.0.1
+    - New API:
+      - QSPI_SetReadArea to set the read area.
+    - Bug fix:
+      - Fix QSPI_UpdateLUT function only update first LUT issue.
+      - Fix issue that some function that hardcode QSPI0 as base.
+
+*/

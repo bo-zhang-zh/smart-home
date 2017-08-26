@@ -1,0 +1,15 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<metadata>
+  <components>
+    <component name="platform.drivers.dcdc.support" requires="devices.modules.DriverType_DCDC"/>
+    <component name="platform.drivers.dcdc.support.ip" requires="devices.modules.DA_IP_DCDC_APACHE_C90LP_013"/>
+    <component name="platform.drivers.dcdc.support.ip" requires="devices.modules.DA_IP_DCDC_APACHE_C90LP_014"/>
+    <component description="DCDC Driver" name="platform.drivers.dcdc" provides="platform.drivers" requires="platform.drivers.dcdc.support" type="driver" version="2.0.0">
+      <source path="./">
+        <files mask="*.meta"/>
+        <files mask="fsl_dcdc.c"/>
+        <files mask="fsl_dcdc.h"/>
+      </source>
+    </component>
+  </components>
+</metadata>

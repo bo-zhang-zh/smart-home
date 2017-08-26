@@ -1,0 +1,8 @@
+/*!
+@defgroup irtc IRTC: IRTC Driver
+@details The KSDK provides a driver for the IRTC module of Kinetis devices.
+@{
+
+*/
+/*! @} */
+

@@ -1,0 +1,21 @@
+/*!
+@page driver_log Driver Change Log
+
+@section lpi2c LPI2C
+  Current LPI2C driver version is 2.1.0
+
+  - 2.0.0
+    - Initial version.
+
+  - 2.1.0
+    - API name change:
+      - LPI2C_MasterTransferCreateHandle -> LPI2C_MasterCreateHandle
+      - LPI2C_MasterTransferGetCount -> LPI2C_MasterGetTransferCount
+      - LPI2C_MasterTransferAbort -> LPI2C_MasterAbortTransfer
+      - LPI2C_MasterTransferHandleIRQ -> LPI2C_MasterHandleInterrupt
+      - LPI2C_SlaveTransferCreateHandle -> LPI2C_SlaveCreateHandle
+      - LPI2C_SlaveTransferGetCount -> LPI2C_SlaveGetTransferCount
+      - LPI2C_SlaveTransferAbort -> LPI2C_SlaveAbortTransfer
+      - LPI2C_SlaveTransferHandleIRQ -> LPI2C_SlaveHandleInterrupt
+
+*/

@@ -1,0 +1,14 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<metadata>
+  <components>
+    <component name="platform.drivers.xrdc.support" requires="devices.modules.DriverType_XRDC"/>
+    <component description="XRDC Driver" name="platform.drivers.xrdc" provides="platform.drivers" requires="platform.drivers.xrdc.support" type="driver" version="2.0.0">
+      <source path="./">
+        <files mask="*.meta"/>
+        <files mask="fsl_xrdc.c"/>
+        <files mask="fsl_xrdc.h"/>
+        <files mask="fsl_xrdc_mappings.h"/>
+      </source>
+    </component>
+  </components>
+</metadata>

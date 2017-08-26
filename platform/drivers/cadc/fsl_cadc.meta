@@ -1,0 +1,14 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<metadata>
+  <components>
+    <component name="platform.drivers.cadc.support" requires="devices.modules.DriverType_CADC"/>
+    <component name="platform.drivers.cadc.support.ip" requires="devices.modules.D_IP_ADC_3v12b_200ns_SYN_032"/>
+    <component description="CADC Driver" name="platform.drivers.cadc" provides="platform.drivers" requires="platform.drivers.cadc.support" type="driver" version="2.0.0">
+      <source path="./">
+        <files mask="*.meta"/>
+        <files mask="fsl_cadc.c"/>
+        <files mask="fsl_cadc.h"/>
+      </source>
+    </component>
+  </components>
+</metadata>

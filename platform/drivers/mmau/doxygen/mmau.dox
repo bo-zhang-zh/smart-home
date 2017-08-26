@@ -1,0 +1,107 @@
+/*!
+@defgroup mmau MMAU: Memory Mapped Arithmetic Unit
+@details The SDK provides Peripheral driver for the Memory Mapped Arithmetic Unit (MMAU)
+         block of Kinetis devices.
+
+@{
+
+
+The Memory Mapped Arithmetic Unit (MMAU) provides acceleration to a set of math
+operations, including signed/unsigned multiplication and accumulation, division
+and root-square, and so on.
+
+# Function groups {#MmauFunctionalGroups}
+
+## MMAU Initialization {#MmauInitial}
+To initialize the MMAU driver, call the MMAU_EnableDMA(MMAU, true) and MMAU_EnableSupervisorOnly(MMAU, false) functions.
+~~~~~{.c}
+/* Enable interrupt */
+MMAU_EnableInterrupts(MMAU, kMMAU_AccumOverflowInterruptEnable | kMMAU_DivideByZeroInterruptEnable);
+MMAU_EnableDMA(MMAU, true); /* DMA enable, MMAU will generate dma request whenever MMAU is IDLE */
+MMAU_EnableSupervisorOnly(MMAU, false); /* Access in both supervisor and user mode */
+~~~~~
+
+## MMAU Interrupts {#MmauInt}
+MMAU supports three interrupts: Accumulation Overflow (Q), Divide/Multiply Overflow (V) and
+Divide-by-Zero (DZ). These interrupts were definition at mmau_flag_t structure.
+The MMAU driver supports enable/disable the interrupts, get/clear the interrupt flags.
+
+For example:
+~~~~~{.c}
+/* Enable Accumulation Overflow and Divide-by-Zero interrupts */
+MMAU_EnableInterrupts(MMAU, kMMAU_AccumOverflowInterruptEnable | kMMAU_DivideByZeroInterruptEnable);
+/* Disable  Divide/Multiply Overflow and Divide-by-Zero interrupts */
+MMAU_DisableInterrupts(MMAU, kMMAU_AccumOverflowInterruptEnable | kMMAU_DivideByZeroInterruptEnable);
+
+/* Get interrupt flags */
+uint32_t flags = MMAU_GetInterruptFlags(MMAU);
+/* Clear interrupt flags */
+MMAU_ClearInterruptFlags(MMAU, kMMAU_OverflowInterruptFlag | kMMAU_DivideByZeroInterruptFlag);
+~~~~~
+
+## MMAU Instruction flags {#MmauInstructFlags}
+The MMAU driver provides four instruction flags: Accumulation Overflow (Q), Divide or Multiply
+Overflow (V), Divide-by-Zero (DZ) and Signed calculation result is negative (N). These flags were
+updated after each calculation. MMAU driver contains get and set functions to access instruction
+flags.
+~~~~~{.c}
+/* Get instruction flags */
+uint32_t flags = MMAU_GetInstructionFlags(MMAU);
+/* Set instruction flags */
+MMAU_SetInstructionFlags(MMAU, kMMAU_OverflowInstructionFlag     |
+                               kMMAU_DivideByZeroInstructionFlag |
+                               kMMAU_NegativeInstructionFlag     |
+                               kMMAU_AccumOverflowInstructionFlag);
+/* Clear instruction flags */
+MMAU_ClearInstructionFlags(MMAU, kMMAU_OverflowInstructionFlag     |
+                                 kMMAU_DivideByZeroInstructionFlag |
+                                 kMMAU_NegativeInstructionFlag     |
+                                 kMMAU_AccumOverflowInstructionFlag);
+~~~~~
+
+## MMAU Operators {#MmauOps}
+The MMAU driver supports multiply, divide and square root functions. Each kind of function
+supports Unsigned Integer, Signed Integer (except square root) and Fractional Number as operator.
+
+# Typical use case and example {#MmauExample}
+This example demonstrates the SIN calculation.
+~~~~~{.c}
+int main(void)
+{
+    frac32_t result;
+
+    BOARD_InitHardware();
+    PRINTF("\r\nMMAU example : start\n");
+
+    result = sine((frac32_t)0x7FFFFFFF);
+    PRINTF("\n\t Sin(pi)      = 0x%X in frac32 format\n", result);
+    result = sine((frac32_t)0x66666666);
+    PRINTF("\n\t Sin(0.8*pi)  = 0x%X in frac32 format\n", result);
+    result = sine((frac32_t)0x4CCCCCCD);
+    PRINTF("\n\t Sin(0.6*pi)  = 0x%X in frac32 format\n", result);
+    result = sine((frac32_t)0x33333333);
+    PRINTF("\n\t Sin(0.4*pi)  = 0x%X in frac32 format\n", result);
+    result = sine((frac32_t)0x19999999);
+    PRINTF("\n\t Sin(0.2*pi)  = 0x%X in frac32 format\n", result);
+    result = sine(0);
+    PRINTF("\n\t Sin(0)       = 0x%X in frac32 format\n", result);
+    result = sine((frac32_t)0x99999999);
+    PRINTF("\n\t Sin(-0.2*pi) = 0x%X in frac32 format\n", result);
+    result = sine((frac32_t)0xB3333333);
+    PRINTF("\n\t Sin(-0.4*pi) = 0x%X in frac32 format\n", result);
+    result = sine((frac32_t)0xCCCCCCCD);
+    PRINTF("\n\t Sin(-0.6*pi) = 0x%X in frac32 format\n", result);
+    result = sine((frac32_t)0xE6666666);
+    PRINTF("\n\t Sin(-0.8*pi) = 0x%X in frac32 format\n", result);
+    result = sine((frac32_t)(0x80000000));
+    PRINTF("\n\t Sin(-pi)     = 0x%X in frac32 format\n\r", result);
+
+    PRINTF("\r\nMMAU example : end\n");
+    while(1)
+    {
+    }
+}
+~~~~~
+
+*/
+/*! @} */

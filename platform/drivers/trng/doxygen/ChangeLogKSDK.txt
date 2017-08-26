@@ -1,0 +1,16 @@
+/*
+@page driver_log Driver Change Log
+
+@section trng TRNG
+  Current TRNG driver version is 2.0.1
+  
+  - 2.0.0
+    - Initial version.
+    
+  - 2.0.1
+    - New features
+      - Set default OSCDIV for Kinetis devices KL8x and KL28Z
+    - Other changes
+      - Changed default OSCDIV for K81 to divide by 2
+
+*/

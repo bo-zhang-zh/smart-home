@@ -1,0 +1,207 @@
+/*!
+@defgroup pwm_driver PWM: Pulse Width Modulator
+@details The SDK provides a driver for the Pulse Width Modulator (PWM)
+         of Kinetis devices.
+
+## Initialization and deinitialization {#PWMInit}
+  The function PWM_Init() initializes the PWM sub module with specified configurations,
+the function PWM_GetDefaultConfig() could help to get the default configurations. The initialization function
+configures the sub module for the requested register update mode for registers with buffers.
+It also sets up the sub module operation in debug and wait modes.
+
+## PWM Operations {#PWMPwmOperation}
+  The function PWM_SetupPwm() sets up PWM channels for PWM output, the function
+can set up PWM signal properties for multiple channels. The PWM has 2 channels: A & B.
+Each channel has its own duty cycle and level-mode specified, however the same PWM
+period and PWM mode is applied to all channels requesting PWM output. The signal
+duty cycle is provided as a percentage of the PWM period, its value should be between 0
+and 100; 0=inactive signal(0% duty cycle) and 100=always active signal (100% duty cycle).
+The function also sets up the channel dead time value which is used when the user selects
+complementary mode of operation.
+
+  The function PWM_UpdatePwmDutycycle() updates the PWM signal duty cycle
+of a particular PWM channel.
+
+## Input capture operations {#PWMInpOperation}
+  The function PWM_SetupInputCapture() sets up a PWM channel for input capture.
+The user can specify the capture edge and the mode; one-shot capture or free-running
+capture.
+
+## Fault operation  {#PWMFaultOperation}
+  The function PWM_SetupFault() sets up the properties for each fault.
+
+## PWM Start and Stop operations  {#PWMStartStopOperation}
+  The function PWM_StartTimer() can be used to start one or multiple sub modules. The
+function PWM_StopTimer() can be used to stop one or multiple sub modules.
+
+## Status {#PWMStatus}
+  Provide functions to get and clear the PWM status.
+
+## Interrupt {#PWMInterrupt}
+  Provide functions to enable/disable PWM interrupts and get current enabled interrupts.
+
+
+# Register Update  {#PWMRegUp}
+  Some of the PWM registers have buffers, the driver support various methods to
+update these registers with the content of the register buffer.
+The update mechanism for register with buffers can be specified through the
+following fields available in the configuration structure.
+~~~~~{.c}
+    pwm_register_reload_t reloadLogic;
+    pwm_reload_source_select_t reloadSelect;
+    pwm_load_frequency_t reloadFrequency;
+~~~~~
+The user can select one of the reload options provided in enumeration ::pwm_register_reload_t.
+When using immediate reload, the reloadFrequency field is not used.
+
+The driver initialization function sets up the appropriate bits in the PWM module based on
+the register update options selected.
+
+The below function should be used to initiate a register reload. The example shows register reload
+initiated on PWM sub modules 0, 1, and 2.
+~~~~~{.c}
+	PWM_SetPwmLdok(BOARD_PWM_BASEADDR, kPWM_Control_Module_0 |
+									           kPWM_Control_Module_1 |
+									           kPWM_Control_Module_2, true);
+~~~~~
+
+
+# Typical use case {#PWMCase}
+
+## PWM output {#PWMPWMOutput}
+  Output PWM signal on 3 PWM sub module with different dutycycles. Periodically update the
+PWM signal duty cycle. Each sub module runs in Complementary output mode with PWM A used to
+generate the complementary PWM pair.
+~~~~~{.c}
+static void PWM_DRV_Init3PhPwm(void)
+{
+    uint16_t deadTimeVal;
+    pwm_signal_param_t pwmSignal[2];
+    uint32_t pwmSourceClockInHz;
+    uint32_t pwmFrequencyInHz = 1000;
+
+    pwmSourceClockInHz = CLOCK_GetFreq(kCLOCK_FastPeriphClk);
+
+    /* Set deadtime count, we set this to about 650ns */
+    deadTimeVal = ((uint64_t)pwmSourceClockInHz * 650) / 1000000000;
+
+    pwmSignal[0].pwmChannel = kPWM_PwmA;
+    pwmSignal[0].level = kPWM_HighTrue;
+    pwmSignal[0].dutyCyclePercent = 50; /* 1 percent dutycycle */
+    pwmSignal[0].deadtimeValue = deadTimeVal;
+
+    pwmSignal[1].pwmChannel = kPWM_PwmB;
+    pwmSignal[1].level = kPWM_HighTrue;
+    /* Dutycycle field of PWM B does not matter as we are running in PWM A complementary mode */
+    pwmSignal[1].dutyCyclePercent = 50;
+    pwmSignal[1].deadtimeValue = deadTimeVal;
+
+    /*********** PWMA_SM0 - phase A, configuration, setup 2 channel as an example ************/
+    PWM_SetupPwm(BOARD_PWM_BASEADDR,
+                 kPWM_Module_0,
+                 pwmSignal,
+                 2,
+                 kPWM_SignedCenterAligned,
+                 pwmFrequencyInHz,
+                 pwmSourceClockInHz);
+
+    /*********** PWMA_SM1 - phase B configuration, setup PWM A channel only ************/
+    PWM_SetupPwm(BOARD_PWM_BASEADDR,
+                 kPWM_Module_1,
+                 pwmSignal,
+                 1,
+                 kPWM_SignedCenterAligned,
+                 pwmFrequencyInHz,
+                 pwmSourceClockInHz);
+
+    /*********** PWMA_SM2 - phase C configuration, setup PWM A channel only ************/
+    PWM_SetupPwm(BOARD_PWM_BASEADDR,
+                 kPWM_Module_2,
+                 pwmSignal,
+                 1,
+                 kPWM_SignedCenterAligned,
+                 pwmFrequencyInHz,
+                 pwmSourceClockInHz);
+}
+
+int main(void)
+{
+    /* Structure of initialize PWM */
+    pwm_config_t pwmConfig;
+    static uint16_t delay;
+    uint32_t pwmVal = 4;
+    uint16_t i;
+
+    /* Board pin, clock, debug console initialization */
+    BOARD_InitHardware();
+
+    PRINTF("FlexPWM driver example\n");
+
+    PWM_GetDefaultConfig(&pwmConfig);
+
+    /* Use full cycle reload */
+    pwmConfig.reloadLogic = kPWM_ReloadPwmFullCycle;
+    /* PWM A & PWM B form a complementary PWM pair */
+    pwmConfig.pairOperation = kPWM_ComplementaryPwmA;
+    pwmConfig.enableDebugMode = true;
+
+    /* Initialize sub module 0 */
+    if (PWM_Init(BOARD_PWM_BASEADDR, kPWM_Module_0, &pwmConfig) == kStatus_Fail)
+    {
+        PRINTF("PWM initialization failed\n");
+        return 1;
+    }
+
+    /* Initialize sub module 1 */
+    pwmConfig.clockSource = kPWM_Submodule0Clock;
+    pwmConfig.initializationControl = kPWM_Initialize_MasterSync;
+    if (PWM_Init(BOARD_PWM_BASEADDR, kPWM_Module_1, &pwmConfig) == kStatus_Fail)
+    {
+        PRINTF("PWM initialization failed\n");
+        return 1;
+    }
+
+    /* Initialize sub module 2 the same way as sub module 1 */
+    if (PWM_Init(BOARD_PWM_BASEADDR, kPWM_Module_2, &pwmConfig) == kStatus_Fail)
+    {
+        PRINTF("PWM initialization failed\n");
+        return 1;
+    }
+
+    /* Call the initialization function with demo configuration */
+    PWM_DRV_Init3PhPwm();
+
+    /* Set the load okay bit for all sub modules to load registers from their buffer */
+    PWM_SetPwmLdok(BOARD_PWM_BASEADDR, kPWM_Control_Module_0 | kPWM_Control_Module_1 | kPWM_Control_Module_2, true);
+
+    /* Start the PWM generation from sub modules 0, 1 and 2 */
+    PWM_StartTimer(BOARD_PWM_BASEADDR, kPWM_Control_Module_0 | kPWM_Control_Module_1 | kPWM_Control_Module_2);
+
+    delay = 0x0fffU;
+
+    while (1U)
+    {
+        for (i = 0U; i < delay; i++)
+        {
+            __ASM volatile("nop");
+        }
+        pwmVal = pwmVal + 4;
+
+        /* Reset the duty cycle percentage */
+        if (pwmVal > 100)
+        {
+            pwmVal = 4;
+        }
+
+        /* Update duty cycles for all 3 PWM signals */
+        PWM_UpdatePwmDutycycle(BOARD_PWM_BASEADDR, kPWM_Module_0, kPWM_PwmA, kPWM_SignedCenterAligned, pwmVal);
+        PWM_UpdatePwmDutycycle(BOARD_PWM_BASEADDR, kPWM_Module_1, kPWM_PwmA, kPWM_SignedCenterAligned, (pwmVal >> 1));
+        PWM_UpdatePwmDutycycle(BOARD_PWM_BASEADDR, kPWM_Module_2, kPWM_PwmA, kPWM_SignedCenterAligned, (pwmVal >> 2));
+
+        /* Set the load okay bit for all submodules to load registers from their buffer */
+        PWM_SetPwmLdok(BOARD_PWM_BASEADDR, kPWM_Control_Module_0 | kPWM_Control_Module_1 | kPWM_Control_Module_2, true);
+    }
+}
+~~~~~
+
+*/

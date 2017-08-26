@@ -1,0 +1,14 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<metadata>
+  <components>
+    <component name="platform.drivers.dac32.support" requires="devices.modules.DriverType_DAC32"/>
+    <component name="platform.drivers.dac32.support.ip" requires="devices.modules.D_IP_DAC_5V12B_NN_C90LP_010"/>
+    <component description="DAC32 Driver" name="platform.drivers.dac32" provides="platform.drivers" requires="platform.drivers.dac32.support" type="driver" version="2.0.0">
+      <source path="./">
+        <files mask="*.meta"/>
+        <files mask="fsl_dac32.c"/>
+        <files mask="fsl_dac32.h"/>
+      </source>
+    </component>
+  </components>
+</metadata>

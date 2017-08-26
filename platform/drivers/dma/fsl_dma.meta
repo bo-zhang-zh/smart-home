@@ -1,0 +1,26 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<metadata>
+  <components>
+    <component name="platform.drivers.dma.support" requires="devices.modules.DriverType_DMA"/>
+    <component name="platform.drivers.dma.support.ip" requires="devices.MKL34Z4"/>
+    <component name="platform.drivers.dma.support.ip" requires="devices.MKL36Z4"/>
+    <component name="platform.drivers.dma.support.ip" requires="devices.MKL46Z4"/>
+    <component name="platform.drivers.dma.support.ip" requires="devices.MKL17Z4"/>
+    <component name="platform.drivers.dma.support.ip" requires="devices.MKL27Z4"/>
+    <component name="platform.drivers.dma.support.ip" requires="devices.MKL33Z4"/>
+    <component name="platform.drivers.dma.support.ip" requires="devices.MKL43Z4"/>
+    <component name="platform.drivers.dma.support.ip" requires="devices.modules.P_IP_RPP_CM0P_LX_SYN_025"/>
+    <component name="platform.drivers.dma.support.ip" requires="devices.modules.P_IP_RPP_CM0P_LX_SYN_020"/>
+    <component name="platform.drivers.dma.support.ip" requires="devices.modules.P_IP_RPP_CM0P_LX_SYN_033"/>
+    <component name="platform.drivers.dma.support.ip" requires="devices.modules.P_IP_RPP_CM0P_LX_SYN_035"/>
+    <component name="platform.drivers.dma.support.ip" requires="devices.modules.P_IP_RPP_CM0P_PHOTON256_SYN_003"/>
+    <component description="DMA Driver" name="platform.drivers.dma" provides="platform.drivers" requires="platform.drivers.dma.support" type="driver" version="2.0.1">
+      <source path="./">
+        <files mask="*.meta"/>
+        <files mask="fsl_dma.c" requires="platform.drivers.dma"/>
+        <files mask="fsl_dma.h" requires="platform.drivers.dma"/>
+        <files mask="fsl_dma_request.h" requires="platform.drivers.dma"/>
+      </source>
+    </component>
+  </components>
+</metadata>

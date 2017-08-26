@@ -1,0 +1,6 @@
+/*!
+@page driver_log Driver Change Log
+
+@section hsadc HSADC
+  Current HSADC driver version is 2.0.0
+*/

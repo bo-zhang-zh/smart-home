@@ -1,0 +1,15 @@
+/*!
+@page drv_err Driver errors status
+ - #kStatus_TRGMUX_Locked = 4200
+*/
+
+/*!
+@defgroup trgmux_driver TRGMUX: Trigger Mux Driver
+@details The KSDK provides driver for the Trigger Mux module of Kinetis devices.
+
+# Typical use case {#TRGMUXTypUC}
+~~~~~{.c}
+    TRGMUX_SetTriggerSource(TRGMUX0,kTRGMUX_Trgmux0Dmamux0,kTRGMUX_TriggerInput0,kTRGMUX_SourcePortPin);
+~~~~~
+
+*/

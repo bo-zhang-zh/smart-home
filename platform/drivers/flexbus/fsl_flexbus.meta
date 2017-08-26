@@ -1,0 +1,19 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<metadata>
+  <components>
+    <component name="platform.drivers.flexbus.support" requires="devices.modules.DriverType_FB"/>
+    <component name="platform.drivers.flexbus.support.ip" requires="devices.modules.D_IP_FLEXBUS_SYN_007"/>
+    <component name="platform.drivers.flexbus.support.ip" requires="devices.modules.P_IP_RPP_CM4_K20_1024_SYN_008"/>
+    <component name="platform.drivers.flexbus.support.ip" requires="devices.modules.P_IP_RPP_CM4_K20_512r_SYN_011"/>
+    <component name="platform.drivers.flexbus.support.ip" requires="devices.modules.P_IP_RPP_CM4_K60_1024_SYN_003"/>
+    <component name="platform.drivers.flexbus.support.ip" requires="devices.modules.P_IP_RPP_CM4_K60_2048_SYN_014"/>
+    <component name="platform.drivers.flexbus.support.ip" requires="devices.modules.P_IP_RPP_CM4_P2_SYN_015"/>
+    <component description="FLEXBUS Driver" name="platform.drivers.flexbus" provides="platform.drivers" requires="platform.drivers.flexbus.support" type="driver" version="2.0.0">
+      <source path="./">
+        <files mask="*.meta"/>
+        <files mask="fsl_flexbus.c"/>
+        <files mask="fsl_flexbus.h"/>
+      </source>
+    </component>
+  </components>
+</metadata>

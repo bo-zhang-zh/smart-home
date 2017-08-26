@@ -1,0 +1,16 @@
+/*!
+@page driver_log Driver Change Log
+
+@section gpio GPIO
+  Current GPIO driver version is 2.1.0
+  
+  - 2.1.0:
+    - API Interface Change
+        - Adds "pins" or "pin" to some APIs' names
+        - Renames "GPIO_PinConfigure" to "GPIO_PinInit" 
+     
+  - 2.1.1:
+    - API Interface Change
+        - Adds API for the check attribute bytes
+        
+*/

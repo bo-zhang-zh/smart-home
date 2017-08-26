@@ -1,0 +1,18 @@
+/*!
+@page driver_log Driver Change Log
+
+@section xbar XBAR
+   Current XBAR driver version is 2.0.2
+
+   - 2.0.0
+     - Initial version.
+
+   - 2.0.1
+     - Bug Fix:
+       - Fix w1c bits for XBAR_SetOutputSignalConfig function.
+
+   - 2.0.2
+     - Bug Fix:
+       - Correct configuration for function XBAR_SetOutputSignalConfig.
+
+ */

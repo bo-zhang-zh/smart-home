@@ -1,0 +1,21 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<metadata>
+  <components>
+    <component name="platform.drivers.sai.support" requires="devices.modules.DriverType_I2S"/>
+    <component name="platform.drivers.sai.support.ip" requires="devices.modules.D_IP_SAI_SYN_012"/>
+    <component name="platform.drivers.sai.support.ip" requires="devices.modules.D_IP_SAI_SYN_016"/>
+    <component name="platform.drivers.sai.support.ip" requires="devices.modules.D_IP_SAI_SYN_013"/>
+    <component name="platform.drivers.sai.support.ip" requires="devices.modules.D_IP_SAI_SYN_017"/>
+    <component description="SAI Driver" name="platform.drivers.sai" provides="platform.drivers" requires="platform.drivers.sai.support" type="driver" version="2.1.1">
+      <source path="./">
+        <files mask="*.meta"/>
+        <files mask="fsl_sai.c"/>
+        <files mask="fsl_sai.h"/>
+        <files mask="fsl_sai_dma.c" requires="platform.drivers.dma"/>
+        <files mask="fsl_sai_dma.h" requires="platform.drivers.dma"/>
+        <files mask="fsl_sai_edma.c" requires="platform.drivers.edma"/>
+        <files mask="fsl_sai_edma.h" requires="platform.drivers.edma"/>
+      </source>
+    </component>
+  </components>
+</metadata>

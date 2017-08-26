@@ -1,0 +1,18 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<metadata>
+  <components>
+    <component name="platform.drivers.gpio.support" requires="devices.modules.DriverType_GPIO"/>
+    <component name="platform.drivers.gpio.support.ip" requires="devices.modules.D_IP_RGPIOC_SYN_017"/>
+    <component name="platform.drivers.gpio.support.ip" requires="devices.modules.D_IP_RGPIOC_SYN_013"/>
+    <component name="platform.drivers.gpio.support.ip" requires="devices.modules.D_IP_RGPIOC_SYN_016"/>
+    <component name="platform.drivers.gpio.support.ip" requires="devices.modules.D_IP_RGPIOC_SYN_018"/>
+    <component name="platform.drivers.gpio.support.ip" requires="devices.modules.D_IP_RGPIOC_SYN_019"/>
+    <component description="GPIO Driver" name="platform.drivers.gpio" provides="platform.drivers" requires="platform.drivers.gpio.support" type="driver" version="2.1.0">
+      <source path="./">
+        <files mask="*.meta"/>
+        <files mask="fsl_gpio.c"/>
+        <files mask="fsl_gpio.h"/>
+      </source>
+    </component>
+  </components>
+</metadata>

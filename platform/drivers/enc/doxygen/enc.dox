@@ -1,0 +1,59 @@
+/*!
+@defgroup enc ENC: Quadrature Encoder/Decoder
+@details The SDK provides Peripheral driver for the Quadrature Encoder/Decoder (ENC)
+         module of Kinetis devices.
+
+This section describes the programming interface of the ENC Peripheral driver.
+The ENC driver configures ENC module, provides functional interface for user to build enc application.
+
+# Function groups {#ENCFunGrps}
+
+## Initialization and De-initialization {#ENCInit}
+
+This function group initializes default configuration structure for the ENC counter, initialize ENC counter with the normal configuration and de-initialize ENC module. Some APIs are also created to control the features.
+
+## Status {#ENCSta}
+
+This function group get/clear the ENC status.
+
+## Interrupts {#ENCInt}
+
+This function group enable/disable the ENC interrupts.
+
+## Value Operation {#ENCValOps}
+
+This function group get the counter/hold value of positions.
+
+# Typical use case {#ENCTpyUC}
+
+## Polling Configuration {#ENCPolConfig}
+
+~~~~~{.c}
+
+    enc_config_t mEncConfigStruct;
+    uint32_t mCurPosValue;
+
+    BOARD_InitHardware();
+
+    // Initialize the ENC module.
+    ENC_GetDefaultConfig(&mEncConfigStruct);
+    ENC_Init(DEMO_ENC_INSTANCE, &mEncConfigStruct);
+    ENC_DoSoftwareLoadInitialPositionValue(DEMO_ENC_INSTANCE);
+    
+    while (1)
+    {
+        // ...
+        
+        // This read operation would capture all the position registers to responding hold registers.
+        mCurPosValue = ENC_GetPositionValue(DEMO_ENC_INSTANCE);
+        
+        PRINTF("Current position value: %ld\r\n", mCurPosValue);
+        PRINTF("Current position differential value: %d\r\n", (int16_t)ENC_GetHoldPositionDifferenceValue(DEMO_ENC_INSTANCE));
+        PRINTF("Current position revolution value: %d\r\n", ENC_GetHoldRevolutionValue(DEMO_ENC_INSTANCE));
+        PRINTF("g_EncIndexCounter: %d\r\n", g_EncIndexCounter);
+    }
+
+~~~~~
+
+*/
+

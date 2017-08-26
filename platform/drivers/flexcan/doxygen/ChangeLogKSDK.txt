@@ -1,0 +1,19 @@
+/*!
+@page driver_log Driver Change Log
+ 
+@section flexcan FLEXCAN
+  Current FLEXCAN driver version is 2.1.0
+
+  - 2.0.0
+    - Initial version.
+
+  - 2.1.0
+    - Bug Fix:
+      - Fix wrong function name spelling: FlEXCAN_XXX() -> FLEXCAN_XXX();
+      - Move Freeze Enable/Disable seting from FLEXCAN_Enter/ExitFreezeMode() to FLEXCAN_Init();
+      - Fix wrong helper macro values.
+    - Other changes:
+      - Hide FLEXCAN_Reset() to user.
+      - Use NDEBUG macro to wrap FLEXCAN_IsMbOccupied() function instand of DEBUG macro
+
+*/

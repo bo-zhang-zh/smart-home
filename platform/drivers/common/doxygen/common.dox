@@ -1,0 +1,6 @@
+/*!
+@defgroup ksdk_common Common Driver
+@details The KSDK provides a driver for the common module of Kinetis devices.
+
+*/
+

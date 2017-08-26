@@ -1,0 +1,6 @@
+/*!
+@defgroup qtmr QTMR: Quad Timer Driver
+@details The KSDK provides a driver for the QTMR module of Kinetis devices.
+
+*/
+

@@ -1,0 +1,17 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<metadata>
+  <components>
+    <component name="platform.drivers.qspi.support" requires="devices.modules.DriverType_QuadSPI"/>
+    <component name="platform.drivers.qspi.support.ip" requires="devices.modules.D_IP_QUADSPI_V2_SYN_038"/>
+    <component name="platform.drivers.qspi.support.ip" requires="devices.modules.D_IP_QUADSPI_V2_SYN_040"/>
+    <component description="QSPI Driver" name="platform.drivers.qspi" provides="platform.drivers" requires="platform.drivers.qspi.support" type="driver" version="2.0.1">
+      <source path="./">
+        <files mask="*.meta"/>
+        <files mask="fsl_qspi.c"/>
+        <files mask="fsl_qspi.h"/>
+        <files mask="fsl_qspi_edma.c" requires="platform.drivers.edma"/>
+        <files mask="fsl_qspi_edma.h" requires="platform.drivers.edma"/>
+      </source>
+    </component>
+  </components>
+</metadata>

@@ -1,0 +1,60 @@
+/*
+@page drv_err Driver errors status
+ - #kStatus_SDHC_Busy = 1700
+ - #kStatus_SDHC_PrepareAdmaDescriptorFailed = 1701
+ - #kStatus_SDHC_SendCommandFailed = 1702
+ - #kStatus_SDHC_TransferDataFailed = 1703
+*/
+
+/*!
+@defgroup sdhc SDHC: Secured Digital Host Controller Driver
+@details The KSDK provides a peripheral driver for the Secured Digital Host Controller (SDHC)
+         module of Kinetis devices.
+
+# Typical use case {#SDHCTypUC}
+
+## SDHC Operation {#SDHCOperation}
+
+~~~~~{.c}
+    /* Initializes the SDHC. */
+    sdhcConfig->cardDetectDat3 = false;
+    sdhcConfig->endianMode = kSDHC_EndianModeLittle;
+    sdhcConfig->dmaMode = kSDHC_DmaModeAdma2;
+    sdhcConfig->readWatermarkLevel = 0x80U;
+    sdhcConfig->writeWatermarkLevel = 0x80U;
+    SDHC_Init(BOARD_SDHC_BASEADDR, sdhcConfig);
+
+    /* Fills state in the card driver. */
+    card->sdhcBase = BOARD_SDHC_BASEADDR;
+    card->sdhcSourceClock = CLOCK_GetFreq(BOARD_SDHC_CLKSRC);
+    card->sdhcTransfer = sdhc_transfer_function;
+
+    /* Initializes the card. */
+    if (SD_Init(card))
+    {
+        PRINTF("\r\nSD card init failed.\r\n");
+    }
+
+    PRINTF("\r\nRead/Write/Erase the card continuously until it encounters error......\r\n");
+    while (true)
+    {
+        if (kStatus_Success != SD_WriteBlocks(card, g_dataWrite, DATA_BLOCK_START, DATA_BLOCK_COUNT))
+        {
+            PRINTF("Write multiple data blocks failed.\r\n");
+        }
+        if (kStatus_Success != SD_ReadBlocks(card, g_dataRead, DATA_BLOCK_START, DATA_BLOCK_COUNT))
+        {
+            PRINTF("Read multiple data blocks failed.\r\n");
+        }
+
+        if (kStatus_Success != SD_EraseBlocks(card, DATA_BLOCK_START, DATA_BLOCK_COUNT))
+        {
+            PRINTF("Erase multiple data blocks failed.\r\n");
+        }
+    }
+
+    SD_Deinit(card);
+~~~~~
+
+*/
+

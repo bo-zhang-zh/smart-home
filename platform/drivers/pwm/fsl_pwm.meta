@@ -1,0 +1,15 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<metadata>
+  <components>
+    <component name="platform.drivers.pwm.support" requires="devices.modules.DriverType_PWM"/>
+    <component name="platform.drivers.pwm.support.ip" requires="devices.modules.D_IP_eFlexPWM_SYN_049"/>
+    <component name="platform.drivers.pwm.support.ip" requires="devices.modules.D_IP_eFlexPWM_SYN_046"/>
+    <component description="PWM Driver" name="platform.drivers.pwm" provides="platform.drivers" requires="platform.drivers.pwm.support" type="driver" version="2.0.0">
+      <source path="./">
+        <files mask="*.meta"/>
+        <files mask="fsl_pwm.c"/>
+        <files mask="fsl_pwm.h"/>
+      </source>
+    </component>
+  </components>
+</metadata>

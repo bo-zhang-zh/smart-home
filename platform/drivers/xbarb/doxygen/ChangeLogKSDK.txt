@@ -1,0 +1,16 @@
+/*!
+@page driver_log Driver Change Log
+
+@section xbarb XBARB
+   Current XBARB driver version is 2.0.1
+
+   - 2.0.0
+     - Initial version.
+
+   - 2.0.1
+     - Bug Fix:
+       - Correct XBARB_SetSignalsConnection function.
+     - Other changes:
+       - Change array clock name.
+
+ */

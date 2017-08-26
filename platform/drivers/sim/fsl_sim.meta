@@ -1,0 +1,33 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<metadata>
+  <components>
+    <component name="platform.drivers.sim.support" requires="devices.modules.DriverType_SIM"/>
+    <component name="platform.drivers.sim.support.ip" requires="devices.modules.D_SSL_PIONEER_SIM_SYN_022"/>
+    <component name="platform.drivers.sim.support.ip" requires="devices.modules.D_SSL_PIONEER_SIM_SYN_005"/>
+    <component name="platform.drivers.sim.support.ip" requires="devices.modules.D_SSL_PIONEER_SIM_SYN_010"/>
+    <component name="platform.drivers.sim.support.ip" requires="devices.modules.D_SSL_PIONEER_SIM_SYN_020"/>
+    <component name="platform.drivers.sim.support.ip" requires="devices.modules.D_SSL_PIONEER_SIM_SYN_012"/>
+    <component name="platform.drivers.sim.support.ip" requires="devices.modules.D_SSL_PIONEER_SIM_SYN_021"/>
+    <component name="platform.drivers.sim.support.ip" requires="devices.modules.D_SSL_PIONEER_SIM_SYN_018"/>
+    <component name="platform.drivers.sim.support.ip" requires="devices.modules.D_SSL_PIONEER_SIM_SYN_025"/>
+    <component name="platform.drivers.sim.support.ip" requires="devices.modules.D_SSL_PIONEER_SIM_SYN_026"/>
+    <component name="platform.drivers.sim.support.ip" requires="devices.modules.D_SSL_LSIM_SYN_011"/>
+    <component name="platform.drivers.sim.support.ip" requires="devices.modules.D_SSL_LSIM_SYN_017"/>
+    <component name="platform.drivers.sim.support.ip" requires="devices.modules.D_SSL_LSIM_SYN_018"/>
+    <component name="platform.drivers.sim.support.ip" requires="devices.modules.D_SSL_LSIM_SYN_014"/>
+    <component name="platform.drivers.sim.support.ip" requires="devices.modules.D_SSL_LSIM_SYN_026"/>
+    <component name="platform.drivers.sim.support.ip" requires="devices.modules.D_SSL_LSIM_SYN_023"/>
+    <component name="platform.drivers.sim.support.ip" requires="devices.modules.D_SSL_LSIM_SYN_024"/>
+    <component name="platform.drivers.sim.support.ip" requires="devices.modules.D_SSL_L5K_SIM_SYN_012"/>
+    <component name="platform.drivers.sim.support.ip" requires="devices.modules.D_SSL_MT256_SOC_SYN_015"/>
+    <component name="platform.drivers.sim.support.ip" requires="devices.modules.D_SSL_PHOTON_SIM_SYN_003"/>
+    <component name="platform.drivers.sim.support.ip" requires="devices.modules.D_SSL_KL80_SIM_SYN_003"/>
+    <component description="SIM Driver" name="platform.drivers.sim" provides="platform.drivers" requires="platform.drivers.sim.support" type="driver" version="2.0.0">
+      <source path="./">
+        <files mask="*.meta"/>
+        <files mask="fsl_sim.c"/>
+        <files mask="fsl_sim.h"/>
+      </source>
+    </component>
+  </components>
+</metadata>

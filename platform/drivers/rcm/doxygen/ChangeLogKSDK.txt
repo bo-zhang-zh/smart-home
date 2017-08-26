@@ -1,0 +1,13 @@
+/*!
+@page driver_log Driver Change Log
+
+@section rcm RCM
+  Current RCM driver version is 2.0.1
+
+  - 2.0.0
+    - Initial version.
+
+  - 2.0.1
+    - [KPSDK-10249] Fix kRCM_SourceSw bit shift issue.
+
+*/

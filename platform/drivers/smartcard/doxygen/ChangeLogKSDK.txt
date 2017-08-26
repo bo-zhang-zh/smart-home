@@ -1,0 +1,18 @@
+/*!
+@page driver_log Driver Change Log
+
+@section smartcard SMARTCARD
+    Current SMARTCARD driver version is 2.1.1
+
+    - 2.1.0
+        - Initial version
+
+    - 2.1.1
+        - New Features:
+            - added default phy interface selection into smartcard RTOS drivers (KPSDK-9063).
+            - replaced smartcard_phy_ncn8025 driver by smartcard_phy_tda8035.
+        - Bug Fix:
+            - fixed protocol timers activation sequences in smartcard_emvsim and smartcard_phy_tda8035
+              drivers during emvl1 pre-certification tests (KPSDK-9170, KPSDK-9556).
+
+*/

@@ -1,0 +1,129 @@
+/*!
+@page drv_err Driver errors status
+ - #kStatus_DSPI_Error = 601
+*/
+
+/*!
+@defgroup dspi DSPI: Serial Peripheral Interface Driver
+@details The KSDK provides a peripheral driver for the Serial Peripheral Interface (SPI) module of Kinetis devices.
+*/
+
+/*!
+@defgroup dspi_driver DSPI Driver
+@ingroup dspi
+@details This section describes the programming interface of the DSPI Peripheral driver.
+The DSPI driver configures DSPI module, provides the functional and transactional
+interfaces to build the DSPI application.
+
+# Typical use case {#DSPITpyUC}
+
+## Master Operation {#DSPIMasterOps}
+
+~~~~~{.c}
+    dspi_master_handle_t g_m_handle; //global variable
+    dspi_master_config_t  masterConfig;
+    masterConfig.whichCtar                                = kDSPI_Ctar0;
+    masterConfig.ctarConfig.baudRate                      = baudrate;
+    masterConfig.ctarConfig.bitsPerFrame                  = 8;
+    masterConfig.ctarConfig.cpol                          = kDSPI_ClockPolarityActiveHigh;
+    masterConfig.ctarConfig.cpha                          = kDSPI_ClockPhaseFirstEdge;
+    masterConfig.ctarConfig.direction                     = kDSPI_MsbFirst;
+    masterConfig.ctarConfig.pcsToSckDelayInNanoSec        = 1000000000 / baudrate ;
+    masterConfig.ctarConfig.lastSckToPcsDelayInNanoSec    = 1000000000 / baudrate ;
+    masterConfig.ctarConfig.betweenTransferDelayInNanoSec = 1000000000 / baudrate ;
+    masterConfig.whichPcs                                 = kDSPI_Pcs0;
+    masterConfig.pcsActiveHighOrLow                       = kDSPI_PcsActiveLow;
+    masterConfig.enableContinuousSCK                      = false;
+    masterConfig.enableRxFifoOverWrite                    = false;
+    masterConfig.enableModifiedTimingFormat               = false;
+    masterConfig.samplePoint                              = kDSPI_SckToSin0Clock;
+    DSPI_MasterInit(base, &masterConfig, srcClock_Hz);
+
+    //srcClock_Hz = CLOCK_GetFreq(xxx);
+    DSPI_MasterInit(base, &masterConfig, srcClock_Hz);
+
+    DSPI_MasterTransferCreateHandle(base, &g_m_handle, NULL, NULL);
+
+    masterXfer.txData      = masterSendBuffer;
+    masterXfer.rxData      = masterReceiveBuffer;
+    masterXfer.dataSize    = transfer_dataSize;
+    masterXfer.configFlags = kDSPI_MasterCtar0 | kDSPI_MasterPcs0 ;
+    DSPI_MasterTransferBlocking(base, &g_m_handle, &masterXfer);
+
+~~~~~
+
+## Slave Operation {#DSPISlaveOps}
+
+~~~~~{.c}
+    dspi_slave_handle_t g_s_handle;//global variable
+    /*Slave config*/
+    slaveConfig.whichCtar                  = kDSPI_Ctar0;
+    slaveConfig.ctarConfig.bitsPerFrame    = 8;
+    slaveConfig.ctarConfig.cpol            = kDSPI_ClockPolarityActiveHigh;
+    slaveConfig.ctarConfig.cpha            = kDSPI_ClockPhaseFirstEdge;
+    slaveConfig.enableContinuousSCK        = false;
+    slaveConfig.enableRxFifoOverWrite      = false;
+    slaveConfig.enableModifiedTimingFormat = false;
+    slaveConfig.samplePoint                = kDSPI_SckToSin0Clock;
+    DSPI_SlaveInit(base, &slaveConfig);
+
+    slaveXfer.txData      = slaveSendBuffer0;
+    slaveXfer.rxData      = slaveReceiveBuffer0;
+    slaveXfer.dataSize    = transfer_dataSize;
+    slaveXfer.configFlags = kDSPI_SlaveCtar0;
+
+    bool isTransferCompleted = false;
+    DSPI_SlaveTransferCreateHandle(base, &g_s_handle, DSPI_SlaveUserCallback, &isTransferCompleted);
+
+    DSPI_SlaveTransferNonBlocking(&g_s_handle, &slaveXfer);
+
+
+	//void DSPI_SlaveUserCallback(SPI_Type *base, dspi_slave_handle_t *handle, status_t status, void *isTransferCompleted)
+	//{
+	//    if (status == kStatus_Success)
+	//    {
+	//        __NOP();
+	//    }
+	//    else if (status == kStatus_DSPI_Error)
+	//    {
+	//        __NOP();
+	//    }
+	//
+	//    *((bool *)isTransferCompleted) = true;
+	//
+	//    PRINTF("This is DSPI slave call back . \r\n");
+	//}
+~~~~~
+
+*/
+/*!
+@defgroup dspi_dma_driver DSPI DMA Driver
+@ingroup dspi
+@details This section describes the programming interface of the DSPI Peripheral driver.
+The DSPI driver configures DSPI module, provides the functional and transactional
+interfaces to build the DSPI application.
+*/
+
+/*!
+@defgroup dspi_edma_driver DSPI eDMA Driver
+@ingroup dspi
+@details This section describes the programming interface of the DSPI Peripheral driver.
+The DSPI driver configures DSPI module, provides the functional and transactional
+interfaces to build the DSPI application.
+*/
+
+/*!
+@defgroup dspi_freertos_driver DSPI FreeRTOS Driver
+@ingroup dspi
+*/
+
+/*!
+@defgroup dspi_ucosii_driver DSPI µCOS/II Driver
+@ingroup dspi
+*/
+
+/*!
+@defgroup dspi_ucosiii_driver DSPI µCOS/III Driver
+@ingroup dspi
+*/
+

@@ -1,0 +1,18 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<metadata>
+  <components>
+    <component name="platform.drivers.rtc.support" requires="devices.modules.DriverType_RTC devices.modules.DriverFeature_RTC_RTC"/>
+    <component name="platform.drivers.rtc.support.ip" requires="devices.modules.D_IP_SRTC_SYN_022"/>
+    <component name="platform.drivers.rtc.support.ip" requires="devices.modules.D_IP_SRTC_SYN_023"/>
+    <component name="platform.drivers.rtc.support.ip" requires="devices.modules.D_IP_SRTC_SYN_021"/>
+    <component name="platform.drivers.rtc.support.ip" requires="devices.modules.D_IP_SRTC_SYN_024"/>
+    <component name="platform.drivers.rtc.support.ip" requires="devices.modules.D_IP_SRTC_SYN_025"/>
+    <component description="RTC Driver" name="platform.drivers.rtc" provides="platform.drivers" requires="platform.drivers.rtc.support" type="driver" version="2.0.0">
+      <source path="./">
+        <files mask="*.meta"/>
+        <files mask="fsl_rtc.c"/>
+        <files mask="fsl_rtc.h"/>
+      </source>
+    </component>
+  </components>
+</metadata>

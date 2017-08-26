@@ -1,0 +1,15 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<metadata>
+  <components>
+    <component name="platform.drivers.xbara.support" requires="devices.modules.DriverType_XBARA"/>
+    <component name="platform.drivers.xbara.support.ip" requires="devices.modules.D_IP_XBAR_SW_DSC_SYN_007"/>
+    <component description="XBARA Driver" name="platform.drivers.xbara" provides="platform.drivers" requires="platform.drivers.xbara.support" type="driver" version="2.0.2">
+      <source path="./">
+        <files mask="*.meta"/>
+        <files mask="fsl_xbara.c"/>
+        <files mask="fsl_xbara.h"/>
+        <files mask="fsl_xbar_signals.h"/>
+      </source>
+    </component>
+  </components>
+</metadata>

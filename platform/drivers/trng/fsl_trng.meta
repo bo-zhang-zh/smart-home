@@ -1,0 +1,16 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<metadata>
+  <components>
+    <component name="platform.drivers.trng.support" requires="devices.modules.DriverType_TRNG"/>
+    <component name="platform.drivers.trng.support.ip" requires="devices.modules.ltc_mcu_rng_001"/>
+    <component name="platform.drivers.trng.support.ip" requires="devices.modules.ltc_mcu_rng_002"/>
+    <component name="platform.drivers.trng.support.ip" requires="devices.modules.D_SSL_L5K_ltc_mcu_rng_003"/>
+    <component description="TRNG Driver" name="platform.drivers.trng" provides="platform.drivers" requires="platform.drivers.trng.support" type="driver" version="2.0.1">
+      <source path="./">
+        <files mask="*.meta"/>
+        <files mask="fsl_trng.c"/>
+        <files mask="fsl_trng.h"/>
+      </source>
+    </component>
+  </components>
+</metadata>

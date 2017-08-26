@@ -1,0 +1,14 @@
+/*!
+@page driver_log Driver Change Log
+
+@section lpspi LPSPI
+  Current lpspi driver version is 2.0.1
+
+  - 2.0.0
+    - Initial version.
+
+  - 2.0.1
+    - Bug Fix:
+      - The clock source should divided by PRESCALE setting in LPSPI_MasterSetDelayTimes function.
+      - Fix the bug that LPSPI_MasterTransferBlocking function would hang in some corner cases.
+*/

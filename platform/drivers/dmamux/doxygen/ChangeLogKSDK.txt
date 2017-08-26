@@ -1,0 +1,16 @@
+/*!
+@page driver_log Driver Change Log
+
+@section dmamux DMAMUX
+  Current DMAMUX driver version is 2.0.2
+  
+  - 2.0.0
+    - Initial version.
+  - 2.0.1
+    - Bug fix:
+      - Fix build warning while setting DMA request source in DMAMUX_SetSourceChange issue, by changing the type of the parameter source from uint8_t to uint32_t.
+  - 2.0.2
+    - New feature:
+      - Add always on enable feature of a certain DMA channel for ULP1 DMAMUX support.
+
+*/

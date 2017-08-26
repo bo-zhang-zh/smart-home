@@ -1,0 +1,16 @@
+/*!
+@page driver_log Driver Change Log
+
+@section mpu MPU
+  Current mpu driver version is 2.1.0
+
+  - 2.0.0
+    - Initial version.
+  - 2.1.0
+    - API changes:
+      - Change the mpu_region_num_t and mpu_master_t to uint32_t.
+      - Change the mpu_low_masters_access_rights_t, mpu_high_masters_access_rights_t to
+        mpu_rwxrights_master_access_control_t, mpu_rwrights_master_access_control_t.
+      - Change the MPU_SetRegionLowMasterAccessRights(), MPU_SetRegionHighMasterAccessRights()  to MPU_SetRegionRwxMasterAccessRights(), MPU_SetRegionRwMasterAccessRights().
+
+*/

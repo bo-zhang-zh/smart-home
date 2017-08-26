@@ -1,0 +1,21 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<metadata>
+  <components>
+    <component name="platform.drivers.vref.support" requires="devices.modules.DriverType_VREF"/>
+    <component name="platform.drivers.vref.support.ip" requires="devices.modules.DA_IP_VREF1v2_NN_C90LP_008"/>
+    <component name="platform.drivers.vref.support.ip" requires="devices.modules.DA_IP_VREF1v2_NN_C90LP_034"/>
+    <component name="platform.drivers.vref.support.ip" requires="devices.modules.DA_IP_VREF1v2_NN_C90LP_028"/>
+    <component name="platform.drivers.vref.support.ip" requires="devices.modules.DA_IP_VREF1v2_NN_C90LP_029"/>
+    <component name="platform.drivers.vref.support.ip" requires="devices.modules.DA_IP_VREF1v2_NN_C90LP_031"/>
+    <component name="platform.drivers.vref.support.ip" requires="devices.modules.DA_IP_VREF1v2_NN_C90LP_033"/>
+    <component name="platform.drivers.vref.support.ip" requires="devices.modules.DA_IP_VREF1v2_NN_C90LP_035"/>
+    <component name="platform.drivers.vref.support.ip" requires="devices.modules.DA_IP_VREF_PHOTON_NN_C90LP_013"/>
+    <component description="VREF Driver" name="platform.drivers.vref" provides="platform.drivers" requires="platform.drivers.vref.support" type="driver" version="2.1.0">
+      <source path="./">
+        <files mask="*.meta"/>
+        <files mask="fsl_vref.c"/>
+        <files mask="fsl_vref.h"/>
+      </source>
+    </component>
+  </components>
+</metadata>

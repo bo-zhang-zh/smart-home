@@ -1,0 +1,12 @@
+/*!
+@defgroup cop COP: Watchdog Driver
+@details The KSDK provides a peripheral driver for the COP module (COP) of Kinetis devices.
+
+# Typical use case {#COPTpyUC}
+~~~~~{.c}
+    cop_config_t config;
+    COP_GetDefaultConfig(&config);
+    config.timeoutCycles = kCOP_2Power8CyclesOr2Power16Cycles;
+    COP_Init(sim_base,&config);
+~~~~~
+*/

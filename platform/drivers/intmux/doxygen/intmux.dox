@@ -1,0 +1,19 @@
+/*!
+@defgroup intmux INTMUX: Interrupt Multiplexer Driver
+@details The KSDK provides a peripheral driver for the Interrupt Multiplexer (INTMUX)
+         module of Kinetis devices.
+
+
+# Typical use case{#INTMUXTypicalUseCase}
+
+## Channel Configure{#ChannelConfig}
+
+~~~~~{.c}
+    /* INTMUX initialization */
+    INTMUX_Init(INTMUX0);
+    /* Resets the INTMUX channel 0 */
+    INTMUX_ResetChannel(INTMUX0, 0);
+    /* Configures the INTMUX channel 0, enable INTMUX source 0, 1, OR mode. */
+    INTMUX_SetChannelConfig(INTMUX0, 0, 1<<0 | 1<<1, kINTMUX_ChannelLogicOR);
+~~~~~
+*/

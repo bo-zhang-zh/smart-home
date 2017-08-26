@@ -1,0 +1,198 @@
+/*!
+@defgroup ltc LTC: LP Trusted Cryptography
+@details The Kinetis SDK provides the Peripheral driver for the LP Trusted Cryptography (LTC) module of Kinetis devices.
+LP Trusted Cryptography is a set of cryptograhpic hardware accelerator engines that share common registers. LTC architecture can support AES, DES, 3DES, MDHA (SHA), RSA and ECC.
+Actual list of implemented cryptograhpic hardware accelerator engines depends on specific Kinetis microcontroller.
+
+The driver comprises two sets of API functions.
+
+In the first set, blocking synchronous APIs are provided, for all operations supported by LTC hardware.
+The LTC operations are complete (and results are made availabe for further usage) when a function returns.
+When called, these functions don't return until an LTC operation is complete.
+These functions use main CPU for simple polling loops to determine operation complete or error status and also for plaintext or ciphertext data movements.
+The driver functions are not re-entrant.
+These functions provide typical interface to upper layer or application software.
+
+In the second set, DMA support for symmetric LTC processing is provided, for AES and DES engines.
+APIs in the second set use DMA for data movement to and from the LTC input and output FIFOs.
+By using these functions, main CPU is not used for plaintext or ciphertext data movements (DMA is used instead).
+Thus, CPU processing power can be used for other application tasks, at cost of decreased maximum data throughput (because of DMA module and transactions management overhead).
+These functions provide less typical interface, for applications that must offload main CPU while ciphertext or plaintext is being processed, at cost of longer
+cryptograhpic processing time.
+
+# LTC Driver Initialization and Configuration {#LTCInit}
+
+LTC Driver is initialized by calling the LTC_Init() function, it enables the LTC module clock in the Kinetis SIM module.
+If AES or DES engine is used and the LTC module implementation features the LTC DPA Mask Seed register, seed
+the DPA mask generator by using the seed from a random number generator. The LTC_SetDpaMaskSeed() function is provided to set the DPA mask seed.
+
+# Comments about API usage in RTOS {#LTCRtos}
+
+LTC operations provided by this driver are not re-entrant. Thus, application software shall ensure
+the LTC module operation is not requested from different tasks or interrupt service routines while an operation is in progress.
+
+# Comments about API usage in interrupt handler {#LTCisr}
+
+All APIs can be used from interrupt handler although execution time shall be considered (interrupt latency of equal and lower priority interrupts increases).
+
+# LTC Driver Examples {#LTCEx}
+
+## Simple examples {#LTCSimpleEx}
+
+Initialize LTC after Power On Reset or reset cycle
+~~~~~{.c}
+    LTC_Init(LTC0);
+    /* optionally initialize DPA mask seed register */
+    LTC_SetDpaMaskSeed(randomNumber);
+~~~~~
+Encrypt plaintext by DES engine
+~~~~~{.c}
+    char plain[16];
+    char cipher[16];
+
+    char iv[LTC_DES_IV_SIZE];
+    char key1[LTC_DES_KEY_SIZE];
+    char key2[LTC_DES_KEY_SIZE];
+    char key3[LTC_DES_KEY_SIZE];
+
+    memcpy(plain, "Hello World!", 12);
+    memcpy(iv, "initvect", LTC_DES_IV_SIZE);
+    memcpy(key1, "mykey1aa", LTC_DES_KEY_SIZE);
+    memcpy(key2, "mykey2bb", LTC_DES_KEY_SIZE);
+    memcpy(key3, "mykey3cc", LTC_DES_KEY_SIZE);
+
+    LTC_DES3_EncryptCbc(LTC0, plain, cipher, 16, iv, key1, key2, key3);
+~~~~~
+
+Encrypt ciphertext by AES engine
+~~~~~{.c}
+    char plain[16] = {0};
+    char cipher[16];
+    char iv[16] = {0};
+    char key[16] = {0};
+
+    memcpy(plain, "Hello World!", 12);
+    memcpy(iv, "initvectorinitve", 16);
+    memcpy(key, "__mykey1aa__^^..", 16);
+
+    LTC_AES_EncryptCbc(LTC0, plain, cipher, 16, iv, key, 16);
+~~~~~
+
+Compute keyed hash by AES engine (CMAC)
+~~~~~{.c}
+   char message[] = "Hello World!";
+   char key[16] = {0};
+   char output[16];
+   uint32_t szOutput = 16u;
+
+   memcpy(key, "__mykey1aa__^^..", 16);
+   LTC_HASH(LTC0, kLTC_Cmac, message, sizeof(message), key, 16, output, &szOutput);
+~~~~~
+
+Compute hash by MDHA engine (SHA-256)
+~~~~~{.c}
+   char message[] = "Hello World!";
+   char output[32];
+   uint32_t szOutput = 32u;
+
+   LTC_HASH(LTC0, kLTC_Sha256, message, sizeof(message), NULL, output, &szOutput);
+~~~~~
+
+Compute modular integer exponentiation
+~~~~~{.c}
+    status_t status;
+    const char bigA[] = "112233445566778899aabbccddeeff";
+    const char bigN[] = "aabbaabbaabb112233445566778899aabbccddeefe";
+    const char bigE[] = "065537";
+    char A[256], E[256], N[256], res[256];
+    uint16_t sizeA, sizeE, sizeN, sizeRes;
+
+    /* Note LTC PKHA integer format is least significant byte at lowest address.
+     * The _read_string() function converts the input string to LTC PKHA integer format
+     * and writes sizeof() the integer to the size variable (sizeA, sizeE, sizeN).
+     */
+    _read_string(A, &sizeA, bigA);
+    _read_string(E, &sizeE, bigN);
+    _read_string(N, &sizeN, bigE);
+
+    status = LTC_PKHA_ModExp(base, A, sizeA, N, sizeN, E, sizeE, res, &sizeRes, kLTC_PKHA_IntegerArith,
+                             kLTC_PKHA_NormalValue, kLTC_PKHA_TimingEqualized);
+~~~~~
+
+Compute elliptic curve point multiplication
+~~~~~{.c}
+    status_t status;
+    ltc_pkha_ecc_point_t B0, res0;
+    uint8_t bx, by, resx, resy;
+    uint8_t E[256];
+    bool isPointOfInfinity;
+    uint16_t resultSize, sizeE;
+
+    /* Example carried out with 1-byte curve params and point coordinates. */
+    uint8_t size = 1;
+    uint8_t aCurveParam = 1;
+    uint8_t bCurveParam = 0;
+
+    bx = 9;
+    by = 5;
+
+    B0.X = &bx;
+    B0.Y = &by;
+    res0.X = &resx;
+    res0.Y = &resy;
+
+    /* Prime modulus of the field. */
+    N[0] = 23;
+
+    /* Note LTC PKHA integer has least significant byte at lowest address */
+
+    /* Scalar multiplier */
+    char ew[] = "0100"; /* 256 in decimal */
+    _read_string(E, &sizeE, ew);
+
+    status = LTC_PKHA_ECC_PointMul(LTC0, &B0, E, sizeE, N, NULL, &aCurveParam, &bCurveParam, size,
+                                   kLTC_PKHA_TimingEqualized, kLTC_PKHA_IntegerArith, &res0, &isPointOfInfinity);
+~~~~~
+*/
+
+/*!
+@defgroup ltc_driver_synchronous_blocking LTC Blocking APIs
+@details This section describes the programming interface of the LTC Synchronous Blocking functions
+@ingroup ltc
+*/
+/*!
+@defgroup ltc_driver_des LTC DES driver
+@details This section describes the programming interface of the LTC DES driver.
+@ingroup ltc_driver_synchronous_blocking
+*/
+/*!
+@defgroup ltc_driver_aes LTC AES driver
+@details This section describes the programming interface of the LTC AES driver.
+@ingroup ltc_driver_synchronous_blocking
+*/
+/*!
+@defgroup ltc_driver_hash LTC HASH driver
+@details This section describes the programming interface of the LTC HASH driver.
+@ingroup ltc_driver_synchronous_blocking
+*/
+/*!
+@defgroup ltc_driver_pkha LTC PKHA driver
+@details This section describes the programming interface of the LTC PKHA driver.
+@ingroup ltc_driver_synchronous_blocking
+*/
+/*!
+@defgroup ltc_edma_driver LTC Non-blocking eDMA APIs
+@details This section describes the programming interface of the LTC EDMA Non Blocking functions
+@ingroup ltc
+*/
+/*!
+@defgroup ltc_edma_driver_des LTC eDMA DES driver
+@details This section describes the programming interface of the LTC EDMA DES driver.
+@ingroup ltc_edma_driver
+*/
+/*!
+@defgroup ltc_edma_driver_aes LTC eDMA AES driver
+@details This section describes the programming interface of the LTC EDMA AES driver.
+@ingroup ltc_edma_driver
+*/
+

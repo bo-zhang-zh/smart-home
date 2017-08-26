@@ -1,0 +1,42 @@
+<?xml version="1.0"?>
+<metadata>
+  <components>
+    <component name="boards.frdmkl26z.rtos_examples.freertos_swtimer" requires="platform.devices.device platform.devices.MKL26Z4 platform.devices.MKL26Z4_startup middleware.freertos platform.drivers platform.drivers.lpsci platform.drivers.uart platform.drivers.port platform.drivers.common platform.utilities platform.utilities.debug_console platform.drivers.gpio platform.drivers.smc platform.utilities.misc_utilities devices.boards.frdmkl26z" provides="examples">
+      <source path="./">
+        <files mask="*.txt"/>
+        <files mask="*.h"/>
+        <files mask="*.c"/>
+        <files mask="*.txt"/>
+        <files mask="*.meta"/>
+        <files mask="*.bin"/>
+      </source>
+      <source path="./iar/" requires="iar">
+        <files mask="*.*"/>
+      </source>
+      <source path="./iar/settings/" requires="iar">
+        <files mask="*.*"/>
+      </source>
+      <source path="./mdk/" requires="mdk">
+        <files mask="*.*"/>
+      </source>
+      <source path="./kds/" requires="kds">
+        <files mask="*.*"/>
+      </source>
+      <source path="./kds/settings/" requires="kds">
+        <files mask="*.*"/>
+      </source>
+      <source path="./atl/" requires="atl">
+        <files mask="*.*"/>
+      </source>
+      <source path="./atl/settings/" requires="atl">
+        <files mask="*.*"/>
+      </source>
+      <source path="./atl/.settings/" requires="atl">
+        <files mask="*.*"/>
+      </source>
+      <source path="./armgcc/" requires="armgcc">
+        <files mask="*.*"/>
+      </source>
+    </component>
+  </components>
+</metadata>

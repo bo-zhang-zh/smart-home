@@ -1,0 +1,86 @@
+/*!
+@defgroup mpu MPU: Memory Protection Unit
+@details The MPU driver provides hardware access control for all memory references generated in the device.
+Use the MPU driver to program the region descriptors that define memory spaces
+and their access rights. After initialization, the MPU concurrently monitors the system bus
+transactions and evaluates the appropriateness.
+
+# Initialization and Deinitialize{#MPUInit}
+
+To initialize the MPU module, call the MPU_Init() function and provide the user configuration data structure.
+This function sets the configuration of the MPU module automatically and enables the MPU module. \n
+Note that the configuration start address, end address, the region valid value, and the debugger's access permission for the MPU region 0 cannot be changed.
+
+This is example code to configure the MPU driver:
+
+~~~~~{.c}
+	// Defines the MPU memory access permission configuration structure . //
+     mpu_rwxrights_master_access_control_t mpuRwxAccessRightsMasters =
+    {
+         kMPU_SupervisorReadWriteExecute, //!< master0 access permission in supervisor mode //
+         kMPU_UserNoAccessRights,         //!< master0 access permission in user mode //
+         kMPU_IdentifierDisable,          //!< master0 process identifier disable value //
+         kMPU_SupervisorEqualToUsermode,  //!< master1 access permission in supervisor mode //
+         kMPU_UserNoAccessRights,         //!< master1 access permission in user mode //
+         kMPU_IdentifierDisable,          //!< master1 process identifier disable value //
+         kMPU_SupervisorEqualToUsermode,  //!< master2 access permission in supervisor mode //
+         kMPU_UserNoAccessRights,         //!< master2 access permission in user mode //
+         kMPU_IdentifierDisable,          //!< master2 process identifier disable value //
+         kMPU_SupervisorEqualToUsermode,  //!< master3 access permission in supervisor mode //
+         kMPU_UserNoAccessRights,         //!< master3 access permission in user mode //
+         kMPU_IdentifierDisable           //!< master3 process identifier disable value //
+    }
+     mpu_rwrights_master_access_control_t mpuRwAccessRightsMasters =
+    {
+          false,              //!< master4 read access permission //
+          false,              //!< master4 write access permission //
+          false,              //!< master5 read access permission //
+          false,              //!< master5 write access permission //
+          false,              //!< master6 read access permission //
+          false,              //!< master6 write access permission //
+          false,              //!< master7 read access permission //
+          false               //!< master7 write access permission //
+   };
+
+	// Defines the MPU region configuration structure. //
+	 mpu_region_config_t mpuRegionConfig =
+    {
+         0,                      //!< MPU region number //
+         0x0,                    //!< Memory region start address //
+         0xffffffff,             //!< Memory region end address //
+         mpuRwxAccessRightsMasters,     //!< MPU masters 0 ~ 3 access permission //
+         mpuRwAccessRightsMasters,    //!< MPU masters 4 ~ 7 access permission //
+         0,
+         0
+   };
+
+    // Defines the MPU user configuration structure. //
+	 mpu_config_t mpuUserConfig =
+    {
+         mpuRegionConfig, 	//!< Region access permission //
+         NULL           	//!< Pointer to the next structure //
+    };
+
+	// Initializes the MPU region 0. //
+	MPU_Init(MPU, &mpuUserConfig);
+~~~~~
+
+# Basic Control Operations {#MPUBasicOp}
+
+MPU can be enabled/disabled for the entire memory protection region by calling the
+MPU_Enable(). To save the power for any unused special regions when the entire
+memory protection region is disabled, call the MPU_RegionEnable().
+
+After MPU initialization, the MPU_SetRegionLowMasterAccessRights() and
+MPU_SetRegionHighMasterAccessRights() can be used to change the access rights
+for special master ports and for special region numbers.
+The MPU_SetRegionConfig can be used to set the whole region with the start/end
+address with access rights.
+
+The MPU_GetHardwareInfo() API is provided to get the hardware information for the device.
+The MPU_GetSlavePortErrorStatus() API is provided to get the error status of a special
+slave port. When an error happens in this port, the MPU_GetDetailErrorAccessInfo() API
+is provided to get the detailed error information.
+
+*/
+

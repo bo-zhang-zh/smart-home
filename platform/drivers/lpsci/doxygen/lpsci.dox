@@ -1,0 +1,96 @@
+/*!
+@defgroup lpsci LPSCI: Universal Asynchronous Receiver/Transmitter
+*/
+
+/*!
+@defgroup lpsci_driver LPSCI Driver
+@ingroup lpsci
+@details The KSDK provides a peripheral driver for the Inter-Integrated Circuit (LPSCI)
+         module of Kinetis devices.
+
+The LPSCI driver can be split into 2 parts: functional APIs and transactional APIs.
+
+Functional APIs are feature/property target low level APIs. Functional APIs can be used for the LPSCI initialization/configuration/operation for
+optimization/customization purpose. Using the functional API requires knowledge of the LPSCI peripheral and how to organize
+functional APIs to meet the application requirements. All functional APIs use the peripheral base address as the first parameter. The LPSCI
+functional operation groups provide the functional APIs set.
+
+The transactional APIs are transaction target high level APIs. Transactional APIs can be used to enable the peripheral quickly and also
+in the user's application if the code size and performance of transactional APIs can satisfy the user's requirements. If there are special requirements
+for the code size and performance, see the transactional API implementation and write custom  code. All transactional APIs use
+the lpsci_handle_t as the first parameter. Initialize the handle by calling the LPSCI_CreateHandle() API.
+
+Transactional APIs support queue feature for both transmit/receive. Whenever the user calls the LPSCI_SendDataIRQ() or LPSCI_ReceiveDataIRQ(),  the transfer
+structure is queued into the internally maintained software queue. The driver  automatically continues the transmit/receive if the queue is not empty.
+When a transfer is finished, the callback is called to inform the user about the completion.
+
+The LPSCI transactional APIs support the background receive. Provide the ringbuffer address and size while calling the LPSCI_CreateHandle() API.
+The driver automatically starts receiving the data from the receive buffer into the ringbuffer. When the user makes subsequent calls to the LPSCI_ReceiveDataIRQ(),
+the driver provides the received data in the ringbuffer for user buffer directly and queues the left buffer into the receive queue.
+
+# Function groups {#LPSCIFuncGrps}
+
+## LPSCI functional Operation {#LPSCIFunctional}
+
+This function group implements the LPSCI functional API. Functional APIs are feature-oriented.
+
+## LPSCI transactional Operation {#LPSCItransactional}
+
+This function group implements the LPSCI transactional API.
+
+## LPSCI DMA transactional Operation {#LPSCItransactional}
+
+This function group implements the LPSCI DMA transactional API.
+
+# Typical use case {#LPSCITypUC}
+
+## LPSCI Operation {#LPSCIOperation}
+
+~~~~~{.c}
+    uint8_t ch;
+    LPSCI_GetDefaultConfig(UART0,&user_config);
+    user_config.baudRate = 115200U;
+
+    LPSCI_Configure(UART0,&user_config,120000000U);
+
+    LPSCI_WriteData(UART0, txbuff, sizeof(txbuff));
+
+    while(1)
+    {
+        LPSCI_ReadData(UART0,&ch, 1);
+        LPSCI_WriteData(UART0, &ch, 1);
+    }
+~~~~~
+
+## LPSCI Send/Receive using an interrupt method {#LPSCIModeInt}
+
+## LPSCI Receive using the ringbuffer feature {#LPSCIUseRingBuf}
+
+## LPSCI Send/Receive using the DMA method {#LPSCIModeDMA}
+
+*/
+
+/*!
+@defgroup lpsci_dma_driver LPSCI DMA Driver
+@ingroup lpsci
+*/
+
+/*!
+@defgroup lpsci_edma_driver LPSCI eDMA Driver
+@ingroup lpsci
+*/
+
+/*!
+@defgroup lpsci_freertos_driver LPSCI FreeRTOS Driver
+@ingroup lpsci
+*/
+
+/*!
+@defgroup lpsci_ucosii_driver LPSCI µCOS/II Driver
+@ingroup lpsci
+*/
+
+/*!
+@defgroup lpsci_ucosiii_driver LPSCI µCOS/III Driver
+@ingroup lpsci
+*/

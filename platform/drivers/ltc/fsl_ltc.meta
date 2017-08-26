@@ -1,0 +1,19 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<metadata>
+  <components>
+    <component name="platform.drivers.ltc.support" requires="devices.modules.DriverType_LTC"/>
+    <component name="platform.drivers.ltc.support.ip" requires="devices.modules.ltc_mcu_aes_001"/>
+    <component name="platform.drivers.ltc.support.ip" requires="devices.modules.ltc_mcu_aes_003"/>
+    <component name="platform.drivers.ltc.support.ip" requires="devices.modules.ltc_mcu_mix_002"/>
+    <component name="platform.drivers.ltc.support.ip" requires="devices.modules.ltc_mcu_mix_003"/>
+    <component description="LTC Driver" name="platform.drivers.ltc" provides="platform.drivers" requires="platform.drivers.ltc.support" type="driver" version="2.0.1">
+      <source path="./">
+        <files mask="*.meta"/>
+        <files mask="fsl_ltc.c"/>
+        <files mask="fsl_ltc.h"/>
+        <files mask="fsl_ltc_edma.c" requires="platform.drivers.edma"/>
+        <files mask="fsl_ltc_edma.h" requires="platform.drivers.edma"/>
+      </source>
+    </component>
+  </components>
+</metadata>

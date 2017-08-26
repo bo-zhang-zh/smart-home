@@ -1,0 +1,13 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<metadata>
+  <components>
+    <component name="platform.drivers.sema42.support" requires="devices.modules.DriverType_SEMA42"/>
+    <component description="SEMA42 Driver" name="platform.drivers.sema42" provides="platform.drivers" requires="platform.drivers.sema42.support" type="driver" version="2.0.0">
+      <source path="./">
+        <files mask="*.meta"/>
+        <files mask="fsl_sema42.c"/>
+        <files mask="fsl_sema42.h"/>
+      </source>
+    </component>
+  </components>
+</metadata>

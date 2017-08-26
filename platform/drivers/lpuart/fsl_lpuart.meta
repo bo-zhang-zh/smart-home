@@ -1,0 +1,38 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<metadata>
+  <components>
+    <component name="platform.drivers.lpuart.support" requires="devices.modules.DriverType_LPUART"/>
+    <component name="platform.drivers.lpuart.support.ip" requires="devices.modules.D_IP_LPUART_SYN_017"/>
+    <component name="platform.drivers.lpuart.support.ip" requires="devices.modules.D_IP_LPUART_SYN_020"/>
+    <component name="platform.drivers.lpuart.support.ip" requires="devices.modules.D_IP_LPUART_SYN_012"/>
+    <component name="platform.drivers.lpuart.support.ip" requires="devices.modules.D_IP_LPUART_SYN_011"/>
+    <component name="platform.drivers.lpuart.support.ip" requires="devices.modules.D_IP_LPUART_SYN_018"/>
+    <component name="platform.drivers.lpuart.support.ip" requires="devices.modules.D_IP_LPUART_SYN_023"/>
+    <component name="platform.drivers.lpuart.support.ip" requires="devices.modules.D_IP_LPUART_SYN_024"/>
+    <component description="LPUART Driver" name="platform.drivers.lpuart" provides="platform.drivers" requires="platform.drivers.lpuart.support" type="driver" version="2.2.1">
+      <source path="./">
+        <files mask="*.meta"/>
+        <files mask="fsl_lpuart.c"/>
+        <files mask="fsl_lpuart.h"/>
+        <files mask="fsl_lpuart_freertos.c" requires="middleware.freertos"/>
+        <files mask="fsl_lpuart_freertos.h" requires="middleware.freertos"/>
+        <files mask="fsl_lpuart_ucosii.c" requires="middleware.ucosii"/>
+        <files mask="fsl_lpuart_ucosii.h" requires="middleware.ucosii"/>
+        <files mask="fsl_lpuart_ucosiii.c" requires="middleware.ucosiii"/>
+        <files mask="fsl_lpuart_ucosiii.h" requires="middleware.ucosiii"/>
+      </source>
+    </component>
+    <component description="LPUART Driver" name="platform.drivers.lpuart_dma" provides="platform.drivers" requires="platform.drivers.lpuart.support platform.drivers.dma" type="driver" version="2.2.1">
+      <source path="./">
+        <files mask="fsl_lpuart_dma.c"/>
+        <files mask="fsl_lpuart_dma.h"/>
+      </source>
+    </component>
+    <component description="LPUART Driver" name="platform.drivers.lpuart_edma" provides="platform.drivers" requires="platform.drivers.lpuart.support platform.drivers.edma" type="driver" version="2.2.1">
+      <source path="./">
+        <files mask="fsl_lpuart_edma.c"/>
+        <files mask="fsl_lpuart_edma.h"/>
+      </source>
+    </component>
+  </components>
+</metadata>

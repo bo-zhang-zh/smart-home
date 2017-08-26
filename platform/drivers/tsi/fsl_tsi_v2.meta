@@ -1,0 +1,14 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<metadata>
+  <components>
+    <component name="platform.drivers.tsi_v2.support" requires="devices.modules.DriverType_TSI devices.modules.DriverFeature_TSI_V2"/>
+    <component name="platform.drivers.tsi_v2.support.ip" requires="devices.modules.D_IP_TSI_SYN_021"/>
+    <component description="TSI Driver" name="platform.drivers.tsi_v2" provides="platform.drivers" requires="platform.drivers.tsi_v2.support" type="driver" version="2.1.2">
+      <source path="./">
+        <files mask="*.meta"/>
+        <files mask="fsl_tsi_v2.c"/>
+        <files mask="fsl_tsi_v2.h"/>
+      </source>
+    </component>
+  </components>
+</metadata>

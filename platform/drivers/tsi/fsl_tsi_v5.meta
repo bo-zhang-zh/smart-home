@@ -1,0 +1,14 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<metadata>
+  <components>
+    <component name="platform.drivers.tsi_v5.support" requires="devices.modules.DriverType_TSI devices.modules.DriverFeature_TSI_V5"/>
+    <component name="platform.drivers.tsi_v5.support.ip" requires="devices.modules.D_IP_TSI_5V_C90TFS_004"/>
+    <component description="TSI Driver" name="platform.drivers.tsi_v5" provides="platform.drivers" requires="platform.drivers.tsi_v5.support" type="driver" version="2.0.0">
+      <source path="./">
+        <files mask="*.meta"/>
+        <files mask="fsl_tsi_v5.c"/>
+        <files mask="fsl_tsi_v5.h"/>
+      </source>
+    </component>
+  </components>
+</metadata>

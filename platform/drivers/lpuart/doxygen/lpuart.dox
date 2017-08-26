@@ -1,0 +1,56 @@
+/*!
+@defgroup lpuart LPUART: Low Power UART Driver
+*/
+
+/*!
+@defgroup lpuart_driver LPUART Driver
+@ingroup lpuart
+@details The KSDK provides a peripheral driver for the Low Power UART (LPUART)
+         module of Kinetis devices.
+
+# Typical use case {#LPUARTTypUC}
+
+## LPUART Operation {#LPUARTOperation}
+
+~~~~~{.c}
+    uint8_t ch;
+    LPUART_GetDefaultConfig(&user_config);
+    user_config.baudRate = 115200U;
+
+    LPUART_Init(LPUART1,&user_config,120000000U);
+
+    LPUART_SendDataPolling(LPUART1, txbuff, sizeof(txbuff));
+
+    while(1)
+    {
+        LPUART_ReceiveDataPolling(LPUART1,&ch, 1);
+        LPUART_SendDataPolling(LPUART1, &ch, 1);
+    }
+~~~~~
+
+*/
+
+/*!
+@defgroup lpuart_dma_driver LPUART DMA Driver
+@ingroup lpuart
+*/
+
+/*!
+@defgroup lpuart_edma_driver LPUART eDMA Driver
+@ingroup lpuart
+*/
+
+/*!
+@defgroup lpuart_ucosii_driver LPUART µCOS/II Driver
+@ingroup lpuart
+*/
+
+/*!
+@defgroup lpuart_ucosiii_driver LPUART µCOS/III Driver
+@ingroup lpuart
+*/
+
+/*!
+@defgroup lpuart_freertos_driver LPUART FreeRTOS Driver
+@ingroup lpuart
+*/

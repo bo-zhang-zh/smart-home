@@ -1,0 +1,18 @@
+/*!
+@page driver_log Driver Change Log
+
+@section mmdvsq MMDVSQ
+   Current MMDVSQ driver version is 2.0.2
+
+   - 2.0.0
+     - Initial version.
+
+   - 2.0.1
+     - Other changes:
+       - Change name of MMDVSQ_GetDivideRemainder and MMDVSQ_GetDivideQuotient functions
+
+   - 2.0.2
+     - Bug Fix:
+       - Fix MMDVSQ_GetExecutionStatus function get execution status wrong
+
+ */

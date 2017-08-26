@@ -1,0 +1,20 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<metadata>
+  <components>
+    <component name="platform.drivers.cmp.support" requires="devices.modules.DriverType_CMP"/>
+    <component name="platform.drivers.cmp.support.ip" requires="devices.modules.D_IP_ANL_1C1D8C_SYN_029"/>
+    <component name="platform.drivers.cmp.support.ip" requires="devices.modules.D_IP_ANL_1C1D8C_SYN_013"/>
+    <component name="platform.drivers.cmp.support.ip" requires="devices.modules.D_IP_ANL_1C1D8C_SYN_019"/>
+    <component name="platform.drivers.cmp.support.ip" requires="devices.modules.D_IP_ANL_1C1D8C_SYN_030"/>
+    <component name="platform.drivers.cmp.support.ip" requires="devices.modules.D_IP_ANL_1C1D8C_SYN_026"/>
+    <component name="platform.drivers.cmp.support.ip" requires="devices.modules.D_IP_ANL_1C1D8C_SYN_023"/>
+    <component name="platform.drivers.cmp.support.ip" requires="devices.modules.D_IP_ANL_1C1D8C_SYN_032"/>
+    <component description="CMP Driver" name="platform.drivers.cmp" provides="platform.drivers" requires="platform.drivers.cmp.support" type="driver" version="2.0.0">
+      <source path="./">
+        <files mask="*.meta"/>
+        <files mask="fsl_cmp.c"/>
+        <files mask="fsl_cmp.h"/>
+      </source>
+    </component>
+  </components>
+</metadata>

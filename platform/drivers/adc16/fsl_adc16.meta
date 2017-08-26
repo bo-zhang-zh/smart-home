@@ -1,0 +1,21 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<metadata>
+  <components>
+    <component name="platform.drivers.adc16.support" requires="devices.modules.DriverType_ADC16"/>
+    <component name="platform.drivers.adc16.support.ip" requires="devices.modules.D_IP_ADC_16bSAR_SYN_046"/>
+    <component name="platform.drivers.adc16.support.ip" requires="devices.modules.D_IP_ADC_16bSAR_SYN_036"/>
+    <component name="platform.drivers.adc16.support.ip" requires="devices.modules.D_IP_ADC_16bSAR_SYN_034"/>
+    <component name="platform.drivers.adc16.support.ip" requires="devices.modules.D_IP_ADC_16bSAR_SYN_043"/>
+    <component name="platform.drivers.adc16.support.ip" requires="devices.modules.D_IP_ADC_16bSAR_SYN_047"/>
+    <component name="platform.drivers.adc16.support.ip" requires="devices.modules.D_IP_ADC_16bSAR_SYN_041"/>
+    <component name="platform.drivers.adc16.support.ip" requires="devices.modules.D_IP_ADC_16bSAR_SYN_040"/>
+    <component name="platform.drivers.adc16.support.ip" requires="devices.modules.D_IP_ADC_16bSAR_SYN_042"/>
+    <component description="ADC16 Driver" name="platform.drivers.adc16" provides="platform.drivers" requires="platform.drivers.adc16.support" type="driver" version="2.0.0">
+      <source path="./">
+        <files mask="*.meta"/>
+        <files mask="fsl_adc16.c"/>
+        <files mask="fsl_adc16.h"/>
+      </source>
+    </component>
+  </components>
+</metadata>

@@ -1,0 +1,13 @@
+/**
+@page rtos_log RTOS Change Log
+
+@section FreeRTOS FreeRTOS for KSDK
+Current version is FreeRTOS 8.2.3. Original package is available at freertos.org.
+
+  - 8.2.3
+    - New Features:
+      - Tickles idle mode support.
+      - Add template application for Kinetis Expert (KEx) tool (template_application).
+    - Other changes:
+      - Folder structure reduction. Keep only Kinetis related parts.
+*/

@@ -1,0 +1,11 @@
+<metadata>
+  <components>
+    <component name="platform.components.wm8960" provides="platform.components">
+      <source path="./">
+        <files mask="*.meta"/>
+        <files mask="fsl_wm8960.c"/>
+        <files mask="fsl_wm8960.h"/>
+      </source>
+    </component>
+  </components>
+</metadata>

@@ -1,0 +1,16 @@
+/*!
+@page driver_log Driver Change Log
+
+@section sdramc SDRAMC
+  Current sdramc driver version is 2.1.0
+
+  - 2.0.0
+    - Initial version.
+  - 2.0.1
+    - Misc Changes:
+      - Add static to the global sdramc variables.
+  - 2.1.0
+    - API change:
+      - Change status_t SDRAMC_SendCommand() to void SDRAMC_SendCommand();
+
+*/

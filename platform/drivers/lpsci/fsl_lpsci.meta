@@ -1,0 +1,27 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<metadata>
+  <components>
+    <component name="platform.drivers.lpsci.support" requires="devices.modules.DriverType_LPSCI"/>
+    <component name="platform.drivers.lpsci.support.ip" requires="devices.modules.D_IP_SCI_SYN_015"/>
+    <component name="platform.drivers.lpsci.support.ip" requires="devices.modules.D_IP_SCI_SYN_016"/>
+    <component description="LPSCI Driver" name="platform.drivers.lpsci" provides="platform.drivers" requires="platform.drivers.lpsci.support" type="driver" version="2.0.1">
+      <source path="./">
+        <files mask="*.meta"/>
+        <files mask="fsl_lpsci.c"/>
+        <files mask="fsl_lpsci.h"/>
+        <files mask="fsl_lpsci_freertos.c" requires="middleware.freertos"/>
+        <files mask="fsl_lpsci_freertos.h" requires="middleware.freertos"/>
+        <files mask="fsl_lpsci_ucosii.c" requires="middleware.ucosii"/>
+        <files mask="fsl_lpsci_ucosii.h" requires="middleware.ucosii"/>
+        <files mask="fsl_lpsci_ucosiii.c" requires="middleware.ucosiii"/>
+        <files mask="fsl_lpsci_ucosiii.h" requires="middleware.ucosiii"/>
+      </source>
+    </component>
+    <component description="LPSCI Driver" name="platform.drivers.lpsci_dma" provides="platform.drivers" requires="platform.drivers.lpsci.support platform.drivers.dma" type="driver" version="2.0.1">
+      <source path="./">
+        <files mask="fsl_lpsci_dma.c"/>
+        <files mask="fsl_lpsci_dma.h"/>
+      </source>
+    </component>
+  </components>
+</metadata>

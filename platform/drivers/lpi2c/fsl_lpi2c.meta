@@ -1,0 +1,23 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<metadata>
+  <components>
+    <component name="platform.drivers.lpi2c.support" requires="devices.modules.DriverType_LPI2C"/>
+    <component name="platform.drivers.lpi2c.support.ip" requires="devices.modules.D_IP_LPI2C_SYN_010"/>
+    <component name="platform.drivers.lpi2c.support.ip" requires="devices.modules.D_IP_LPI2C_SYN_012"/>
+    <component description="LPI2C Driver" name="platform.drivers.lpi2c" provides="platform.drivers" requires="platform.drivers.lpi2c.support" type="driver" version="2.1.0">
+      <source path="./">
+        <files mask="*.meta"/>
+        <files mask="fsl_lpi2c.c"/>
+        <files mask="fsl_lpi2c.h"/>
+        <files mask="fsl_lpi2c_edma.c" requires="platform.drivers.edma"/>
+        <files mask="fsl_lpi2c_edma.h" requires="platform.drivers.edma"/>
+        <files mask="fsl_lpi2c_freertos.c" requires="middleware.freertos"/>
+        <files mask="fsl_lpi2c_freertos.h" requires="middleware.freertos"/>
+        <files mask="fsl_lpi2c_ucosii.c" requires="middleware.ucosii"/>
+        <files mask="fsl_lpi2c_ucosii.h" requires="middleware.ucosii"/>
+        <files mask="fsl_lpi2c_ucosiii.c" requires="middleware.ucosiii"/>
+        <files mask="fsl_lpi2c_ucosiii.h" requires="middleware.ucosiii"/>
+      </source>
+    </component>
+  </components>
+</metadata>

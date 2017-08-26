@@ -1,0 +1,14 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<metadata>
+  <components>
+    <component name="platform.drivers.pmc0.support" requires="devices.modules.DriverType_PMC0"/>
+    <component name="platform.drivers.pmc0.support.ip" requires="devices.modules.D_IP_PMC_NN_C90LP_039"/>
+    <component description="PMC0 Driver" name="platform.drivers.pmc0" provides="platform.drivers" requires="platform.drivers.pmc0.support" type="driver" version="2.0.0">
+      <source path="./">
+        <files mask="*.meta"/>
+        <files mask="fsl_pmc0.c"/>
+        <files mask="fsl_pmc0.h"/>
+      </source>
+    </component>
+  </components>
+</metadata>

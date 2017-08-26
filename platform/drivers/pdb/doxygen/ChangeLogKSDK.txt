@@ -1,0 +1,13 @@
+/*!
+@page driver_log Driver Change Log
+
+@section pdb PDB
+  Current PDB driver version is 2.0.1
+
+  - 2.0.0
+    - Initial version.
+
+  - 2.0.1
+    - Change PDB register base array to const.
+
+*/

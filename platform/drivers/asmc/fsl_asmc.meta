@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<metadata>
+  <components>
+    <component name="platform.drivers.asmc.support" requires="devices.modules.D_IP_BBS_PERIF_WRAP_SYN_033"/>
+    <component description="ASMC Driver" name="platform.drivers.asmc" provides="platform.drivers" requires="platform.drivers.asmc.support" type="driver" version="2.0.0">
+      <source path="./">
+        <files mask="*.meta"/>
+        <files mask="fsl_asmc.c"/>
+        <files mask="fsl_asmc.h"/>
+      </source>
+    </component>
+  </components>
+</metadata>

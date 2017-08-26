@@ -1,0 +1,14 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<metadata>
+  <components>
+    <component name="platform.drivers.afe.support" requires="devices.modules.DriverType_AFE"/>
+    <component name="platform.drivers.afe.support.ip" requires="devices.modules.DA_IP_AFE_WRAPPER_C90SGTFS_020"/>
+    <component description="AFE Driver" name="platform.drivers.afe" provides="platform.drivers" requires="platform.drivers.afe.support" type="driver" version="2.0.1">
+      <source path="./">
+        <files mask="*.meta"/>
+        <files mask="fsl_afe.c"/>
+        <files mask="fsl_afe.h"/>
+      </source>
+    </component>
+  </components>
+</metadata>

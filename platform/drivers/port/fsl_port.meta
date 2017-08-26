@@ -1,0 +1,12 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<metadata>
+  <components>
+    <component name="platform.drivers.port.support" requires="devices.modules.DriverType_PORT"/>
+    <component description="PORT Driver" name="platform.drivers.port" provides="platform.drivers" type="driver" version="2.0.1">
+      <source path="./">
+        <files mask="*.meta"/>
+        <files mask="fsl_port.h"/>
+      </source>
+    </component>
+  </components>
+</metadata>

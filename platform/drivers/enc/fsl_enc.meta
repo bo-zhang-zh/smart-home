@@ -1,0 +1,15 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!-- This file is maintained by driver author -->
+<metadata>
+  <components>
+    <component name="platform.drivers.enc.support" requires="devices.modules.DriverType_ENC"/>
+    <component name="platform.drivers.enc.support.ip" requires="devices.modules.D_IP_ENC_DSC_SYN_010"/>
+    <component name="platform.drivers.enc" description="ENC Driver" requires="platform.drivers.enc.support" provides="platform.drivers" version="2.0.0">
+      <source path=".">
+        <files mask="*.meta"/>
+        <files mask="fsl_enc.c"/>
+        <files mask="fsl_enc.h"/>
+      </source>
+    </component>
+  </components>
+</metadata>

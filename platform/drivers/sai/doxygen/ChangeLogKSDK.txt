@@ -1,0 +1,23 @@
+/*!
+@page driver_log Driver Change Log
+
+@section sai SAI
+  Current SAI driver version is 2.1.1
+
+  - 2.0.0
+    - Initial version.
+  - 2.1.0
+    - API name change:
+      - SAI_GetSendRemainingBytes -> SAI_GetSentCount
+      - SAI_GetReceiveRemainingBytes -> SAI_GetReceivedCount
+      - All transcational API name add "Transfer" prefix.
+      - All transactional API use base and handle as input parameter.
+      - Unify the parameter names.
+    - Bug fix:
+      - Fix w1c bug while reading TCSR/RCSR registers.
+      - Fix MOE enable flow issue, move MOE enable after MICS settings in SAI_TxInit/SAI_RxInit.
+  - 2.1.1
+    - Optimization:
+      - Reduce code size while not using transactional API.
+
+*/

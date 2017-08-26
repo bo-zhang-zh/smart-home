@@ -1,0 +1,8 @@
+/*!
+@defgroup rcm RCM: Reset Control Module Driver
+@details The KSDK provides a Peripheral driver for the Reset Control Module (RCM) module of Kinetis devices.
+
+
+
+*/
+

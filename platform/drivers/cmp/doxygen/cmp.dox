@@ -1,0 +1,104 @@
+/*!
+@defgroup cmp CMP: Analog Comparator Driver
+@details The KSDK provides a peripheral driver for the Analog Comparator (CMP) module of Kinetis devices.
+
+
+The CMP driver is a basic comparator
+with advanced features. The APIs for the basic comparator enable the CMP  as a general comparator, which compares the
+two voltage of the two input channels and creates the output of the comparator result. The APIs for advanced features
+can be used as the plug-in function based on the basic comparator. They can process the comparator's output with
+hardware support.
+
+# Typical use case {#CMPTpyUC}
+
+## Polling Configuration {#CMPPolConfig}
+
+~~~~~{.c}
+
+    int main(void)
+    {
+        cmp_config_t mCmpConfigStruct;
+        cmp_dac_config_t mCmpDacConfigStruct;
+
+        // ...
+
+        // Configures the comparator.
+        CMP_Init(DEMO_CMP_INSTANCE);
+        CMP_GetDefaultConfig(&mCmpConfigStruct);
+        CMP_Configure(DEMO_CMP_INSTANCE, &mCmpConfigStruct);
+
+        // Configures the DAC channel.
+        mCmpDacConfigStruct.referenceVoltageSource = kCMP_VrefSourceVin2; // VCC.
+        mCmpDacConfigStruct.DACValue = 32U; // Half voltage of logic high-level.
+        CMP_SetDACConfig(DEMO_CMP_INSTANCE, &mCmpDacConfigStruct);
+        CMP_SetInputChannels(DEMO_CMP_INSTANCE, DEMO_CMP_USER_CHANNEL, DEMO_CMP_DAC_CHANNEL);
+
+        while (1)
+        {
+            if (0U != (kCMP_OutputAssertEventFlag & CMP_GetStatusFlags(DEMO_CMP_INSTANCE)))
+            {
+                // Do something.
+            }
+            else
+            {
+                // Do something.
+            }
+        }
+    }
+
+~~~~~
+
+## Interrupt Configuration {#CMPIntConfig}
+
+~~~~~{.c}
+
+    volatile uint32_t g_CmpFlags = 0U;
+
+    // ...
+
+    void DEMO_CMP_IRQ_HANDLER_FUNC(void)
+    {
+        g_CmpFlags = CMP_GetStatusFlags(DEMO_CMP_INSTANCE);
+        CMP_ClearStatusFlags(DEMO_CMP_INSTANCE, kCMP_OutputRisingEventFlag | kCMP_OutputFallingEventFlag);
+        if (0U != (g_CmpFlags & kCMP_OutputRisingEventFlag))
+        {
+            // Do something.
+        }
+        else if (0U != (g_CmpFlags & kCMP_OutputFallingEventFlag))
+        {
+            // Do something.
+        }
+    }
+
+    int main(void)
+    {
+        cmp_config_t mCmpConfigStruct;
+        cmp_dac_config_t mCmpDacConfigStruct;
+
+        // ...
+        EnableIRQ(DEMO_CMP_IRQ_ID);
+        // ...
+
+        // Configures the comparator.
+        CMP_Init(DEMO_CMP_INSTANCE);
+        CMP_GetDefaultConfig(&mCmpConfigStruct);
+        CMP_Configure(DEMO_CMP_INSTANCE, &mCmpConfigStruct);
+
+        // Configures the DAC channel.
+        mCmpDacConfigStruct.referenceVoltageSource = kCMP_VrefSourceVin2; // VCC.
+        mCmpDacConfigStruct.DACValue = 32U; // Half voltage of logic high-level.
+        CMP_SetDACConfig(DEMO_CMP_INSTANCE, &mCmpDacConfigStruct);
+        CMP_SetInputChannels(DEMO_CMP_INSTANCE, DEMO_CMP_USER_CHANNEL, DEMO_CMP_DAC_CHANNEL);
+
+        // Enables the output rising and falling interrupts.
+        CMP_EnableInterrupts(DEMO_CMP_INSTANCE, kCMP_OutputRisingInterruptEnable | kCMP_OutputFallingInterruptEnable);
+
+        while (1)
+        {
+        }
+    }
+
+~~~~~
+
+*/
+

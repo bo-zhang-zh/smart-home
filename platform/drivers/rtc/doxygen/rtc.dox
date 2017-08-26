@@ -1,0 +1,159 @@
+/*!
+@defgroup rtc RTC: Real Time Clock
+@details The KSDK provides a driver for the Real Time Clock (RTC)
+         of Kinetis devices.
+
+# Function groups {#RTCFunc}
+The RTC driver supports operating the module as a time counter.
+
+## Initialization and deinitialization {#RTCInit}
+The function RTC_Init() initializes the RTC with specified configurations. The function
+RTC_GetDefaultConfig() gets the default configurations.
+
+The function RTC_Deinit() disables the RTC timer and disables the module clock.
+
+## Set & Get Datetime {#RTCDatetime}
+The function RTC_SetDatetime() sets the timer period in seconds. User passes in the
+details in date & time format by using the below data structure.
+
+~~~~~{.c}
+typedef struct _rtc_datetime
+{
+    uint16_t year;  /*!< Range from 1970 to 2099.*/
+    uint8_t month;  /*!< Range from 1 to 12.*/
+    uint8_t day;    /*!< Range from 1 to 31 (depending on month).*/
+    uint8_t hour;   /*!< Range from 0 to 23.*/
+    uint8_t minute; /*!< Range from 0 to 59.*/
+    uint8_t second; /*!< Range from 0 to 59.*/
+} rtc_datetime_t;
+~~~~~
+
+The function RTC_GetDatetime() reads the current timer value in seconds, converts it to
+date & time format and stores it into a datetime structure passed in by the user.
+
+## Set & Get Alarm {#RTCAlarm}
+The function RTC_SetAlarm()  sets the alarm time period in seconds. User passes in the
+details in date & time format by using the datetime data structure.
+
+The function RTC_GetAlarm() reads the alarm time in seconds, converts it to
+date & time format and stores it into a datetime structure passed in by the user.
+
+## Start & Stop timer {#RTCStart}
+The function RTC_StartTimer() starts the RTC time counter.
+
+The function RTC_StopTimer() stops the RTC time counter.
+
+## Status {#RTCStatus}
+Provides functions to get and clear the RTC status.
+
+## Interrupt {#RTCInterrupt}
+Provides functions to enable/disable RTC interrupts and get current enabled interrupts.
+
+## RTC Oscillator {#RTCOscillator}
+Some SoC's allow control of the RTC oscillator through the RTC module.
+
+The function RTC_SetOscCapLoad() allows the user to modify the capacitor load configuration
+of the RTC oscillator.
+
+## Monotonic Counter {#RTCMonotonic}
+Some SoC's have a 64-bit Monotonic counter available in the RTC module.
+
+The function  RTC_SetMonotonicCounter() writes a 64-bit to the counter.
+
+The function RTC_GetMonotonicCounter() reads the monotonic counter and returns the
+64-bit counter value to the user.
+
+The function RTC_IncrementMonotonicCounter() increments the Monotonic Counter by one.
+
+# Typical use case {#RTCUseCase}
+
+## RTC tick example {#RTCTick}
+Example to set the RTC current time and trigger an alarm.
+~~~~~{.c}
+int main(void)
+{
+    uint32_t sec;
+    uint32_t currSeconds;
+    rtc_datetime_t date;
+    rtc_config_t rtcConfig;
+
+    /* Board pin, clock, debug console init */
+    BOARD_InitHardware();
+    /* Init RTC */
+    RTC_GetDefaultConfig(&rtcConfig);
+    RTC_Init(RTC, &rtcConfig);
+    /* Select RTC clock source */
+    BOARD_SetRtcClockSource();
+
+    PRINTF("RTC example: set up time to wake up an alarm\r\n");
+
+    /* Set a start date time and start RT */
+    date.year = 2014U;
+    date.month = 12U;
+    date.day = 25U;
+    date.hour = 19U;
+    date.minute = 0;
+    date.second = 0;
+
+    /* RTC time counter has to be stopped before setting the date & time in the TSR register */
+    RTC_StopTimer(RTC);
+
+    /* Set RTC time to default */
+    RTC_SetDatetime(RTC, &date);
+
+    /* Enable RTC alarm interrupt */
+    RTC_EnableInterrupts(RTC, kRTC_AlarmInterruptEnable);
+
+    /* Enable at the NVIC */
+    EnableIRQ(RTC_IRQn);
+
+    /* Start the RTC time counter */
+    RTC_StartTimer(RTC);
+
+    /* This loop will set the RTC alarm */
+    while (1)
+    {
+        busyWait = true;
+        /* Get date time */
+        RTC_GetDatetime(RTC, &date);
+
+        /* print default time */
+        PRINTF("Current datetime: %04hd-%02hd-%02hd %02hd:%02hd:%02hd\r\n", date.year, date.month, date.day, date.hour,
+               date.minute, date.second);
+
+        /* Get alarm time from user */
+        sec = 0;
+        PRINTF("Please input the number of second to wait for alarm \r\n");
+        PRINTF("The second must be positive value\r\n");
+        while (sec < 1)
+        {
+            SCANF("%d", &sec);
+        }
+
+        /* Read the RTC seconds register to get current time in seconds */
+        currSeconds = RTC->TSR;
+
+        /* Add alarm seconds to current time */
+        currSeconds += sec;
+
+        /* Set alarm time in seconds */
+        RTC->TAR = currSeconds;
+
+        /* Get alarm time */
+        RTC_GetAlarm(RTC, &date);
+
+        /* Print alarm time */
+        PRINTF("Alarm will occur at: %04hd-%02hd-%02hd %02hd:%02hd:%02hd\r\n", date.year, date.month, date.day,
+               date.hour, date.minute, date.second);
+
+        /* Wait until alarm occurs */
+        while (busyWait)
+        {
+        }
+
+        PRINTF("\r\n Alarm occurs !!!! ");
+    }
+}
+~~~~~
+
+*/

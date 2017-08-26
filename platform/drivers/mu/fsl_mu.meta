@@ -1,0 +1,13 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<metadata>
+  <components>
+    <component name="platform.drivers.mu.support" requires="devices.modules.DriverType_MU"/>
+    <component description="MU Driver" name="platform.drivers.mu" provides="platform.drivers" requires="platform.drivers.mu.support" type="driver" version="2.0.1">
+      <source path="./">
+        <files mask="*.meta"/>
+        <files mask="fsl_mu.c"/>
+        <files mask="fsl_mu.h"/>
+      </source>
+    </component>
+  </components>
+</metadata>

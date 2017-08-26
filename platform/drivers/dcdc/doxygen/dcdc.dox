@@ -1,0 +1,102 @@
+/*!
+@defgroup dcdc DCDC: DCDC Converter
+@details The KSDK provides a Peripheral driver for the DCDC Converter (DCDC) module of Kinetis devices.
+@{
+*/
+
+/*!
+@defgroup dcdc DCDC Converter Peripheral driver
+@ingroup dcdc
+@details This section describes the programming interface of the DCDC Converter Peripheral driver.
+
+
+The DCDC converter module is a switching mode DC-DC converter supporting Buck, Boost and Bypass mode. It could produce multiple switching outputs for SoC peripherals and external devices with high conversion efficiency. The converter can be operated in continuous or pulsed mode.
+
+As a module to provide the power for hardware system, the DCDC would start working when the system is powered up before the software takes over SoC. Some important configuration like selecting BUCK/BOOST/BYPASS mode is done by board settings. Before software can access the DCDC's registers, DCDC are already working normally with default settings.
+
+However, if the application needs to improve the DCDC's performance or change the default settings, DCDC driver would help. The DCDC's register can not be accessed by software before its initialization (open the clock gate). Then user can configure the hardware according to the application guide from RM.
+
+# Function groups {#DCDCFunGrps}
+
+## Initialization and deinitialization {#DCDCInit}
+
+This function group is to enable/disable the operations to DCDC module through the driver. 
+
+## Status {#DCDCStatus}
+
+Provides functions to get and clear the DCDC status.
+
+## Interrupts {#DCDCInterrupts}
+
+Provides functions to enable/disable DCDC interrupts.
+
+## Misc control {#DCDCMiscCtrl}
+
+Provides functions to set the DCDC's miscellaneous control.
+
+# Application guideline {#DCDCAppGuide}
+
+## Continuous mode {#DCDCModeContinous}
+
+As guideline from RM, to have better efficiency and ripple. The following call is recommended:
+
+~~~~~{.c}
+
+    dcdc_loop_control_config_t dcdcLoopCtrlConfigStruct;
+
+    DCDC_GetDefaultLoopControlConfig(&dcdcLoopCtrlConfigStruct);
+    dcdcLoopCtrlConfigStruct.enableDiffHysteresis = true; //DCDC_LOOPCTRL_EN_DF_HYST = 1
+    dcdcLoopCtrlConfigStruct.enableCommonHysteresis = true; //DCDC_LOOPCTRL_EN_CM_HYST = 1
+    dcdcLoopCtrlConfigStruct.enableInvertHysteresisSign = true; //DCDC_LOOPCTRL_HYST_SIGN = 1
+    DCDC_SetLoopControlConfig(DCDC, &dcdcLoopCtrlConfigStruct);
+
+~~~~~
+
+In boost mode, POSLIMIT_BOOST_IN is set to small value by default. To limit startup voltage, set it to 0x12 after startup, to provide high current to output, especially when battery voltage is low. The following call could be used.
+
+~~~~~{.c}
+
+    DCDC_SetUpperLimitDutyCycleBoost(DCDC, 0x12);
+
+~~~~~
+
+## Target voltage adjustment {#DCDCTargVolAdj}
+
+To adjust target voltage of VDD1P8 and VDD1P5. The following code could be used:
+
+~~~~~{.c}
+
+    DCDC_AdjustTargetVoltage(DCDC, vdd1p45Boost, vdd1p45Buck, vdd1p8); // Target voltage is unlocked.
+    // DCDC_STS_DC_OK bit will be de-asserted after target register changes.
+    // After output voltage settling to new target value, DCDC_STS_DC_OK will be asserted.
+    while (kDCDC_LockedOKStatus == (kDCDC_LockedOKStatus & DCDC_GetStatusFlags(DCDC)))
+    {
+    }
+
+~~~~~
+
+## Pulsed mode {#DCDCModePulse}
+
+Before entering pulsed mode, the target voltage should be locked. Also, there are some recommended setting.
+
+~~~~~{.c}
+
+    dcdc_low_power_config_t dcdcLpConfigStruct;
+    dcdc_loop_control_config_t dcdcLoopCtrlConfigStruct;
+
+    DCDC_GetDefaultLoopControlConfig(&dcdcLoopCtrlConfigStruct);
+    dcdcLoopCtrlConfigStruct.enableDiffHysteresis = true; //DCDC_LOOPCTRL_EN_DF_HYST = 1
+    dcdcLoopCtrlConfigStruct.enableCommonHysteresis = true; //DCDC_LOOPCTRL_EN_CM_HYST = 1
+    dcdcLoopCtrlConfigStruct.enableInvertHysteresisSign = true; //DCDC_LOOPCTRL_HYST_SIGN = 1
+    DCDC_SetLoopControlConfig(DCDC, &dcdcLoopCtrlConfigStruct);
+
+    DCDC_GetDefaultLowPowerConfig(&dcdcLpConfigStruct);
+    dcdcLpConfigStruct.enableDiffComparators = true;
+    DCDC_SetLowPowerConfig(DCDC, &dcdcLpConfigStruct)
+
+    // Enter low power mode.
+
+~~~~~
+
+*/
+/*! @} */

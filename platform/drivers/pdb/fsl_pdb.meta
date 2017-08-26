@@ -1,0 +1,16 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<metadata>
+  <components>
+    <component name="platform.drivers.pdb.support" requires="devices.modules.DriverType_PDB"/>
+    <component name="platform.drivers.pdb.support.ip" requires="devices.modules.D_SSL_PDB_Pioneer_SYN_011"/>
+    <component name="platform.drivers.pdb.support.ip" requires="devices.modules.D_SSL_PDB_Pioneer_SYN_010"/>
+    <component name="platform.drivers.pdb.support.ip" requires="devices.modules.D_SSL_PDB_Pioneer_SYN_012"/>
+    <component description="PDB Driver" name="platform.drivers.pdb" provides="platform.drivers" requires="platform.drivers.pdb.support" type="driver" version="2.0.1">
+      <source path="./">
+        <files mask="*.meta"/>
+        <files mask="fsl_pdb.c"/>
+        <files mask="fsl_pdb.h"/>
+      </source>
+    </component>
+  </components>
+</metadata>

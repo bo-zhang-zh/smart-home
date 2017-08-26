@@ -1,0 +1,15 @@
+/*!
+@page driver_log Driver Change Log
+
+@section slcd SLCD
+  Current slcd driver version is 2.0.1
+
+  - 2.0.0
+    - Initial version.
+  - 2.0.1
+    - Bug Fix:
+      - Change the Blink mode start setting flow.
+    - Misc Changes:
+      - Add static to slcd global variables.
+
+*/

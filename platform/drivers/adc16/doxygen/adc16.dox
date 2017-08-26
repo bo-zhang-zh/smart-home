@@ -1,0 +1,104 @@
+/*!
+@defgroup adc16 ADC16: 16-bit SAR Analog-to-Digital Converter Driver
+@details The KSDK provides a Peripheral driver for the 16-bit SAR Analog-to-Digital Converter (ADC16)
+         module of Kinetis devices.
+
+# Typical use case {#ADC16TpyUC}
+
+## Polling Configuration {#ADC16PolConfig}
+
+~~~~~{.c}
+    adc16_config_t adc16ConfigStruct;
+    adc16_channel_config_t adc16ChannelConfigStruct;
+
+    ADC16_Init(DEMO_ADC16_INSTANCE);
+    ADC16_GetDefaultConfig(&adc16ConfigStruct);
+    ADC16_Configure(DEMO_ADC16_INSTANCE, &adc16ConfigStruct);
+    ADC16_EnableHardwareTrigger(DEMO_ADC16_INSTANCE, false);
+#if defined(FSL_FEATURE_ADC16_HAS_CALIBRATION) && FSL_FEATURE_ADC16_HAS_CALIBRATION
+    if (kStatus_Success == ADC16_DoAutoCalibration(DEMO_ADC16_INSTANCE))
+    {
+        PRINTF("ADC16_DoAutoCalibration() Done.\r\n");
+    }
+    else
+    {
+        PRINTF("ADC16_DoAutoCalibration() Failed.\r\n");
+    }
+#endif // FSL_FEATURE_ADC16_HAS_CALIBRATION
+
+    adc16ChannelConfigStruct.channelNumber = DEMO_ADC16_USER_CHANNEL;
+    adc16ChannelConfigStruct.enableInterruptOnConversionCompleted = false;
+#if defined(FSL_FEATURE_ADC16_HAS_DIFF_MODE) && FSL_FEATURE_ADC16_HAS_DIFF_MODE
+    adc16ChannelConfigStruct.enableDifferentialConversion = false;
+#endif // FSL_FEATURE_ADC16_HAS_DIFF_MODE
+
+    while(1)
+    {
+        GETCHAR(); // Input any key in terminal console.
+        ADC16_ChannelConfigure(DEMO_ADC16_INSTANCE, DEMO_ADC16_CHANNEL_GROUP, &adc16ChannelConfigStruct);
+        while (kADC16_ChannelConversionDoneFlag != ADC16_ChannelGetStatusFlags(DEMO_ADC16_INSTANCE, DEMO_ADC16_CHANNEL_GROUP))
+        {
+        }
+        PRINTF("ADC Value: %d\r\n", ADC16_ChannelGetConversionValue(DEMO_ADC16_INSTANCE, DEMO_ADC16_CHANNEL_GROUP));
+    }
+~~~~~
+
+## Interrupt Configuration {#ADC16IntConfig}
+
+~~~~~{.c}
+    volatile bool g_Adc16ConversionDoneFlag = false;
+    volatile uint32_t g_Adc16ConversionValue;
+    volatile uint32_t g_Adc16InterruptCount = 0U;
+
+    // ...
+
+    adc16_config_t adc16ConfigStruct;
+    adc16_channel_config_t adc16ChannelConfigStruct;
+
+    ADC16_Init(DEMO_ADC16_INSTANCE);
+    ADC16_GetDefaultConfig(&adc16ConfigStruct);
+    ADC16_Configure(DEMO_ADC16_INSTANCE, &adc16ConfigStruct);
+    ADC16_EnableHardwareTrigger(DEMO_ADC16_INSTANCE, false);
+#if defined(FSL_FEATURE_ADC16_HAS_CALIBRATION) && FSL_FEATURE_ADC16_HAS_CALIBRATION
+    if (ADC16_DoAutoCalibration(DEMO_ADC16_INSTANCE))
+    {
+        PRINTF("ADC16_DoAutoCalibration() Done.\r\n");
+    }
+    else
+    {
+        PRINTF("ADC16_DoAutoCalibration() Failed.\r\n");
+    }
+#endif // FSL_FEATURE_ADC16_HAS_CALIBRATION
+
+    adc16ChannelConfigStruct.channelNumber = DEMO_ADC16_USER_CHANNEL;
+    adc16ChannelConfigStruct.enableInterruptOnConversionCompleted = true; // Enable the interrupt.
+#if defined(FSL_FEATURE_ADC16_HAS_DIFF_MODE) && FSL_FEATURE_ADC16_HAS_DIFF_MODE
+    adc16ChannelConfigStruct.enableDifferentialConversion = false;
+#endif // FSL_FEATURE_ADC16_HAS_DIFF_MODE
+
+    while(1)
+    {
+        GETCHAR(); // Input any key in terminal console.
+        g_Adc16ConversionDoneFlag = false;
+        ADC16_ChannelConfigure(DEMO_ADC16_INSTANCE, DEMO_ADC16_CHANNEL_GROUP, &adc16ChannelConfigStruct);
+        while (!g_Adc16ConversionDoneFlag)
+        {
+        }
+        PRINTF("ADC Value: %d\r\n", g_Adc16ConversionValue);
+        PRINTF("ADC Interrupt Count: %d\r\n", g_Adc16InterruptCount);
+    }
+
+    // ...
+
+    void DEMO_ADC16_IRQHandler(void)
+    {
+        g_Adc16ConversionDoneFlag = true;
+        // Read conversion result to clear the conversion completed flag.
+        g_Adc16ConversionValue = ADC16_ChannelConversionValue(DEMO_ADC16_INSTANCE, DEMO_ADC16_CHANNEL_GROUP);
+        g_Adc16InterruptCount++;
+    }
+
+~~~~~
+
+*/
+

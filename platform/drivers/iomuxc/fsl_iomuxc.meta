@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<metadata>
+  <components>
+    <component name="platform.drivers.iomuxc.support" requires="devices.modules."/>
+    <component name="platform.drivers.iomuxc.support" requires="devices.modules."/>
+    <component description="IOMUXC Driver" name="platform.drivers.iomuxc" provides="platform.drivers" requires="platform.drivers.iomuxc.support" type="driver" version="2.0.0">
+      <source path="./">
+        <files mask="*.meta"/>
+        <files mask="fsl_iomuxc.h"/>
+      </source>
+    </component>
+  </components>
+</metadata>

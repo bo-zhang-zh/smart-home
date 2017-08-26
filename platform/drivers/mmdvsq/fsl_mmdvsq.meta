@@ -1,0 +1,14 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<metadata>
+  <components>
+    <component name="platform.drivers.mmdvsq.support" requires="devices.modules.DriverType_MMDVSQ"/>
+    <component name="platform.drivers.mmdvsq.support.ip" requires="devices.modules.D_IP_AHB_MMDVSQ_SYN_001"/>
+    <component description="MMDVSQ Driver" name="platform.drivers.mmdvsq" provides="platform.drivers" requires="platform.drivers.mmdvsq.support" type="driver" version="2.0.2">
+      <source path="./">
+        <files mask="*.meta"/>
+        <files mask="fsl_mmdvsq.c"/>
+        <files mask="fsl_mmdvsq.h"/>
+      </source>
+    </component>
+  </components>
+</metadata>

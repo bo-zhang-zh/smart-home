@@ -1,0 +1,20 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<metadata>
+  <components>
+    <component name="platform.drivers.pit.support" requires="devices.modules.DriverType_PIT"/>
+    <component name="platform.drivers.pit.support.ip" requires="devices.modules.pit_rti_038"/>
+    <component name="platform.drivers.pit.support.ip" requires="devices.modules.pit_rti_030"/>
+    <component name="platform.drivers.pit.support.ip" requires="devices.modules.pit_rti_037"/>
+    <component name="platform.drivers.pit.support.ip" requires="devices.modules.pit_rti_040"/>
+    <component name="platform.drivers.pit.support.ip" requires="devices.modules.pit_rti_039"/>
+    <component name="platform.drivers.pit.support.ip" requires="devices.modules.pit_rti_032"/>
+    <component name="platform.drivers.pit.support.ip" requires="devices.modules.pit_rti_033"/>
+    <component description="PIT Driver" name="platform.drivers.pit" provides="platform.drivers" requires="platform.drivers.pit.support" type="driver" version="2.0.0">
+      <source path="./">
+        <files mask="*.meta"/>
+        <files mask="fsl_pit.c"/>
+        <files mask="fsl_pit.h"/>
+      </source>
+    </component>
+  </components>
+</metadata>

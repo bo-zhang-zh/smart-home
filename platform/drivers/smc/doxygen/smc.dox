@@ -1,0 +1,19 @@
+/*!
+@page drv_err Driver errors status
+ - #kStatus_SMC_StopAbort = 3900
+*/
+
+/*!
+@defgroup smc SMC: System Mode Controller Driver
+@details The KSDK provides a Peripheral driver for the System Mode Controller (SMC) module of
+Kinetis devices. The SMC module is responsible for sequencing the system into and out of all
+low-power Stop and Run modes
+
+API functions are provided for configuring the system working in a dedicated power mode. For
+different power modes, function `SMC_SetPowerModexxx` accepts different parameters. System power mode
+state transitions are not available for between power modes. For details about available transitions,
+see the Power mode transitions section in the SoC reference manual.
+
+
+*/
+

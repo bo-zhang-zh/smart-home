@@ -1,0 +1,102 @@
+/*!
+@defgroup lpit_driver LPIT: Low-Power Interrupt Timer
+@details The KSDK provides a driver for the Low-Power Interrupt Timer (LPIT)
+         of Kinetis devices.
+
+# Function groups {#LPITFunc}
+The LPIT driver supports operating the module as a time counter.
+
+## Initialization and deinitialization {#LPITInit}
+The function LPIT_Init() initializes the LPIT with specified configurations. The function
+LPIT_GetDefaultConfig() gets the default configurations. The initialization function
+configures the LPIT operation in doze mode and debug mode.
+
+The function LPIT_SetupChannel() configures the operation of each LPIT channel.
+
+The function LPIT_Deinit() disables the LPIT module and disables the module clock.
+
+## Timer period Operations {#LPITTimerPeriodOperation}
+The function LPITR_SetTimerPeriod()  sets the timer period in units of count. Timers begin
+counting down from the value set by this function until it reaches 0.
+
+The function LPIT_GetCurrentTimerCount() reads the current timer counting value.
+This function returns the real-time timer counting value, in a range from 0 to a timer period.
+
+The timer period operation functions takes the count value in ticks. User can call the utility macros
+provided in fsl_common.h to convert to microseconds or milliseconds
+
+## Start and Stop timer operations {#LPITStartStopOperation}
+The function LPIT_StartTimer() starts the timer counting. After calling this function, the timer loads
+the period value set earlier via the LPIT_SetPeriod() function and starts counting down to 0. When
+the timer reaches 0, it generates a trigger pulse and sets the timeout interrupt flag.
+
+The function LPIT_StopTimer() stops the timer counting.
+
+## Status {#LPITStatus}
+Provides functions to get and clear the LPIT status.
+
+## Interrupt {#LPITInterrupt}
+Provides functions to enable/disable LPIT interrupts and get current enabled interrupts.
+
+
+# Typical use case {#LPITUseCase}
+
+## LPIT tick example {#LPITTick}
+Updates the LPIT period and toggles an LED periodically.
+~~~~~{.c}
+int main(void)
+{
+    /* Structure of initialize LPIT */
+    lpit_config_t lpitConfig;
+    lpit_chnl_params_t lpitChannelConfig;
+
+    /* Initialize and enable LED */
+    LED_Init();
+
+    /* Board pin, clock, debug console init */
+    BOARD_InitHardware();
+
+    LPIT_GetDefaultConfig(&lpitConfig);
+
+    /* Init lpit module */
+    LPIT_Init(LPIT0, &lpitConfig);
+
+    lpitChannelConfig.chainChannel = false;
+    lpitChannelConfig.enableReloadOnTrigger = false;
+    lpitChannelConfig.enableStartOnTrigger = false;
+    lpitChannelConfig.enableStopOnTimeout = false;
+    lpitChannelConfig.timerMode = kLPIT_PeriodicCounter;
+    /* Set default values for the trigger source */
+    lpitChannelConfig.triggerSelect = kLPIT_Trigger_TimerChn0;
+    lpitChannelConfig.triggerSource = kLPIT_TriggerSource_External;
+
+    /* Init lpit channel 0 */
+    LPIT_SetupChannel(LPIT0, kLPIT_Chnl_0, &lpitChannelConfig);
+
+    /* Set timer period for channel 0 */
+    LPIT_SetTimerPeriod(LPIT0, kLPIT_Chnl_0, USEC_TO_COUNT(1000000U, LPIT_SOURCECLOCK));
+
+    /* Enable timer interrupts for channel 0 */
+    LPIT_EnableInterrupts(LPIT0, kLPIT_Channel0TimerInterruptEnable);
+
+    /* Enable at the NVIC */
+    EnableIRQ(LPIT0_IRQn);
+
+    /* Start channel 0 */
+    PRINTF("\r\nStarting channel No.0 ...");
+    LPIT_StartTimer(LPIT0, kLPIT_Chnl_0);
+
+    while (true)
+    {
+        /* Check whether occur interupt and toggle LED */
+        if (true == lpitIsrFlag)
+        {
+            PRINTF("\r\n Channel No.0 interrupt is occured !");
+            LED_Toggle();
+            lpitIsrFlag = false;
+        }
+    }
+}
+~~~~~
+
+*/

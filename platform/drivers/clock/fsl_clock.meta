@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<metadata>
+  <components>
+    <component description="Clock Driver" name="platform.drivers.clock" provides="platform.drivers" type="driver" version="2.1.0">
+      <source path="./">
+        <files mask="*.meta"/>
+        <files mask="fsl_clock.c"/>
+        <files mask="fsl_clock.h"/>
+      </source>
+    </component>
+  </components>
+</metadata>

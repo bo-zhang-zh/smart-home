@@ -1,0 +1,162 @@
+/*!
+@defgroup acmp ACMP: Analog Comparator Driver
+@details The SDK provides Peripheral driver for the Comparator (ACMP) module of Kinetis devices.
+
+ACMP driver is created to help user to operate the ACMP module better. This driver can be considered as a basic
+comparator with advanced features. The APIs for basic comparator can make the CMP work as a general comparator, which
+compares the two input channel's voltage and creates the output of the comparator result immediately. The APIs for
+advanced feature can be used as the plug-in function based on the basic comparator, they can provide more ways to
+process the comparator's output.
+
+# Typical use case {#ACMPTpyUC}
+
+## Normal Configuration {#ACMPNormalConfig}
+
+~~~~~{.c}
+    acmp_config_t acmpConfigStruct;
+    acmp_dac_config_t dacConfigStruct;
+    acmp_channel_config_t channelConfigStruct;
+    CMP_Type *base = DEMO_ACMP_INSTANCE;
+    uint32_t statusFlags;
+
+    ACMP_GetDefaultConfig(&acmpConfigStruct);
+    ACMP_Init(base, &acmpConfigStruct);
+
+    /* Select the positive port input from DAC and negative port input from minus mux input. */
+    channelConfigStruct.positivePortInput = kACMP_PortInputFromDAC;
+    channelConfigStruct.negativePortInput = kACMP_PortInputFromMux;
+    channelConfigStruct.minusMuxInput = DEMO_ACMP_USER_CHANNEL;
+    ACMP_SetChannelConfig(base, &channelConfigStruct);
+
+    dacConfigStruct.referenceVoltageSource = kACMP_VrefSourceVin1;
+    dacConfigStruct.DACValue = 0x7FU;
+    ACMP_SetDACConfig(base, &dacConfigStruct);
+
+    ACMP_Enable(base, true);
+
+    while (true)
+    {
+        statusFlags = ACMP_GetStatusFlags(base);
+
+        /* Check the comparison result. */
+        if ((kACMP_OutputAssertEventFlag == (statusFlags & kACMP_OutputAssertEventFlag)) &&
+            (kACMP_OutputRisingEventFlag == (statusFlags & kACMP_OutputRisingEventFlag)))
+        {
+            ACMP_ClearStatusFlags(base, kACMP_OutputRisingEventFlag);
+        }
+        else if ((kACMP_OutputAssertEventFlag != (statusFlags & kACMP_OutputAssertEventFlag)) &&
+                 (kACMP_OutputFallingEventFlag == (statusFlags & kACMP_OutputFallingEventFlag)))
+        {
+            ACMP_ClearStatusFlags(base, kACMP_OutputFallingEventFlag);
+        }
+        else
+        {
+            /* The input state has no change. */
+        }
+    }
+~~~~~
+
+## Interrupt Configuration {#ACMPIntConfig}
+
+~~~~~{.c}
+    acmp_config_t acmpConfigStruct;
+    acmp_dac_config_t dacConfigStruct;
+    acmp_channel_config_t channelConfigStruct;
+    CMP_Type *base = DEMO_ACMP_INSTANCE;
+
+    BOARD_InitHardware();
+
+    ACMP_GetDefaultConfig(&acmpConfigStruct);
+    ACMP_Init(base, &acmpConfigStruct);
+
+    /* Select the positive port input from DAC and negative port input from minus mux input. */
+    channelConfigStruct.positivePortInput = kACMP_PortInputFromDAC;
+    channelConfigStruct.negativePortInput = kACMP_PortInputFromMux;
+    channelConfigStruct.minusMuxInput = DEMO_ACMP_USER_CHANNEL;
+    ACMP_SetChannelConfig(base, &channelConfigStruct);
+
+    dacConfigStruct.referenceVoltageSource = kACMP_VrefSourceVin1;
+    dacConfigStruct.DACValue = 0x7FU;
+    ACMP_SetDACConfig(base, &dacConfigStruct);
+
+    /* Enable the interrupts. */
+    ACMP_EnableInterrupts(base, kACMP_OutputRisingInterruptEnable | kACMP_OutputFallingInterruptEnable);
+    EnableIRQ(DEMO_ACMP_IRQ_ID);
+
+    ACMP_Enable(base, true);
+
+    while (true)
+    {
+        /* Check the global flag set in the ISR. */
+        if (g_acmpOutputRising)
+        {
+            g_acmpOutputRising = 0U;
+        }
+        else if (g_acmpOutputFalling)
+        {
+            g_acmpOutputFalling = 0U;
+        }
+        else
+        {
+            /* Unknown status. */
+        }
+    }
+~~~~~
+
+## Round robin Configuration {#ACMPRoundRobinConfig}
+
+~~~~~{.c}
+    acmp_config_t acmpConfigStruct;
+    acmp_channel_config_t channelConfigStruct;
+    acmp_dac_config_t dacConfigStruct;
+    acmp_round_robin_config_t roundRobinConfigStruct;
+    CMP_Type *base = DEMO_ACMP_INSTANCE;
+    uint32_t outputResult;
+
+    BOARD_InitHardware();
+
+    ACMP_GetDefaultConfig(&acmpConfigStruct);
+    ACMP_Init(base, &acmpConfigStruct);
+
+    /* Select the positive port input from DAC and negative port input from minus mux input. */
+    channelConfigStruct.positivePortInput = kACMP_PortInputFromDAC;
+    channelConfigStruct.negativePortInput = kACMP_PortInputFromMux;
+    /* Plus mux input must be different from minus mux input in round robin mode although they aren't functional.
+     * Please refer to the reference manual to get detail description.
+     */
+    channelConfigStruct.plusMuxInput = 0U;
+    channelConfigStruct.minusMuxInput = 1U;
+    ACMP_SetChannelConfig(base, &channelConfigStruct);
+
+    dacConfigStruct.referenceVoltageSource = kACMP_VrefSourceVin1;
+    dacConfigStruct.DACValue = 0x7FU; /* DAC output voltage is VDDA/2 */
+    ACMP_SetDACConfig(base, &dacConfigStruct);
+
+    /* Configure round robin mode. */
+    roundRobinConfigStruct.fixedPort = kACMP_FixedPlusPort;
+    roundRobinConfigStruct.fixedChannelNumber = 0U;
+    roundRobinConfigStruct.checkerChannelMask = DEMO_ACMP_ROUND_ROBIN_CHANNELS_CHECKER_MASK;
+    roundRobinConfigStruct.sampleClockCount = 0U;
+    roundRobinConfigStruct.delayModulus = 0U;
+    ACMP_SetRoundRobinConfig(base, &roundRobinConfigStruct);
+
+    ACMP_EnableInterrupts(base, kACMP_RoundRobinInterruptEnable);
+    EnableIRQ(DEMO_ACMP_IRQ_ID);
+
+    ACMP_Enable(base, true);
+
+    ACMP_SetRoundRobinPreState(base, DEMO_ACMP_ROUND_ROBIN_CHANNELS_PRE_STATE_MASK);
+
+    /* Set round robin camparison trigger period in STOP mode. */
+    BOARD_InitAcmpRoundRobinTrigger(DEMO_ACMP_ROUND_ROBIN_PERIOD_MILLISECONDS);
+
+    BOARD_EnterStopMode();
+
+    /* Wakeup and continue doing something. */
+
+    while (true)
+    {
+    }
+~~~~~
+
+*/

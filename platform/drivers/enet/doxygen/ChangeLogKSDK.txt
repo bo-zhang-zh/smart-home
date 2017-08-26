@@ -1,0 +1,17 @@
+/*!
+@page driver_log Driver Change Log
+
+@section enet ENET
+  Current enet driver version is 2.0.1
+
+  - 2.0.0
+    - Initial version.
+  - 2.0.1
+    - Bug Fix:
+      - Use direct transmit busy check when do data transmit.
+    - Misc Changes:
+      - Update IRQ handler work flow.
+      - Change the tx/rx interrupt macro from kENET_RxByteInterrupt to kENET_RxBufferInterrupt, from kENET_TxByteInterrupt to kENET_TxBufferInterrupt.
+      - Delete unnecessary parameter in ENET handler.
+
+*/

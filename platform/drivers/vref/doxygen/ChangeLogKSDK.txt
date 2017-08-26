@@ -1,0 +1,14 @@
+/*!
+@page driver_log Driver Change Log
+
+@section vref VREF
+
+  Current VREF driver version is 2.1.0
+
+  - 2.0.0
+    - Initial version.
+
+  - 2.1.0
+    - Add new functions:
+      - Support L5K board: add VREF_SetTrim2V1Val() and VREF_GetTrim2V1Val() functions to supply 2V1 output mode.
+*/

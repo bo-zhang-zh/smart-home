@@ -1,0 +1,21 @@
+/*!
+@page driver_log Driver Change Log
+
+@section tpm TPM
+  Current TPM driver version is 2.0.2
+
+  - 2.0.0
+    - Initial version.
+
+  - 2.0.1
+    - Bugfix
+      - Fix TPM_UpdateChnIEdgeLevelSelect ACK wait issue.
+      - Fix TPM_SetupdualEdgeCapture can not set FILTER register issue.
+      - Fix TPM_UpdateChnEdgeLevelSelect ACK wait issue.
+
+  - 2.0.2
+    - Bugfix
+      - Fix issues in functions TPM_SetupPwm/TPM_UpdateChnlEdgeLevelSelect
+        /TPM_SetupInputCapture/TPM_SetupOutputCompare/TPM_SetupDualEdgeCapture,
+        wait acknowledgement when channel disabled.
+*/

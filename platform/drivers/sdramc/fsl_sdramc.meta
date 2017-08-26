@@ -1,0 +1,15 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<metadata>
+  <components>
+    <component name="platform.drivers.sdramc.support" requires="devices.modules.DriverType_SDRAM"/>
+    <component name="platform.drivers.sdramc.support.ip" requires="devices.modules.D_IP_SDR_DRAMC_SYN_002"/>
+    <component name="platform.drivers.sdramc.support.ip" requires="devices.modules.P_IP_RPP_CM4_K60_2048_SYN_014"/>
+    <component description="SDRAMC Driver" name="platform.drivers.sdramc" provides="platform.drivers" requires="platform.drivers.sdramc.support" type="driver" version="2.1.0">
+      <source path="./">
+        <files mask="*.meta"/>
+        <files mask="fsl_sdramc.c"/>
+        <files mask="fsl_sdramc.h"/>
+      </source>
+    </component>
+  </components>
+</metadata>

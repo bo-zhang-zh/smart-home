@@ -1,0 +1,18 @@
+/*!
+@page driver_log Driver Change Log
+
+@section dspi DSPI
+  Current dspi driver version is 2.1.2
+
+  - 2.1.0
+    - New Features:
+      - Add Transfer prefix in transactional APIs
+
+  - 2.1.1
+    - Bug Fix:
+      - Set the EOQ(End Of Queue) bit to TRUE for the last transfer in transactional APIs.
+
+  - 2.1.2
+    - Bug Fix:
+      - DSPI_MasterTransferBlocking function would hang in some corner cases. (for example, some cases with bitsPerFrame is 4,6 and kDSPI_MasterPcsContinuous transfer mode)
+*/

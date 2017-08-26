@@ -1,0 +1,62 @@
+/*!
+@defgroup mmdvsq MMDVSQ: Memory-Mapped Divide and Square Root
+@details The SDK provides driver for the Memory-Mapped Divide and Square Root (MMDVSQ)
+         module of Kinetis devices.
+@{
+
+
+ARM processor cores in the Cortex-M family implementing the ARMv6-M instruction set architecture do
+not include hardware support for integer divide operations. However, in certain deeply embedded
+application spaces, hardware support for this class of arithmetic operation along with an unsigned
+square root function is important to maximize system performance and minimize device power
+dissipation. Accordingly, the MMDVSQ module is included in select to serve as a memory-mapped
+co-processor located in a special address space within the system memory map accessible only to
+the processor core.
+The MMDVSQ module supports execution of the integer divide operations defined in the ARMv7-M
+instruction set architecture plus an unsigned integer square root operation. The supported integer
+divide operations include 32/32 signed (SDIV) and unsigned (UDIV) calculations.
+
+# Function groups {#MmdvsqFunctionalGroups}
+
+## MMDVSQ functional Operation {#MmdvsqFunctionalOperation}
+
+This group implements MMDVSQ functional API.
+
+## MMDVSQ status Operation {#MmdvsqStatusOperation}
+
+This group implements MMDVSQ status API
+
+# Typical use case and example {#MmdvsqExample}
+Example:
+~~~~~{.c}
+    uint16_t sqrtresult;    /* square root result */
+    int32_t divideresult;   /* divide result */
+    uint32_t rcndval;       /* radicand value */
+    int32_t dendval;        /* dividend value */
+    int32_t dsorval;        /* divisor value */
+
+    /* Initialize standard SDK demo application pins */
+    BOARD_InitHardware();
+    /* Print the initial banner */
+    PRINTF("\r\nStart MMDVSQ Example\r\n");
+    PRINTF("\r\nCalculation square root, please enter radicand\r\n");
+    /* Import radicand value */
+    SCANF("%d", &rcndval);
+    /* Calculation square root */
+    sqrtresult = MMDVSQ_Sqrt(MMDVSQ, rcndval);
+    PRINTF("\r\nSquare root of %d is %d\r\n", rcndval, sqrtresult);
+
+    PRINTF("\r\nCalculation division to get remainder and quotient");
+    PRINTF("\r\nEnter dividend and divisor\r\n");
+    /* Import dividend value and divisor value */
+    SCANF("%d, %d", &dendval, &dsorval);
+    /* Calculation Remainder */
+    divideresult = MMDVSQ_GetDivideRemainder(MMDVSQ, dendval, dsorval, false);
+    PRINTF("\r\nRemainder of %d and %d is %d\r\n",dendval, dsorval, divideresult);
+    /* Calculation nQuotient */
+    divideresult = MMDVSQ_GetDivideQuotient(MMDVSQ, dendval, dsorval, false);
+    PRINTF("\r\nQuotient of %d and %d is %d\r\n", dendval, dsorval, divideresult);
+~~~~~
+
+*/
+/*! @} */

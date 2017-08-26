@@ -1,0 +1,16 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<metadata>
+  <components>
+    <component name="platform.drivers.lpit.support" requires="devices.modules.DriverType_LPIT"/>
+    <component name="platform.drivers.lpit.support.ip" requires="devices.modules.D_IP_LPIT_SYN_000"/>
+    <component name="platform.drivers.lpit.support.ip" requires="devices.modules.D_IP_LPIT_SYN_012"/>
+    <component name="platform.drivers.lpit.support.ip" requires="devices.modules.D_IP_LPIT_SYN_014"/>
+    <component description="LPIT Driver" name="platform.drivers.lpit" provides="platform.drivers" requires="platform.drivers.lpit.support" type="driver" version="2.0.0">
+      <source path="./">
+        <files mask="*.meta"/>
+        <files mask="fsl_lpit.c"/>
+        <files mask="fsl_lpit.h"/>
+      </source>
+    </component>
+  </components>
+</metadata>

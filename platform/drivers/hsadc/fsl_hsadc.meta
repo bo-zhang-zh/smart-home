@@ -1,0 +1,13 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<metadata>
+  <components>
+    <component name="platform.drivers.hsadc.support" requires="devices.modules.DriverType_HSADC"/>
+    <component description="HSADC Driver" name="platform.drivers.hsadc" provides="platform.drivers" requires="platform.drivers.hsadc.support" type="driver" version="2.0.0">
+      <source path="./">
+        <files mask="*.meta"/>
+        <files mask="fsl_hsadc.c"/>
+        <files mask="fsl_hsadc.h"/>
+      </source>
+    </component>
+  </components>
+</metadata>

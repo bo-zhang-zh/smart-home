@@ -1,0 +1,6 @@
+/*!
+@defgroup tstmr_driver TSTMR: Timestamp Timer Driver
+@details The KSDK provides a driver for the TSTMR module of Kinetis devices.
+
+*/
+

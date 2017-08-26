@@ -1,0 +1,28 @@
+/*!
+@defgroup clock Clock Driver
+@details The KSDK provides APIs for Kinetis devices clock operation.
+
+# Get frequency {#CLKFreq}
+
+  There is a centralized function CLOCK_GetFreq to get different types of clock
+frequency by passing in clock name, for example, pass in kCLOCK_CoreSysClk to
+get core clock, pass in kCLOCK_BusClk to get bus clock. Beside, there are also
+separate functions to get frequency, for example, use CLOCK_GetCoreSysClkFreq to
+get core clock frequency, use CLOCK_GetBusClkFreq to get bus clock frequency,
+use these separate functions could reduce image size.
+
+# External clock frequency {#CLKExtFreq}
+
+  The external clock EXTAL0/EXTAL1/EXTAL32 are decided by board level design.
+Clock driver uses variables g_xtal0Freq/g_xtal1Freq/g_xtal32Freq to save these
+clock frequency. Correspondingly, the APIs CLOCK_SetXtal0Freq, CLOCK_SetXtal1Freq
+and CLOCK_SetXtal32Freq are used to set these variables.\n
+
+  Upper layer must set these values correctly, for example, after OSC0(SYSOSC) is
+initialized using CLOCK_InitOsc0 or CLOCK_InitSysOsc, upper layer should call
+CLOCK_SetXtal0Freq too. Otherwise, the clock frequency get functions may not get
+valid value. This is useful for multi-core platforms, only one core calls
+CLOCK_InitOsc0 to initialize OSC0, other cores only need to call CLOCK_SetXtal0Freq.
+
+
+*/

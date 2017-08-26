@@ -1,0 +1,14 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<metadata>
+  <components>
+    <component name="platform.drivers.irtc.support" requires="devices.modules.DriverType_RTC devices.modules.DriverFeature_RTC_IRTC"/>
+    <component name="platform.drivers.irtc.support.ip" requires="devices.modules.D_IP_Robust_RTC_v2_SYN_031"/>
+    <component description="IRTC Driver" name="platform.drivers.irtc" provides="platform.drivers" requires="platform.drivers.irtc.support" type="driver" version="2.0.0">
+      <source path="./">
+        <files mask="*.meta"/>
+        <files mask="fsl_irtc.c"/>
+        <files mask="fsl_irtc.h"/>
+      </source>
+    </component>
+  </components>
+</metadata>

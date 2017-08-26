@@ -1,0 +1,101 @@
+/*!
+@defgroup adc12 ADC12: Anolog-to-Digital Converter
+@details The SDK provides Peripheral driver for the Anolog-to-Digital Converter (ADC12) module of 
+         Kinetis devices.
+
+ADC12 driver is created to help user to operate the ADC12 module better. This driver can be considered
+as a basic anolog-to-digital converter with advanced features. The APIs for basic operations can make
+the ADC12 work as a general converter, which can convert the anolog input to be a digital value. The
+APIs for advanced operations can be used as the plug-in function based on the basic operations, they 
+can provide more ways to process the converter's conversion result such DMA trigger, hardware compare,
+hardware average and so on.
+
+Note that the channel 26 of ADC12 is connected to a internal temperature sensor of the module. If 
+you want to get the best conversion result of the temperature value, you should set the field 
+"sampleClockCount" in the structure "adc12_config_t" to be maximum value when you calling the API 
+"ADC12_Init()". This field indicates the sample time of the analog input signal. Longer sample time 
+will make the conversion result of the analog input signal to be more stable and accurate.
+
+# Function groups {#ADC12FuncGrps}
+
+## Initialization and deinitialization {#ADC12InitDeinit}
+This function group implement ADC12 initialization and deinitialization API.
+## Basic Operations {#ADC12BasicOperation}
+This function group implement basic ADC12 operation API.
+## Advanced Operations {#ADC12AdvancedOperation}
+This function group implement advanced ADC12 operation API.
+
+# Typical use case {#ADC12TpyUC}
+
+## Normal Configuration {#ADC12NormalConfig}
+
+~~~~~{.c}
+    adc12_config_t adc12ConfigStruct;
+    adc12_channel_config_t adc12ChannelConfigStruct;
+    uint32_t result;
+
+    /* Initialize ADC. */
+    ADC12_GetDefaultConfig(&adc12ConfigStruct);
+    ADC12_Init(DEMO_ADC12_BASE, &adc12ConfigStruct);
+
+    /* Make sure the software trigger is used. */
+    ADC12_EnableHardwareTrigger(DEMO_ADC12_BASE, false);
+
+    /* Trigger the conversion. */
+    adc12ChannelConfigStruct.channelNumber = DEMO_ADC12_USER_CHANNEL;
+    adc12ChannelConfigStruct.enableInterruptOnConversionDone = false;
+    while (true)
+    {
+        /*
+         When in software trigger mode, each conversion would be launched once calling the "ADC12_SetChannelConfig()"
+         function, which works like writing a conversion command and executing it. For another channel's conversion,
+         just to change the "channelNumber" field in channel's configuration structure, and call the
+         "ADC12_SetChannelConfig() again.
+        */
+        ADC12_SetChannelConfig(DEMO_ADC12_BASE, DEMO_ADC12_CHANNEL_GROUP, &adc12ChannelConfigStruct);
+        while (0U == (kADC12_ChannelConversionDoneFlag &
+                      ADC12_GetChannelStatusFlags(DEMO_ADC12_BASE, DEMO_ADC12_CHANNEL_GROUP)))
+        {
+        }
+        result = ADC12_GetChannelConversionValue(DEMO_ADC12_BASE, DEMO_ADC12_CHANNEL_GROUP);
+    }
+~~~~~
+
+## Interrupt Configuration {#ADC12IntConfig}
+
+~~~~~{.c}
+    adc12_config_t adc12ConfigStruct;
+    adc12_channel_config_t adc12ChannelConfigStruct;
+    uint32_t result;
+
+    /* Initialize ADC. */
+    ADC12_GetDefaultConfig(&adc12ConfigStruct);
+    ADC12_Init(DEMO_ADC12_BASE, &adc12ConfigStruct);
+    ADC12_EnableHardwareTrigger(DEMO_ADC12_BASE, false); /* Make sure the software trigger is used. */
+
+    /* Trigger the conversion. */
+    adc12ChannelConfigStruct.channelNumber = DEMO_ADC12_USER_CHANNEL;
+    adc12ChannelConfigStruct.enableInterruptOnConversionDone = true; /* Enable the interrupt. */
+    g_Adc12InterruptCounter = 0U;
+    while (true)
+    {
+        g_Adc12ConversionDoneFlag = false;
+        /*
+         When in software trigger mode, each conversion would be launched once calling the "ADC12_SetChannelConfig()"
+         function, which works like writing a conversion command and executing it. For another channel's conversion,
+         just to change the "channelNumber" field in channel configuration structure, and call the function
+         "ADC12_SetChannelConfig()"" again.
+         Also, the "enableInterruptOnConversionDone" inside the channel configuration structure is a parameter for
+         the conversion command. It makes affect just for the current conversion. If the interrupt is still required
+         for the following conversion, it is necessary to assert the "enableInterruptOnConversionDone" every time
+         for each command.
+        */
+        ADC12_SetChannelConfig(DEMO_ADC12_BASE, DEMO_ADC12_CHANNEL_GROUP, &adc12ChannelConfigStruct);
+        while (!g_Adc12ConversionDoneFlag)
+        {
+        }
+        result = g_Adc12ConversionValue;/* g_Adc12ConversionDoneFlag and g_Adc12ConversionValue is set in ISR. */
+    }
+~~~~~
+
+*/

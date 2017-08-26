@@ -1,0 +1,15 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<metadata>
+  <components>
+    <component name="platform.drivers.acmp.support" requires="devices.modules.DriverType_ACMP"/>
+    <component name="platform.drivers.acmp.support.ip" requires="devices.modules.D_IP_ACMP_SYN_043"/>
+    <component name="platform.drivers.acmp.support.ip" requires="devices.modules.D_IP_ANL_1C1D8C_5V_C90LCTFS_013"/>
+    <component description="ACMP Driver" name="platform.drivers.acmp" provides="platform.drivers" requires="platform.drivers.acmp.support" type="driver" version="2.0.2">
+      <source path="./">
+        <files mask="*.meta"/>
+        <files mask="fsl_acmp.c"/>
+        <files mask="fsl_acmp.h"/>
+      </source>
+    </component>
+  </components>
+</metadata>

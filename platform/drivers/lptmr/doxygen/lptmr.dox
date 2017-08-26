@@ -1,0 +1,87 @@
+/*!
+@defgroup lptmr LPTMR: Low-Power Timer
+@details The KSDK provides a driver for the Low-Power Timer (LPTMR)
+         of Kinetis devices.
+
+# Function groups {#LPTMRFunc}
+The LPTMR driver supports operating the module as a time counter or as a pulse counter.
+
+## Initialization and deinitialization {#LPTMRInit}
+The function LPTMR_Init() initializes the LPTMR with specified configurations. The function
+LPTMR_GetDefaultConfig() gets the default configurations. The initialization function
+configures the LPTMR for timer or pulse counter mode mode. It also sets up the LPTMR's
+free running mode operation and clock source.
+
+The function LPTMR_DeInit() disables the LPTMR module and gate the module clock.
+
+## Timer period Operations {#LPTMRTimerPeriodOperation}
+The function LPTMR_SetTimerPeriod()  sets the timer period in units of count. Timers counts
+from 0 till it equals the count value set here.
+
+The function LPTMR_GetCurrentTimerCount() reads the current timer counting value.
+This function returns the real-time timer counting value, in a range from 0 to a timer period.
+
+The timer period operation functions takes the count value in ticks. User can call the utility macros
+provided in fsl_common.h to convert to microseconds or milliseconds
+
+## Start and Stop timer operations {#LPTMRStartStopOperation}
+The function LPTMR_StartTimer() starts the timer counting. After calling this function, the timer
+counts up to the count value set earlier via the LPTMR_SetPeriod() function. Each time the timer
+reaches count value and then increments, it generates a trigger pulse and sets the timeout
+interrupt flag. An interrupt is also triggered if the timer interrupt is enabled.
+
+The function LPTMR_StopTimer() stops the timer counting and resets the timer's counter register
+
+## Status {#LPTMRStatus}
+Provides functions to get and clear the LPTMR status.
+
+## Interrupt {#LPTMRInterrupt}
+Provides functions to enable/disable LPTMR interrupts and get current enabled interrupts.
+
+
+# Typical use case {#LPTMRUseCase}
+
+## LPTMR tick example {#LPTMRTick}
+Updates the LPTMR period and toggles an LED periodically.
+~~~~~{.c}
+int main(void)
+{
+    uint32_t currentCounter = 0U;
+    lptmr_config_t lptmrConfig;
+
+    LED_INIT();
+
+    /* Board pin, clock, debug console init */
+    BOARD_InitHardware();
+
+    /* Configure LPTMR */
+    LPTMR_GetDefaultConfig(&lptmrConfig);
+
+    /* Initialize the LPTMR */
+    LPTMR_Init(LPTMR0, &lptmrConfig);
+
+    /* Set timer period */
+    LPTMR_SetTimerPeriod(LPTMR0, USEC_TO_COUNT(1000000U, LPTMR_SOURCE_CLOCK));
+
+    /* Enable timer interrupt */
+    LPTMR_EnableInterrupts(LPTMR0, kLPTMR_TimerInterruptEnable);
+
+    /* Enable at the NVIC */
+    EnableIRQ(LPTMR0_IRQn);
+
+    PRINTF("Low Power Timer Example\r\n");
+
+    /* Start counting */
+    LPTMR_StartTimer(LPTMR0);
+    while (1)
+    {
+        if (currentCounter != lptmrCounter)
+        {
+            currentCounter = lptmrCounter;
+            PRINTF("LPTMR interrupt No.%d \r\n", currentCounter);
+        }
+    }
+}
+~~~~~
+
+*/

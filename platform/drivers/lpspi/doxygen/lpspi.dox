@@ -1,0 +1,159 @@
+/*!
+@page drv_err Driver errors status
+ - #kStatus_LPSPI_Error = 401
+*/
+
+/*!
+@defgroup lpspi LPSPI: Low Power Serial Peripheral Interface
+@details The KSDK provides a peripheral driver for the Low Power Serial Peripheral Interface (LPSPI) module of Kinetis devices.
+@{
+*/
+
+/*!
+@defgroup lpspi_driver LPSPI Peripheral driver
+@ingroup lpspi
+@details This section describes the programming interface of the LPSPI Peripheral driver.
+The LPSPI driver configures LPSPI module, provides the functional and transactional
+interfaces to build the LPSPI application.
+
+# Function groups{#LPSPIFunGrps}
+
+## LPSPI Initialization and De-initialization {#LPSPIInitReset}
+
+This function group initializes the default configuration structure for master and slave, initializes the LPSPI
+master with a master configuration, initializes the LPSPI slave with a slave configuration, and de-initializes the LPSPI module.
+
+## LPSPI Basic Operation {#LPSPIBasicOps}
+
+This function group enables/disables the LPSPI module both interrupt and DMA, gets the data register address for the DMA
+transfer, sets master and slave, starts and stops the transfer, and so on.
+
+## LPSPI Transfer Operation {#LPSPITransOps}
+
+This function group controls the transfer, master send/receive data, and slave send/receive data.
+
+## LPSPI Status Operation {#LPSPIStatusOps}
+
+This function group gets/clears the LPSPI status.
+
+## LPSPI Block Transfer Operation {#LPSPIBlockTrans}
+
+This function group transfers a block of data, gets the transfer status, and aborts the transfer.
+
+# Typical use case {#LPSPITpyUC}
+
+## Master Operation {#LPSPIMasterOps}
+
+~~~~~{.c}
+    lpspi_master_handle_t g_m_handle; //global variable
+    lpspi_master_config_t  masterConfig;
+    masterConfig.baudRate = 50000;
+    masterConfig.bitsPerFrame = 8 ;
+    masterConfig.cpol = kLPSPI_ClockPolarityActiveHigh;
+    masterConfig.cpha = kLPSPI_ClockPhaseFirstEdge;
+    masterConfig.direction = kLPSPI_MsbFirst;
+
+    masterConfig.pcsToSckDelayInNanoSec = 1000000000 / masterConfig.baudRate * 2;
+    masterConfig.lastSckToPcsDelayInNanoSec = 1000000000 / masterConfig.baudRate * 2;
+    masterConfig.betweenTransferDelayInNanoSec = 1000000000 / masterConfig.baudRate * 2;
+
+    masterConfig.whichPcs = kLPSPI_Pcs0;
+    masterConfig.pcsActiveHighOrLow = kLPSPI_PcsActiveLow;
+
+    masterConfig.pinCfg = kLPSPI_SdiInSdoOut;
+    masterConfig.dataOutConfig = kLpspiDataOutRetained;
+
+    //srcClock_Hz = CLOCK_GetFreq(xxx);
+
+    LPSPI_MasterInit(EXAMPLE_LPSPI_MASTER_BASEADDR, &masterConfig, srcClock_Hz);
+
+    LPSPI_MasterTransferCreateHandle(base, &g_m_handle, NULL, NULL);
+
+    masterXfer.txData = masterTxData;
+    masterXfer.rxData = masterRxData;
+    masterXfer.dataSize = TRANSFER_SIZE;
+    masterXfer.configFlags = kLPSPI_MasterPcs0 | kLPSPI_MasterPcsContinuous | kLPSPI_SlaveByteSwap;
+
+    LPSPI_MasterTransferNonBlocking(base, &g_m_handle, &masterXfer);
+
+~~~~~
+
+## Slave Operation {#LPSPISlaveOps}
+
+~~~~~{.c}
+    lpspi_slave_handle_t g_s_handle;//global variable
+
+    /*Slave config*/
+    slaveConfig.bitsPerFrame = 8;
+    slaveConfig.cpol = kLPSPI_ClockPolarityActiveHigh;
+    slaveConfig.cpha = kLPSPI_ClockPhaseFirstEdge;
+    slaveConfig.direction = kLPSPI_MsbFirst;
+
+    slaveConfig.whichPcs = kLPSPI_Pcs0;
+    slaveConfig.pcsActiveHighOrLow = kLPSPI_PcsActiveLow;
+
+    slaveConfig.pinCfg = kLPSPI_SdiInSdoOut;
+    slaveConfig.dataOutConfig = kLpspiDataOutRetained;
+
+    LPSPI_SlaveInit(base, &slaveConfig);
+
+    /*Set up slave first */
+    isSlaveTransferCompleted = false;
+    LPSPI_SlaveTransferCreateHandle(base, &g_s_handle, LPSPI_SlaveUserCallback, NULL);
+
+    slaveXfer.txData = slaveTxData;
+    slaveXfer.rxData = slaveRxData;
+    slaveXfer.dataSize = TRANSFER_SIZE;
+    slaveXfer.configFlags = kLPSPI_SlavePcs0 | kLPSPI_SlaveByteSwap;
+
+    LPSPI_SlaveTransferNonBlocking(EXAMPLE_LPSPI_SLAVE_BASEADDR, &g_s_handle, &slaveXfer);
+
+
+    //void LPSPI_SlaveUserCallback(LPSPI_Type *base, lpspi_slave_handle_t *handle, status_t status, void *userData)
+    //{
+    //   if (status == kStatus_Success)
+    //    {
+    //        PRINTF("This is LPSPI slave transfer completed callback. \r\n");
+    //        PRINTF("It's a successful transfer. \r\n\r\n");
+    //    }
+    //    else if (status == kStatus_LPSPI_Error)
+    //    {
+    //        PRINTF("This is LPSPI slave transfer completed callback. \r\n");
+    //        PRINTF("Error occurred in this transfer. \r\n\r\n");
+    //    }
+    //    else
+    //    {
+    //        __NOP();
+    //    }
+    //
+    //    isSlaveTransferCompleted = true;
+    //}
+~~~~~
+
+
+*/
+
+/*!
+@defgroup lpspi_edma_driver LPSPI eDMA Driver
+@ingroup lpspi
+*/
+
+/*!
+@defgroup lpspi_freertos_driver LPSPI FreeRTOS Driver
+@ingroup lpspi
+*/
+
+/*!
+@defgroup lpspi_ucosii_driver LPSPI µCOS/II Driver
+@ingroup lpspi
+*/
+
+/*!
+@defgroup lpspi_ucosiii_driver LPSPI µCOS/III Driver
+@ingroup lpspi
+*/
+
+
+/*!
+ * @}
+ */

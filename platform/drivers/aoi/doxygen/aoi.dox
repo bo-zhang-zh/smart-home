@@ -1,0 +1,218 @@
+/*!
+
+@defgroup aoi AOI: Crossbar AND/OR/INVERT Driver
+@details The SDK provides Peripheral driver for the Crossbar AND/OR/INVERT (AOI) block of Kinetis devices.
+@{
+
+
+The AOI module supports a configurable number of event outputs, where each event
+output represents a user-programmed combinational boolean function based on four event
+inputs. The key features of this module include:
+  - Four dedicated inputs for each event output
+  - User-programmable combinational boolean function evaluation for each event output
+  - Memory-mapped device connected to a slave peripheral (IPS) bus
+  - Configurable number of event outputs
+
+# Function groups {#AOIFuncGroups}
+## AOI Initialization {#AOIInit}
+To initialize the AOI driver, call the AOI_Init() function and pass a baseaddr pointer.
+
+~~~~~{.c}
+
+    // Initialize AOI module.
+    status = AOI_Init(AOI);
+
+~~~~~
+## AOI Get Set Operation {#AOIOperation}
+The AOI module provides a universal boolean function generator using a four-term sum of products expression with each product term containing
+true or complement values of the four selected event inputs (A, B, C, D). The AOI is a highly programmable module for creating combinational
+boolean outputs for use as hardware triggers. Each selected input term in each product term can be configured to produce a logical 0 or 1 or
+pass the true or complement of the selected event input. To configure the selected AOI module event, call the API of the AOI_SetEventLogicConfig() function.
+To get current event state configure, call the API of AOI_GetEventLogicConfig() function.The AOI module does not support any special modes of operation.
+~~~~~{.c}
+
+/*
+EVENTn
+= (0,An,~An,1) & (0,Bn,~Bn,1) & (0,Cn,~Cn,1) & (0,Dn,~Dn,1)// product term 0
+| (0,An,~An,1) & (0,Bn,~Bn,1) & (0,Cn,~Cn,1) & (0,Dn,~Dn,1)// product term 1
+| (0,An,~An,1) & (0,Bn,~Bn,1) & (0,Cn,~Cn,1) & (0,Dn,~Dn,1)// product term 2
+| (0,An,~An,1) & (0,Bn,~Bn,1) & (0,Cn,~Cn,1) & (0,Dn,~Dn,1)// product term 3
+*/
+    aoi_event_config_t demoEventLogicStruct;
+
+    /* Configure the AOI event */
+    demoEventLogicStruct.PT0AC = kAOI_InvInputSignal;  /* CMP0 output*/
+    demoEventLogicStruct.PT0BC = kAOI_InputSignal;     /* PIT0 output*/
+    demoEventLogicStruct.PT0CC = kAOI_LogicOne;
+    demoEventLogicStruct.PT0DC = kAOI_LogicOne;
+
+    demoEventLogicStruct.PT1AC = kAOI_LogicZero;
+    demoEventLogicStruct.PT1BC = kAOI_LogicOne;
+    demoEventLogicStruct.PT1CC = kAOI_LogicOne;
+    demoEventLogicStruct.PT1DC = kAOI_LogicOne;
+
+    demoEventLogicStruct.PT2AC = kAOI_LogicZero;
+    demoEventLogicStruct.PT2BC = kAOI_LogicOne;
+    demoEventLogicStruct.PT2CC = kAOI_LogicOne;
+    demoEventLogicStruct.PT2DC = kAOI_LogicOne;
+
+    demoEventLogicStruct.PT3AC = kAOI_LogicZero;
+    demoEventLogicStruct.PT3BC = kAOI_LogicOne;
+    demoEventLogicStruct.PT3CC = kAOI_LogicOne;
+    demoEventLogicStruct.PT3DC = kAOI_LogicOne;
+
+    AOI_SetEventLogicConfig(AOI, kAOI_Event0, &demoEventLogicStruct);
+
+~~~~~
+# Typical use case {#AOIUsercase}
+AOI module is designed to be integrated in conjuction with one or more inter-peripheral
+crossbar switch (XBAR) modules. A crossbar switch is typically used to select the 4*n
+AOI inputs from among available peripheral outputs and GPIO signals. The n EVENTn
+outputs from the AOI module are typically used as additional inputs to a second crossbar
+switch, adding to it the ability to connect to its outputs an arbitrary 4-input boolean
+function of its other inputs.
+
+This is an example to initialize and configure the AOI driver for a possible use case. Because the AOI module function is directly connected with an XBAR (Inter-peripheral crossbar) module,
+other peripheral (PIT, CMP and XBAR) drivers are used to show full functionality of AOI module.
+
+For example:
+~~~~~{.c}
+#include "fsl_device_registers.h"
+#include "fsl_debug_console.h"
+#include "fsl_cmp.h"
+#include "fsl_pit.h"
+#include "fsl_aoi.h"
+#include "fsl_xbara.h"
+#include "fsl_xbarb.h"
+#include "board.h"
+#include "app.h"
+
+/*******************************************************************************
+ * Definitions
+ ******************************************************************************/
+
+/*******************************************************************************
+ * Prototypes
+ ******************************************************************************/
+volatile bool xbaraInterrupt = false;
+/*******************************************************************************
+ * Code
+ ******************************************************************************/
+
+int main (void)
+{
+    cmp_config_t cmpConfig;
+    cmp_dac_config_t cmpdacConfig;
+
+    pit_config_t pitConfig;
+
+    aoi_event_config_t aoiEventLogicStruct;
+
+    xbara_control_config_t xbaraConfig;
+
+    /* Init board hardware.*/
+    BOARD_InitHardware();
+
+    cmpdacConfig.referenceVoltageSource = kCMP_VrefSourceVin2;
+    cmpdacConfig.DACValue = 32U; /* Set DAC output value */
+
+    CMP_GetDefaultConfig(&cmpConfig);
+    CMP_Init(BOARD_CMP_BASEADDR, &cmpConfig);
+    /* Set input plus is CMP_channel1, input minus is CMP_DAC out */
+    CMP_SetInputChannels(BOARD_CMP_BASEADDR, 1, 7);
+
+    CMP_SetDACConfig(BOARD_CMP_BASEADDR, &cmpdacConfig);
+
+    /* Enable falling interrupt */
+    CMP_EnableInterrupts(BOARD_CMP_BASEADDR, kCMP_OutputFallingInterruptEnable);
+    EnableIRQ(BOARD_CMP_IRQ);
+
+    PIT_Init(BOARD_PIT_BASEADDR);
+    pitConfig.enableRunInDebug = false;
+    PIT_Configure(BOARD_PIT_BASEADDR, &pitConfig);
+    /* Set period is 500ms */
+    PIT_SetTimerPeriod(BOARD_PIT_BASEADDR, BOARD_PIT_CHANNEL,  USEC_TO_COUNT(500000u, CLOCK_GetFreq(kCLOCK_BusClk)));
+    PIT_EnableInterrupts(BOARD_PIT_BASEADDR, BOARD_PIT_CHANNEL, kPIT_TimerInterruptEnable);
+    EnableIRQ(BOARD_PIT_IRQ);
+    PIT_StartTimer(BOARD_PIT_BASEADDR, BOARD_PIT_CHANNEL);
+
+    /* Configure the AOI event */
+    aoiEventLogicStruct.PT0AC = kAOI_InvInputSignal;  /* CMP0 output*/
+    aoiEventLogicStruct.PT0BC = kAOI_InputSignal;     /* PIT0 output*/
+    aoiEventLogicStruct.PT0CC = kAOI_LogicOne;
+    aoiEventLogicStruct.PT0DC = kAOI_LogicOne;
+
+    aoiEventLogicStruct.PT1AC = kAOI_LogicZero;
+    aoiEventLogicStruct.PT1BC = kAOI_LogicOne;
+    aoiEventLogicStruct.PT1CC = kAOI_LogicOne;
+    aoiEventLogicStruct.PT1DC = kAOI_LogicOne;
+
+    aoiEventLogicStruct.PT2AC = kAOI_LogicZero;
+    aoiEventLogicStruct.PT2BC = kAOI_LogicOne;
+    aoiEventLogicStruct.PT2CC = kAOI_LogicOne;
+    aoiEventLogicStruct.PT2DC = kAOI_LogicOne;
+
+    aoiEventLogicStruct.PT3AC = kAOI_LogicZero;
+    aoiEventLogicStruct.PT3BC = kAOI_LogicOne;
+    aoiEventLogicStruct.PT3CC = kAOI_LogicOne;
+    aoiEventLogicStruct.PT3DC = kAOI_LogicOne;
+    /* Init AOI module. */
+    AOI_Init(BOARD_AOI_BASEADDR);
+    AOI_SetEventLogicConfig(BOARD_AOI_BASEADDR, kAOI_Event0, &aoiEventLogicStruct);
+
+    /* Init XBAR module. */
+    XBARA_Init(BOARD_XBARA_BASEADDR);
+    XBARB_Init(BOARD_XBARB_BASEADDR);
+
+    /* Configure the XBARA signal connections */
+    XBARA_SetSignalsConnection(BOARD_XBARA_BASEADDR, kXBARA_InputPIT_TRG0, kXBARA_OutputDMAMUX18);
+
+    /* Configure the XBARA interrupt */
+    xbaraConfig.activeEdge = kXBARA_EdgeRising;
+    xbaraConfig.requestType = kXBARA_RequestInterruptEnalbe;
+    XBARA_SetOutputSignalConfig(BOARD_XBARA_BASEADDR, kXBARA_OutputDMAMUX18, &xbaraConfig);
+
+    /* Configure the XBARA signal connections */
+    XBARB_SetSignalsConnection(BOARD_XBARB_BASEADDR, kXBARB_InputCMP0_Output, kXBARB_OutputAOI_IN0);
+    XBARB_SetSignalsConnection(BOARD_XBARB_BASEADDR, kXBARB_InputPIT_TRG0, kXBARB_OutputAOI_IN1);
+    XBARA_SetSignalsConnection(BOARD_XBARA_BASEADDR, kXBARA_InputAND_OR_INVERT_0, kXBARA_OutputDMAMUX18);
+    /* Enable at the NVIC. */
+    EnableIRQ(BOARD_XBARA_IRQ);
+
+    PRINTF("XBAR and AOI Demo: Start...\r\n");
+
+    while(1)
+    {
+      if(xbaraInterrupt)
+      {
+        xbaraInterrupt = false;
+        PRINTF("XBARA interrupt occurred\r\n\r\n");
+      }
+    }
+}
+
+void CMP0_IRQHandler(void)
+{
+    if(CMP_GetStatusFlags(BOARD_CMP_BASEADDR) & kCMP_OutputFallingEventFlag)
+    {
+        CMP_ClearStatusFlags(BOARD_CMP_BASEADDR, kCMP_OutputFallingEventFlag);
+    }
+}
+
+void PIT0_IRQHandler(void)
+{
+    if(PIT_GetStatusFlags(BOARD_PIT_BASEADDR, BOARD_PIT_CHANNEL) & kPIT_TimerFlag)
+    {
+        PIT_ClearStatusFlags(BOARD_PIT_BASEADDR, BOARD_PIT_CHANNEL, kPIT_TimerFlag);
+    }
+}
+
+void XBARA_IRQHandler(void)
+{
+    /* Clear interrupt flag */
+    XBARA_ClearStatusFlags(XBARA, kXBARA_EdgeDetectionOut0);
+    xbaraInterrupt = true;
+}
+~~~~~
+*/
+/*! @} */

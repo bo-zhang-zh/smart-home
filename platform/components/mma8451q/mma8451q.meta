@@ -1,0 +1,12 @@
+<!-- This file is maintained by example author -->
+<metadata>
+  <components>
+    <component name="platform.components.mma8451q" requires="platform.drivers" provides="platform.components">
+      <source path="">
+        <files mask="*.meta"/>
+        <files mask="*.c"/>
+        <files mask="*.h"/>
+      </source>
+    </component>
+  </components>
+</metadata>

@@ -1,0 +1,24 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<metadata>
+  <components>
+    <component name="platform.drivers.dspi.support" requires="devices.modules.DriverType_DSPI"/>
+    <component name="platform.drivers.dspi.support.ip" requires="devices.modules.D_IP_DSPI_SYN_034"/>
+    <component description="DSPI Driver" name="platform.drivers.dspi" provides="platform.drivers" requires="platform.drivers.dspi.support" type="driver" version="2.1.2">
+      <source path="./">
+        <files mask="*.meta"/>
+        <files mask="fsl_dspi.c"/>
+        <files mask="fsl_dspi.h"/>
+        <files mask="fsl_dspi_edma.c" requires="platform.drivers.edma"/>
+        <files mask="fsl_dspi_edma.h" requires="platform.drivers.edma"/>
+        <files mask="fsl_dspi_dma.c" requires="platform.drivers.dma"/>
+        <files mask="fsl_dspi_dma.h" requires="platform.drivers.dma"/>
+        <files mask="fsl_dspi_freertos.c" requires="middleware.freertos"/>
+        <files mask="fsl_dspi_freertos.h" requires="middleware.freertos"/>
+        <files mask="fsl_dspi_ucosii.c" requires="middleware.ucosii"/>
+        <files mask="fsl_dspi_ucosii.h" requires="middleware.ucosii"/>
+        <files mask="fsl_dspi_ucosiii.c" requires="middleware.ucosiii"/>
+        <files mask="fsl_dspi_ucosiii.h" requires="middleware.ucosiii"/>
+      </source>
+    </component>
+  </components>
+</metadata>

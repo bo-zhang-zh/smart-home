@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<metadata>
+  <components>
+    <component description="COMMON Driver" name="platform.drivers.common" provides="platform.drivers" type="driver" version="2.0.0">
+      <source path="./">
+        <files mask="*.meta"/>
+        <files mask="fsl_common.c"/>
+        <files mask="fsl_common.h"/>
+      </source>
+    </component>
+  </components>
+</metadata>

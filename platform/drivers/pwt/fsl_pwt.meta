@@ -1,0 +1,14 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<metadata>
+  <components>
+    <component name="platform.drivers.pwt.support" requires="devices.modules.DriverType_PWT"/>
+    <component name="platform.drivers.pwt.support.ip" requires="devices.modules.D_IP_PWTimer_SYN_007"/>
+    <component description="PWT Driver" name="platform.drivers.pwt" provides="platform.drivers" requires="platform.drivers.pwt.support" type="driver" version="2.0.0">
+      <source path="./">
+        <files mask="*.meta"/>
+        <files mask="fsl_pwt.c"/>
+        <files mask="fsl_pwt.h"/>
+      </source>
+    </component>
+  </components>
+</metadata>

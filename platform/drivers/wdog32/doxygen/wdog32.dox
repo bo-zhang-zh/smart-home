@@ -1,0 +1,14 @@
+/*!
+@defgroup wdog32_driver WDOG32: 32-bit Watchdog Timer
+@details The KSDK provides a peripheral driver for the WDOG32 module of Kinetis devices.
+
+# Typical use case {#WDOG32TypUC}
+~~~~~{.c}
+    wdog32_config_t config;
+    WDOG32_GetDefaultConfig(&config);
+    config.timeoutValue = 0x7ffU;
+    config.enableWindowMode = true;
+    config.windowValue = 0x1ffU;
+    WDOG32_Init(wdog_base,&config);
+~~~~~
+*/

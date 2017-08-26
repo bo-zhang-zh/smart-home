@@ -1,0 +1,14 @@
+/*!
+@page driver_log Driver Change Log
+
+@section llwu LLWU
+  Current LLWU driver version is 2.0.1
+
+  - 2.0.0
+    - Initial version.
+
+  - 2.0.1
+    - Misc Changes:
+      - Update for KL8x.
+
+*/

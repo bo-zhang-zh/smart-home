@@ -1,0 +1,16 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<metadata>
+  <components>
+    <component name="platform.drivers.trgmux.support" requires="devices.modules.DriverType_TRGMUX"/>
+    <component name="platform.drivers.trgmux.support.ip" requires="devices.modules.D_IP_TRGMUX_SYN_005"/>
+    <component name="platform.drivers.trgmux.support.ip" requires="devices.modules.D_IP_TRGMUX_SYN_006"/>
+    <component description="TRGMUX Driver" name="platform.drivers.trgmux" provides="platform.drivers" requires="platform.drivers.trgmux.support" type="driver" version="2.0.0">
+      <source path="./">
+        <files mask="*.meta"/>
+        <files mask="fsl_trgmux.c"/>
+        <files mask="fsl_trgmux.h"/>
+        <files mask="fsl_trgmux_source.h"/>
+      </source>
+    </component>
+  </components>
+</metadata>

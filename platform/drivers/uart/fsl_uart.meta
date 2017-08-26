@@ -1,0 +1,37 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<metadata>
+  <components>
+    <component name="platform.drivers.uart.support" requires="devices.modules.DriverType_UART"/>
+    <component name="platform.drivers.uart.support.ip" requires="devices.modules.D_IP_HiSpd_SCI_SYN_022"/>
+    <component name="platform.drivers.uart.support.ip" requires="devices.modules.D_IP_HiSpd_SCI_SYN_011"/>
+    <component name="platform.drivers.uart.support.ip" requires="devices.modules.D_IP_HiSpd_SCI_SYN_013"/>
+    <component name="platform.drivers.uart.support.ip" requires="devices.modules.D_IP_HiSpd_SCI_SYN_024"/>
+    <component name="platform.drivers.uart.support.ip" requires="devices.modules.D_IP_HiSpd_SCI_SYN_019"/>
+    <component name="platform.drivers.uart.support.ip" requires="devices.modules.D_IP_HiSpd_SCI_SYN_025"/>
+    <component description="UART Driver" name="platform.drivers.uart" provides="platform.drivers" requires="platform.drivers.uart.support" type="driver" version="2.1.1">
+      <source path="./">
+        <files mask="*.meta"/>
+        <files mask="fsl_uart.c"/>
+        <files mask="fsl_uart.h"/>
+        <files mask="fsl_uart_freertos.c" requires="middleware.freertos"/>
+        <files mask="fsl_uart_freertos.h" requires="middleware.freertos"/>
+        <files mask="fsl_uart_ucosii.c" requires="middleware.ucosii"/>
+        <files mask="fsl_uart_ucosii.h" requires="middleware.ucosii"/>
+        <files mask="fsl_uart_ucosiii.c" requires="middleware.ucosiii"/>
+        <files mask="fsl_uart_ucosiii.h" requires="middleware.ucosiii"/>
+      </source>
+    </component>
+    <component description="UART Driver" name="platform.drivers.uart_dma" provides="platform.drivers" requires="platform.drivers.uart.support platform.drivers.dma" type="driver" version="2.1.1">
+      <source path="./">
+        <files mask="fsl_uart_dma.c"/>
+        <files mask="fsl_uart_dma.h"/>
+      </source>
+    </component>
+    <component description="UART Driver" name="platform.drivers.uart_edma" provides="platform.drivers" requires="platform.drivers.uart.support platform.drivers.edma" type="driver" version="2.1.1">
+      <source path="./">
+        <files mask="fsl_uart_edma.c"/>
+        <files mask="fsl_uart_edma.h"/>
+      </source>
+    </component>
+  </components>
+</metadata>

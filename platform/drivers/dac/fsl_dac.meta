@@ -1,0 +1,24 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<metadata>
+  <components>
+    <component name="platform.drivers.dac.support" requires="devices.modules.DriverType_DAC"/>
+    <component name="platform.drivers.dac.support.ip" requires="devices.modules.DA_IP_DAC_3V12B_LP_NN_C90LP_056"/>
+    <component name="platform.drivers.dac.support.ip" requires="devices.modules.DA_IP_DAC_3V12B_LP_NN_C90LP_035"/>
+    <component name="platform.drivers.dac.support.ip" requires="devices.modules.DA_IP_DAC_3V12B_LP_NN_C90LP_044"/>
+    <component name="platform.drivers.dac.support.ip" requires="devices.modules.DA_IP_DAC_3V12B_LP_NN_C90LP_047"/>
+    <component name="platform.drivers.dac.support.ip" requires="devices.modules.DA_IP_DAC_3V12B_LP_NN_C90LP_052"/>
+    <component name="platform.drivers.dac.support.ip" requires="devices.modules.DA_IP_DAC_3V12B_LP_NN_C90LP_051"/>
+    <component name="platform.drivers.dac.support.ip" requires="devices.modules.DA_IP_DAC_3V12B_LP_NN_C90LP_046"/>
+    <component name="platform.drivers.dac.support.ip" requires="devices.modules.DA_IP_DAC_3V12B_LP_NN_C90LP_050"/>
+    <component name="platform.drivers.dac.support.ip" requires="devices.modules.DA_IP_DAC_3V12B_LP_NN_C90LP_053"/>
+    <component name="platform.drivers.dac.support.ip" requires="devices.modules.DA_IP_DAC_3V12B_LP_NN_C90LP_059"/>
+    <component name="platform.drivers.dac.support.ip" requires="devices.modules.DA_IP_DAC_3V12B_LP_NN_C90LP_060"/>
+    <component description="DAC Driver" name="platform.drivers.dac" provides="platform.drivers" requires="platform.drivers.dac.support" type="driver" version="2.0.0">
+      <source path="./">
+        <files mask="*.meta"/>
+        <files mask="fsl_dac.c"/>
+        <files mask="fsl_dac.h"/>
+      </source>
+    </component>
+  </components>
+</metadata>

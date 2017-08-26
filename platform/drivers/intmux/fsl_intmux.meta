@@ -1,0 +1,15 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<metadata>
+  <components>
+    <component name="platform.drivers.intmux.support" requires="devices.modules.DriverType_INTMUX"/>
+    <component name="platform.drivers.intmux.support.ip" requires="devices.modules.D_IP_INT_MUX_SYN_004"/>
+    <component name="platform.drivers.intmux.support.ip" requires="devices.modules.D_IP_INT_MUX_SYN_005"/>
+    <component description="INTMUX Driver" name="platform.drivers.intmux" provides="platform.drivers" requires="platform.drivers.intmux.support" type="driver" version="2.0.0">
+      <source path="./">
+        <files mask="*.meta"/>
+        <files mask="fsl_intmux.c"/>
+        <files mask="fsl_intmux.h"/>
+      </source>
+    </component>
+  </components>
+</metadata>

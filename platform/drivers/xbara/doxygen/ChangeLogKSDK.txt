@@ -1,0 +1,22 @@
+/*!
+@page driver_log Driver Change Log
+
+@section xbara XBARA
+   Current XBARA driver version is 2.0.3
+
+   - 2.0.0
+     - Initial version.
+
+   - 2.0.1
+     - Bug Fix:
+       - Fix w1c bits for XBARA_SetOutputSignalConfig function.
+
+   - 2.0.2
+     - Other changes:
+       - Change array clock name.
+
+   - 2.0.3
+     - Bug Fix:
+       - Correct configuration for function XBAR_SetOutputSignalConfig.
+
+ */

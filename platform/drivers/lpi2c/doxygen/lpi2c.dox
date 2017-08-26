@@ -1,0 +1,40 @@
+/*!
+ * @defgroup lpi2c_driver LPI2C: Low Power I2C Driver
+ */
+
+/*!
+ * @defgroup lpi2c_master_driver LPI2C Master Driver
+ * @ingroup lpi2c_driver
+ */
+
+/*!
+ * @defgroup lpi2c_slave_driver LPI2C Slave Driver
+ * @ingroup lpi2c_driver
+ */
+
+/*!
+ * @defgroup lpi2c_master_edma_driver LPI2C Master DMA Driver
+ * @ingroup lpi2c_driver
+ */
+
+/*!
+ * @defgroup lpi2c_slave_edma_driver LPI2C Slave DMA Driver
+ * @ingroup lpi2c_driver
+ */
+
+ /*!
+ * @defgroup lpi2c_freertos_driver LPI2C FreeRTOS Driver
+ * @ingroup lpi2c_driver
+ */
+
+
+ /*!
+ * @defgroup lpi2c_ucosii_driver LPI2C µCOS/II Driver
+ * @ingroup lpi2c_driver
+ */
+
+
+ /*!
+ * @defgroup lpi2c_ucosiii_driver LPI2C µCOS/III Driver
+ * @ingroup lpi2c_driver
+ */

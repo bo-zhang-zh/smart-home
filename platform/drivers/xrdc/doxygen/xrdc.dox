@@ -1,0 +1,224 @@
+/*!
+@page drv_err Driver errors status
+ - #kStatus_XRDC_NoError = 1500
+*/
+
+/*!
+@defgroup xrdc XRDC: Extended Resource Domain Controller
+@details The Kinetis SDK provides a driver for the Extended Resource Domain
+Controller (XRDC) block of Kinetis devices.
+@{
+
+# XRDC functions {#XRDCFunc}
+
+The XRDC module includes four submodules, as follows:
+
+ - XRDC_MGR
+   The Manager submodule coordinates all programming model reads and writes.
+
+ - XRDC_MDAC
+   The Master Domain Assignment Controller handles resource assignments
+   and generation of the domain identifiers (domain ID).
+
+ - XRDC_MRC
+   The Memory Region Controller implements the access controls for slave
+   memories based on the pre-programmed region descriptor registers.
+
+ - XRDC_PAC
+   The Peripheral Access Controller implements the access controls for
+   slave peripherals based on the preprogrammed domain access control registers.
+
+Accordingly, the XRDC driver functions could be grouped as follows:
+ - XRDC_MGR functions.
+ - XRDC_MDAC functions.
+ - XRDC_MRC functions.
+ - XRDC_PAC functions.
+
+# Typical use case {#XRDCTypUC}
+
+## Set up configurations during system initialization {#XRDCConfig}
+
+The domain assignment and access policy can be configured during the system initialization.
+
+~~~~~{.c}
+
+    /*
+     * Domain assignment definition.
+     * In this example, core 0 has 2 domain assignment registers.
+     * The XRDC supports 3 domain IDs.
+     */
+    xrdc_processor_domain_assignment_t core0DomainAssignments[] =
+    {
+        /* When XRDC_PID[PID] = 0, this assignment hits, domain ID is 0. */
+        {
+            .domainId  = 0U,
+            .pidEnable = kXRDC_PidExp0,
+            .pidMask   = 0x3E,
+            .pid       = 0x00,
+        },
+        /* When XRDC_PID[PID] = 1, this assignment hits, domain ID is 2. */
+        {
+            .domainId  = 2U,
+            .pidEnable = kXRDC_PidExp0,
+            .pidMask   = 0x3E,
+            .pid       = 0x01,
+        }
+    };
+
+    /* DMA0 domain ID assigned to 0. */
+    xrdc_non_processor_domain_assignment_t dma0DomainAssignment =
+    {
+        .domainId  = 0U,
+    };
+
+    /* Memory region access policy. */
+    xrdc_mem_access_config_t memAccessPolicy[] =
+    {
+        {
+            .mem         = kXRDC_MemMrc0_0,
+            .baseAddress = 0x1FFF0000U,
+            .size        = kXRDC_MemSize32K,
+            .policy[0]   = kXRDC_AccessPolicyAll,  /* Allow all access from domain 0.  */
+            .policy[1]   = kXRDC_AccessPolicyNone, /* Reject all access from domain 1. */
+            .policy[2]   = kXRDC_AccessPolicyAll,  /* Allow all access from domain 2.  */
+        },
+        {
+            .mem         = kXRDC_MemMrc0_1,
+            .baseAddress = 0x20000000U,
+            .size        = kXRDC_MemSize32K,
+            .policy[0]   = kXRDC_AccessPolicyAll,  /* Allow all access from domain 0.  */
+            .policy[1]   = kXRDC_AccessPolicyNone, /* Reject all access from domain 1. */
+            .policy[2]   = kXRDC_AccessPolicyAll,  /* Allow all access from domain 2.  */
+        }
+    };
+
+    /* Peripheral access policy. */
+    xrdc_periph_access_config_t periphAccessPolicy[] =
+    {
+        {
+            .periph    = kXRDC_PeriphLptmr0,
+            .policy[0] = kXRDC_AccessPolicyAll,  /* Allow all access from domain 0.  */
+            .policy[1] = kXRDC_AccessPolicyNone, /* Reject all access from domain 1. */
+            .policy[2] = kXRDC_AccessPolicyAll,  /* Allow all access from domain 2.  */
+        },
+        {
+            .periph    = kXRDC_PeriphLpuart0,
+            .policy[0] = kXRDC_AccessPolicyAll,  /* Allow all access from domain 0.  */
+            .policy[1] = kXRDC_AccessPolicyNone, /* Reject all access from domain 1. */
+            .policy[2] = kXRDC_AccessPolicyAll,  /* Allow all access from domain 2.  */
+        }
+    };
+
+
+    void main(void)
+    {
+        uint32_t i;
+        uint8_t  domainId;
+        xrdc_pid_config_t pidConfig;
+
+        XRDC_Init(XRDC); /* Enable XRDC clock. */
+
+        /* Sets the domain ID. */
+        for (i=0U; i<(sizeof(core0DomainAssignments)/sizeof(core0DomainAssignments[0])); i++)
+        {
+            XRDC_SetProcessorDomainAssignment(XRDC, kXRDC_MasterCpu0, i, &core0DomainAssignments[i]);
+        }
+        XRDC_SetNonProcessorDomainAssignment(XRDC, kXRDC_MasterDma0, 0, &dma0DomainAssignments);
+
+        /* Sets the memory access policy. */
+        for (i=0U; i<(sizeof(memAccessPolicy)/sizeof(memAccessPolicy[0])); i++)
+        {
+            XRDC_SetMemAccessConfig(XRDC, &memAccessPolicy[i]);
+        }
+
+        /* Sets the peripheral access policy. */
+        for (i=0U; i<(sizeof(periphAccessPolicy)/sizeof(periphAccessPolicy[0])); i++)
+        {
+            XRDC_SetPeriphAccessConfig(XRDC, &periphAccessPolicy[i]);
+        }
+
+        /* Sets the the XRDC valid. */
+        XRDC_SetGlobalValid(XRDC, true);
+
+        /*
+         * Now the XRDC configure is finished. The next example shows how the PID is used
+         * for domain hit evaluation.
+         */
+        XRDC_GetPidDefaultConfig(&pidConfig);
+
+        /* Sets the core 0 PID[PID] to 0. */
+        pidConfig.pid = 0U;
+        XRDC_SetPidConfig(XRDC, kXRDC_MasterCpu0, &pidConfig);
+        /* Based on domain ID assignments, now domain ID should be 0. */
+        domainId = XRDC_GetCurrentMasterDomainId(XRDC);
+        assert(0 == domainId);
+
+        /* Sets the core 0 PID[PID] to 1. */
+        pidConfig.pid = 1U;
+        XRDC_SetPidConfig(XRDC, kXRDC_MasterCpu0, &pidConfig);
+        /* Based on the domain ID assignments, domain ID should be 2. */
+        domainId = XRDC_GetCurrentMasterDomainId(XRDC);
+        assert(2 == domainId);
+
+        while (1)
+        {
+        }
+    }
+
+~~~~~
+
+## XRDC error handle {#XRDCErrHandle}
+
+When an access violation occurs, the hard fault is triggered. The function
+XRDC_GetAndClearFirstDomainError() is used to get the error information. Although there
+might be more than one error, this function only gets the first error.
+
+~~~~~{.c}
+
+void HardFault_Handler(void)
+{
+    xrdc_error_t error;
+
+    while (kStatus_XRDC_NoError != XRDC_GetAndClearFirstDomainError(XRDC, &error))
+    {
+        /* Processes the error. */
+    }
+}
+
+~~~~~
+
+## Access involve SEMA42 {#XRDCInvolSEMA42}
+
+See the SoC reference manual to check which SEMA42 instance is used. For example, for
+KL28, the memory region defined by the MRC0 uses the SEMA42-0, while the memory region defined by
+MRC1 uses the SEMA42-1. The peripherals controlled by the PAC0 and PAC2 use the SEMA42-0, while the
+peripherals controlled by PAC1 use the SEMA42-1.\n
+
+~~~~~{.c}
+
+    xrdc_mem_access_config_t memAccessPolicy =
+    {
+        .mem         = kXRDC_MemMrc0_0,
+        .enableSema  = true,
+        .semaNum     = 5,                      /* Sema42 gate 5 is used.           */
+        .baseAddress = 0x1FFF0000U,
+        .size        = kXRDC_MemSize32K,
+        .policy[0]   = kXRDC_AccessPolicyAll,  /* Allow all access from domain 0.  */
+        .policy[1]   = kXRDC_AccessPolicyNone, /* Reject all access from domain 1. */
+        .policy[2]   = kXRDC_AccessPolicyAll,  /* Allow all access from domain 2.  */
+    };
+
+    XRDC_SetMemAccessConfig(&memAccessPolicy);
+
+    /* Blocks to lock the SEMA42 gate. */
+    SEMA42_Lock(SEMA42_0, 5, XRDC_GetDomainId(XRDC));
+
+    /* Accesses the memory region. */
+
+    /* Unlocks the gate. */
+    SEMA42_Unlock(SEMA42_0, 5);
+
+~~~~~
+
+*/
+/*! @} */

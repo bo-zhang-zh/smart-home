@@ -1,0 +1,14 @@
+/*!
+@page driver_log Driver Change Log
+
+@section ftm FTM
+  Current FTM driver version is 2.0.1
+
+  - 2.0.0
+    - Initial version.
+
+  - 2.0.1
+    - Bug Fix:
+      - Update the FTM driver to fix write to ELSA and ELSB bits.
+      - FTM combine mode: set the COMBINE bit before writing to CnV register.
+*/

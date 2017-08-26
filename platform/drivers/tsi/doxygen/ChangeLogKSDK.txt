@@ -1,0 +1,42 @@
+/*!
+@page driver_log Driver Change Log
+
+@section tsi_v2 TSI_V2
+  Current TSI_V2 driver version is 2.1.2
+
+- 2.0.1
+  - Other changes:
+    - Change default configuration structure member order;
+    
+- 2.1.1
+  - New Features:
+    - Change void TSI_DeInit(TSI_Type *base) to void TSI_Deinit(TSI_Type *base); 
+
+- 2.1.2
+  - Bug Fix:
+    - Fix w1c issues in status handling API;
+    
+@section tsi_v4 TSI_V4
+  Current TSI_V4 driver version is 2.1.2
+  
+- 2.0.1
+  - Other changes:
+    - Change default configuration structure member order;
+
+- 2.1.1
+  - New Features:
+    - Change void TSI_DeInit(TSI_Type *base) to void TSI_Deinit(TSI_Type *base);    
+    
+- 2.1.2
+  - Bug Fix:
+    - Fix w1c issues in status handling API;
+    - Fix register naming error in API "static inline void TSI_EnableEndOfScanDmaTransferOnly(TSI_Type *base, bool enable)";
+    - Remove redundant status flags clear APIs when enable interrupts;
+    
+@section tsi_v5 TSI_V5
+  Current TSI_V5 driver version is 2.0.0
+  
+- 2.0.0
+  - Initial version.
+
+*/

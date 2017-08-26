@@ -1,0 +1,17 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<metadata>
+  <components>
+    <component name="platform.drivers.tpm.support" requires="devices.modules.DriverType_TPM"/>
+    <component name="platform.drivers.tpm.support.ip" requires="devices.modules.D_IP_LPTPM_SYN_018"/>
+    <component name="platform.drivers.tpm.support.ip" requires="devices.modules.D_IP_LPTPM_SYN_011"/>
+    <component name="platform.drivers.tpm.support.ip" requires="devices.modules.D_IP_LPTPM_SYN_016"/>
+    <component name="platform.drivers.tpm.support.ip" requires="devices.modules.D_IP_LPTPM_SYN_020"/>
+    <component description="TPM Driver" name="platform.drivers.tpm" provides="platform.drivers" requires="platform.drivers.tpm.support" type="driver" version="2.0.2">
+      <source path="./">
+        <files mask="*.meta"/>
+        <files mask="fsl_tpm.c"/>
+        <files mask="fsl_tpm.h"/>
+      </source>
+    </component>
+  </components>
+</metadata>

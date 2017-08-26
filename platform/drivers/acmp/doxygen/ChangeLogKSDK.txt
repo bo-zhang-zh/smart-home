@@ -1,0 +1,16 @@
+/*!
+@page driver_log Driver Change Log
+
+@section acmp ACMP
+  Current ACMP driver version is 2.0.2
+
+  - 2.0.1
+    - Bug Fix:
+      - Fix the bug of the function "ACMP_SetRoundRobinConfig". It will not continue execution but return directly
+        after disabling round robin mode;
+
+  - 2.0.2
+    - Coding style changes:
+      - Change coding style of peripheral base address from "s_acmpBases" to "s_acmpBase";
+
+*/

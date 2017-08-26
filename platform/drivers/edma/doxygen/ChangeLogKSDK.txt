@@ -1,0 +1,16 @@
+/*!
+@page driver_log Driver Change Log
+
+@section eDMA EDMA
+  Current EDMA driver version is 2.0.1
+  
+  - 2.0.0
+    - Initial version.
+  - 2.0.1
+    - Bug fix:
+      - Fix the eDMA callback does not check valid status issue in EDMA_HandleIRQ API.
+  - 2.0.2
+    - Bug fix:
+      - Fix incorrect minorLoopBytes type definition in _edma_transfer_config struct. Define minorLoopBytes as uint32_t instead of uint16_t.
+
+*/

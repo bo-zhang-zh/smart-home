@@ -1,0 +1,19 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<metadata>
+  <components>
+    <component name="platform.drivers.ftm.support" requires="devices.modules.DriverType_FTM"/>
+    <component name="platform.drivers.ftm.support.ip" requires="devices.modules.D_IP_FlexTimer32_SYN_025"/>
+    <component name="platform.drivers.ftm.support.ip" requires="devices.modules.D_IP_FlexTimer32_SYN_018"/>
+    <component name="platform.drivers.ftm.support.ip" requires="devices.modules.D_IP_FlexTimer32_SYN_022"/>
+    <component name="platform.drivers.ftm.support.ip" requires="devices.modules.D_IP_FlexTimer32_SYN_024"/>
+    <component name="platform.drivers.ftm.support.ip" requires="devices.modules.D_IP_FlexTimer32_SYN_027"/>
+    <component name="platform.drivers.ftm.support.ip" requires="devices.modules.D_IP_FlexTimer32_SYN_032"/>
+    <component description="FTM Driver" name="platform.drivers.ftm" provides="platform.drivers" requires="platform.drivers.ftm.support" type="driver" version="2.0.0">
+      <source path="./">
+        <files mask="*.meta"/>
+        <files mask="fsl_ftm.c"/>
+        <files mask="fsl_ftm.h"/>
+      </source>
+    </component>
+  </components>
+</metadata>

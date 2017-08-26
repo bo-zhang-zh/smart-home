@@ -1,0 +1,22 @@
+/*!
+@page driver_log Driver Change Log
+
+@section sdhc SDHC
+  Current SDHC driver version is 2.1.1
+
+  - 2.1.0
+    - New Features:
+      - Add a host descriptor to contain SDHC related attributes;
+    - Bug Fix:
+      - Remove clock auto gated function because of that it is a hardware issue;
+    - Other changes:
+      - Add more SDIO card related command type;
+      - Change the callback mechanism in the non-blocking transaction API;
+      - Merge the two ADMA configuration function to be one;
+      - Change the transaction API's name;
+
+  - 2.1.1
+    - Bug Fix:
+      - Fix the compile error when ADMA1 is enabled;
+
+*/

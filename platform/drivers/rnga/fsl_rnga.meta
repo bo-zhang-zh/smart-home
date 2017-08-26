@@ -1,0 +1,16 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<metadata>
+  <components>
+    <component name="platform.drivers.rnga.support" requires="devices.modules.DriverType_RNG"/>
+    <component name="platform.drivers.rnga.support.ip" requires="devices.modules.D_IP_RNGA_32IP_CMOS090_LP9TM1_SYN_001"/>
+    <component name="platform.drivers.rnga.support.ip" requires="devices.modules.D_IP_RNGA_32IP_CMOS090_LP9TM1_SYN_002"/>
+    <component name="platform.drivers.rnga.support.ip" requires="devices.modules.D_IP_RNGA_32IP_CMOS090_LP9TM1_SYN_003"/>
+    <component description="RNGA Driver" name="platform.drivers.rnga" provides="platform.drivers" requires="platform.drivers.rnga.support" type="driver" version="2.0.1">
+      <source path="./">
+        <files mask="*.meta"/>
+        <files mask="fsl_rnga.c"/>
+        <files mask="fsl_rnga.h"/>
+      </source>
+    </component>
+  </components>
+</metadata>

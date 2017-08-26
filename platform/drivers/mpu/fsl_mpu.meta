@@ -1,0 +1,21 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<metadata>
+  <components>
+    <component name="platform.drivers.mpu.support" requires="devices.modules.DriverType_MPU"/>
+    <component name="platform.drivers.mpu.support.ip" requires="devices.modules.D_IP_AHB_MPU_SYN_002"/>
+    <component name="platform.drivers.mpu.support.ip" requires="devices.modules.P_IP_RPP_CM4_K60_1024_SYN_003"/>
+    <component name="platform.drivers.mpu.support.ip" requires="devices.modules.P_IP_RPP_CM4_K20_1024_SYN_008"/>
+    <component name="platform.drivers.mpu.support.ip" requires="devices.modules.P_IP_RPP_CM4_K60_2048_SYN_011"/>
+    <component name="platform.drivers.mpu.support.ip" requires="devices.modules.P_IP_RPP_CM4_K60_2048_SYN_014"/>
+    <component name="platform.drivers.mpu.support.ip" requires="devices.modules.P_IP_RPP_CM4_P2_SYN_015"/>
+    <component name="platform.drivers.mpu.support.ip" requires="devices.modules.P_IP_RPP_CM0P_PHOTON256_SYN_003"/>
+    <component name="platform.drivers.mpu.support.ip" requires="devices.modules.P_IP_RPP_CM0P_KL80_SYN_004"/>
+    <component description="MPU Driver" name="platform.drivers.mpu" provides="platform.drivers" requires="platform.drivers.mpu.support" type="driver" version="2.1.0">
+      <source path="./">
+        <files mask="*.meta"/>
+        <files mask="fsl_mpu.c"/>
+        <files mask="fsl_mpu.h"/>
+      </source>
+    </component>
+  </components>
+</metadata>

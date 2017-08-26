@@ -1,0 +1,14 @@
+/*!
+@page driver_log Driver Change Log
+
+@section afe AFE
+  Current AFE driver version is 2.0.1
+   - 2.0.0
+    - Initial version.
+
+   - 2.0.1
+    - Other changes:
+      - Change coding style of peripheral base address const xx_Type * s_xxBases to xx_Type *const s_xxBases;
+      - Add static for the s_xxx defined in drivers
+
+*/

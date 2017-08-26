@@ -1,0 +1,40 @@
+/*!
+@defgroup iomuxc IOMUXC: Input/Output Multiplexing Controller
+@details The KSDK provides a driver for the Input/Output Multiplexing Controller (IOMUXC)
+module of Kinetis devices.
+
+# Typical configuration use case {#IOMUXCTypicalConfig}
+
+## SW_MUX_CTL_PAD configuration {#IOMUXC_SW_MUX_CTL_PADConfig}
+
+~~~~~{.c}
+  /* SW_MUX_CTL_PAD configuration */
+  iomux_pin_config_t config = {
+      kIOMUXC_PullUp,
+      kIOMUXC_StandardSlewRate,
+      kIOMUXC_OpenDrainDisable,
+      kIOMUXC_StandardDriveStrength,
+      kIOMUXC_MuxAlt0,
+      kIOMUXC_UnLockRegister,
+      kIOMUXC_InputBufferEnable,
+      kIOMUXC_digitalDisable,
+      0,
+      0,
+  };
+  /*  Sets the configuration */
+  IOMUXC_SET_MUX_CONTROL_PAD(IOMUXC0,kIOMUXC0_SW_MUX_CTL_PAD_PORTA, 4, config);
+~~~~~
+
+## SELECT_INPUT Configuration {#IOMUXC_SELECT_INPUTConfig}
+
+~~~~~{.c}
+  /*  SELECT_INPUT configuration */
+  iomuxc_input_pin_config_t config = {
+      kIOMUXC_InputMuxAlt0,
+      kIOMUXC_InputInversionDisable,
+  };
+  IOMUXC_SET_INPUTPIN_CONFIG(kIOMUXC1_SW_MUX_CTL_PAD_PORTC,kIOMUXC1_D_IP_FLEXIO_SYN1_IPP_IND_FLEXIO0_SELECT_INPUT,config);
+~~~~~
+
+*/
+

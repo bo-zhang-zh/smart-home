@@ -1,0 +1,15 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<metadata>
+  <components>
+    <component name="platform.drivers.lmem.support" requires="devices.modules.DriverType_LMEM"/>
+    <component name="platform.drivers.lmem.support.ip" requires="devices.modules.D_IP_AHB_LMEM_SYN_026"/>
+    <component name="platform.drivers.lmem.support.ip" requires="devices.modules.P_IP_RPP_CM4_K60_2048_SYN_014"/>
+    <component description="LMEM Driver" name="platform.drivers.lmem" provides="platform.drivers" requires="platform.drivers.lmem.support" type="driver" version="2.0.0">
+      <source path="./">
+        <files mask="*.meta"/>
+        <files mask="fsl_lmem_cache.c"/>
+        <files mask="fsl_lmem_cache.h"/>
+      </source>
+    </component>
+  </components>
+</metadata>

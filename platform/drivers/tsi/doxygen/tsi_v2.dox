@@ -1,0 +1,22 @@
+/*!
+@defgroup tsi_v2_driver TSIv2 Driver
+@ingroup tsi
+@details The KSDK provides a driver for the Touch Sensing Input (TSI)
+         module of Kinetis devices.
+
+# Typical use case {#TSIv2TypUC}
+
+## TSI Operation {#TSIOperation}
+
+~~~~~{.c}
+    TSI_Init(TSI0);
+    TSI_Configure(TSI0, &user_config);
+    TSI_EnableChannel(TSI0, channelMask);
+    TSI_EnableInterrupts(TSI0, kTSI_GlobalInterruptEnable | kTSI_EndOfScanInterruptEnable);
+
+    TSI_EnablePeriodicalScan(TSI0);
+    TSI_EnableModule(TSI0);
+    while(1);
+~~~~~
+
+*/

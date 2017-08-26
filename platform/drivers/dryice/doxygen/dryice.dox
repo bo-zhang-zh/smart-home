@@ -1,0 +1,117 @@
+/*!
+@defgroup dryice DryIce: DryIce Driver
+@details The Kinetis SDK provides the Peripheral driver for the MCU DryIce module of Kinetis devices.
+
+# DRYICE Driver Initialization and Configuration {#DRYICEInit}
+
+DRYICE_Init() function enables the clock gate for the DryIce module in the Kinetis SIM module. 
+For module configuration, the following configuration functions are available:
+
+* DRYICE_SetConfig()
+
+* DRYICE_ActiveTamperSetConfig()
+
+* DRYICE_PinSetConfig()
+
+After the VBAT POR, a software reset, a write to the tamper seconds register, or whenever an enabled tamper flag is set, the DryIce Tamper Flag is set.
+To clear the DryIce Tamper Flag, the Tamper Acknowledge Flag has to be set also, which can be accomplished by issuing a chip reset.
+Note that the DryIce includes 32-bytes of secure key storage that is held in reset whenever the DryIce
+tamper flag is set. As a result, always clear the DryIce tamper flag before writing any secure key register.
+
+# DRYICE Driver Examples {#DRYICEEx}
+
+Initialization and configuration
+
+@code{.c}
+    DRY_Type *base = DRY;
+    status_t status;
+    uint32_t flags;
+    dryice_config_t myConfig;
+
+    DRYICE_Init(base);
+
+    flags = 0;
+    status = DRYICE_GetStatusFlags(base, &flags);
+    if ((status == kStatus_Success) && (kDRYICE_StatusTamperFlag & flags))
+    {
+        /* If the Tamper Acknowledge is clear, issue a chip reset to set it */
+        if (0 == (kDRYICE_StatusTamperAcknowledgeFlag & flags))
+        {
+            /* Request software reset */
+            SCB->AIRCR = 0x05FA0004;
+            while (1)
+            {
+            }
+        }
+
+        /* DTF and TAF are set so we can clear */
+        status = DRYICE_ClearStatusFlags(base, kDRYICE_StatusTamperFlag | kDRYICE_StatusTamperAcknowledgeFlag);
+    }
+
+    /* Enable the DryIce clock (32768 Hz within DryIce) and prescaler */
+    if (status == kStatus_Success)
+    {
+        DRYICE_GetDefaultConfig(base, &myConfig);
+        status = DRYICE_SetConfig(base, &myConfig);
+    }
+@endcode
+
+Configure the active tamper
+
+@code{.c}
+    status_t status;
+    dryice_active_tamper_config_t myActiveTamperConfig;
+
+    myActiveTamperConfig.activeTamperShift = 0x6633u;
+    myActiveTamperConfig.activeTamperPolynomial = 0xa4c2;
+    status = DRYICE_ActiveTamperSetConfig(base, &myActiveTamperConfig, kDRYICE_ActiveTamperRegister0);
+@endcode
+
+Configure tamper pins
+
+@code{.c}
+    dryice_pin_config_t myPinConfig;
+    status_t status;
+
+    /* TAMPER PIN 0 and 4 */
+    DRYICE_PinGetDefaultConfig(base, &myPinConfig);
+    myPinConfig.pinDirection =
+        kDRYICE_TamperPinDirectionOut; /*Set tamper pin to be output driving inverse of expected value*/
+    myPinConfig.pinPolarity = kDRYICE_TamperPinPolarityExpectInverted; /*Configure tamper pin to be inverted*/
+    myPinConfig.tamperPinExpected =
+        kDRYICE_GlitchFilterExpectedActTamperOut0; /*Specify expected value for tamper pin as active tamper 0 output */
+    status = DRYICE_PinSetConfig(base, &myPinConfig, kDRYICE_Pin0 | kDRYICE_Pin4);
+@endcode
+
+Write and read secure key storage
+
+@code{.c}
+    status_t status;
+    uint8_t myKey[32] = {0xaa};
+
+    status = DRYICE_WriteKey(base, myKey, 32);
+    status = DRYICE_GetKey(base, myKey, 32);
+@endcode
+
+Enable and disable interrupt and tamper sources
+
+@code{.c}
+    status_t status;
+    uint32_t flags;
+
+    status = DRYICE_DisableInterrupts(base, kDRYICE_InterruptAll);
+    status = DRYICE_EnableInterrupts(base, kDRYICE_InterruptTamper);
+
+    status = DRYICE_DisableTampers(base, kDRYICE_TamperAll);
+    status = DRYICE_EnableTampers(base, kDRYICE_TamperTestMode);
+    status = DRYICE_DisableTampers(base, kDRYICE_TamperTestMode);
+@endcode
+
+Disable write access to secure key storage and DryIce pin configuration registers
+
+@code{.c}
+    DRYICE_DisableAccess(base, kDRYICE_PinConfigurationRegisters, kDRYICE_AllSecureKeys, kDRYICE_Write);
+@endcode
+
+*/
+

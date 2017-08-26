@@ -1,0 +1,27 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<metadata>
+  <components>
+    <component name="platform.drivers.spi.support" requires="devices.modules.DriverType_SPI"/>
+    <component name="platform.drivers.spi.support.ip" requires="devices.modules.D_IP_SPI_SYN_023"/>
+    <component name="platform.drivers.spi.support.ip" requires="devices.modules.D_IP_SPI_SYN_026"/>
+    <component name="platform.drivers.spi.support.ip" requires="devices.modules.D_IP_SPI16_FIFO_SYN_009"/>
+    <component name="platform.drivers.spi.support.ip" requires="devices.modules.D_IP_SPI16_SYN_010"/>
+    <component name="platform.drivers.spi.support.ip" requires="devices.modules.D_IP_SPI16_SYN_008"/>
+    <component name="platform.drivers.spi.support.ip" requires="devices.modules.D_IP_SPI_SYN_019"/>
+    <component description="SPI Driver" name="platform.drivers.spi" provides="platform.drivers" requires="platform.drivers.spi.support" type="driver" version="2.0.1">
+      <source path="./">
+        <files mask="*.meta"/>
+        <files mask="fsl_spi.c"/>
+        <files mask="fsl_spi.h"/>
+        <files mask="fsl_spi_dma.c" requires="platform.drivers.dma"/>
+        <files mask="fsl_spi_dma.h" requires="platform.drivers.dma"/>
+        <files mask="fsl_spi_freertos.c" requires="middleware.freertos"/>
+        <files mask="fsl_spi_freertos.h" requires="middleware.freertos"/>
+        <files mask="fsl_spi_ucosii.c" requires="middleware.ucosii"/>
+        <files mask="fsl_spi_ucosii.h" requires="middleware.ucosii"/>
+        <files mask="fsl_spi_ucosiii.c" requires="middleware.ucosiii"/>
+        <files mask="fsl_spi_ucosiii.h" requires="middleware.ucosiii"/>
+      </source>
+    </component>
+  </components>
+</metadata>

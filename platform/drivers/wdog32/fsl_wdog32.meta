@@ -1,0 +1,15 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<metadata>
+  <components>
+    <component name="platform.drivers.wdog32.support" requires="devices.modules.DriverType_WDOG devices.modules.DriverFeature_WDOG_WDOG32"/>
+    <component name="platform.drivers.wdog32.support.ip" requires="devices.modules.D_IP_WDG_SYN_016"/>
+    <component name="platform.drivers.wdog32.support.ip" requires="devices.modules.D_IP_WDG_SYN_017"/>
+    <component description="WDOG32 Driver" name="platform.drivers.wdog32" provides="platform.drivers" requires="platform.drivers.wdog32.support" type="driver" version="2.0.0">
+      <source path="./">
+        <files mask="*.meta"/>
+        <files mask="fsl_wdog32.c"/>
+        <files mask="fsl_wdog32.h"/>
+      </source>
+    </component>
+  </components>
+</metadata>

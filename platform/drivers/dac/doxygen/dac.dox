@@ -1,0 +1,104 @@
+/*!
+@defgroup dac DAC: Digital-to-Analog Converter Driver
+@details The KSDK provides a peripheral driver for the Digital-to-Analog Converter (DAC)
+         module of Kinetis devices.
+
+The DAC driver includes a basic DAC module (converter) and DAC buffer.
+
+The basic DAC module supports operations unique to the DAC converter in each DAC instance. The APIs in this part
+are used in the initialization phase, which is necessary for enabling the DAC module in the application. The APIs
+enable/disable the clock, enable/disable the module, and configure the converter. Call the initial APIs to
+prepare the DAC module for the application.
+
+The DAC buffer operates the DAC hardware buffer. The DAC module supports a hardware buffer to
+keep a group of DAC values to be converted. This feature supports updating the DAC output value automatically by
+triggering the buffer read pointer to move in the buffer. Use the APIs to configure the hardware buffer's
+trigger mode, watermark, work mode, and use size. Additionally, the APIs operate the DMA, interrupts, flags,
+the pointer (index of buffer), item values, and so on.
+
+The DAC buffer plays a major part when using the DAC module, as the most functional features are designed for the DAC
+hardware buffer.
+
+# Typical use case {#DACTypUC}
+
+## Working as a basic DAC without the hardware buffer feature. {#DACWithoutHBuf}
+
+~~~~~{.c}
+
+    // ...
+
+    // Configures the DAC.
+    DAC_GetDefaultConfig(&dacConfigStruct);
+    DAC_Init(DEMO_DAC_INSTANCE, &dacConfigStruct);
+    DAC_SetBufferReadPointer(DEMO_DAC_INSTANCE, 0U);
+
+    // ...
+
+    DAC_SetBufferValue(DEMO_DAC_INSTANCE, 0U, dacValue);
+
+~~~~~
+
+## Working with the hardware buffer. {#DACWithHBuf}
+
+~~~~~{.c}
+
+    // ...
+
+    EnableIRQ(DEMO_DAC_IRQ_ID);
+
+    // ...
+
+    // Configures the DAC.
+    DAC_GetDefaultConfig(&dacConfigStruct);
+    DAC_Init(DEMO_DAC_INSTANCE, &dacConfigStruct);
+
+    // Configures the DAC buffer.
+    DAC_GetDefaultBufferConfig(&dacBufferConfigStruct);
+    DAC_SetBufferConfig(DEMO_DAC_INSTANCE, &dacBufferConfigStruct);
+    DAC_SetBufferReadPointer(DEMO_DAC_INSTANCE, 0U); // Make sure the read pointer to the start.
+    for (index = 0U, dacValue = 0; index < DEMO_DAC_USED_BUFFER_SIZE; index++, dacValue += (0xFFFU / DEMO_DAC_USED_BUFFER_SIZE))
+    {
+        DAC_SetBufferValue(DEMO_DAC_INSTANCE, index, dacValue);
+    }
+    // Clears flags.
+#if defined(FSL_FEATURE_DAC_HAS_WATERMARK_DETECTION) && FSL_FEATURE_DAC_HAS_WATERMARK_DETECTION
+    g_DacBufferWatermarkInterruptFlag = false;
+#endif // FSL_FEATURE_DAC_HAS_WATERMARK_DETECTION
+    g_DacBufferReadPointerTopPositionInterruptFlag = false;
+    g_DacBufferReadPointerBottomPositionInterruptFlag = false;
+
+    // Enables interrupts.
+    mask = 0U;
+#if defined(FSL_FEATURE_DAC_HAS_WATERMARK_DETECTION) && FSL_FEATURE_DAC_HAS_WATERMARK_DETECTION
+    mask |= kDAC_BufferWatermarkInterruptEnable;
+#endif // FSL_FEATURE_DAC_HAS_WATERMARK_DETECTION
+    mask |= kDAC_BufferReadPointerTopInterruptEnable | kDAC_BufferReadPointerBottomInterruptEnable;
+    DAC_EnableBuffer(DEMO_DAC_INSTANCE, true);
+    DAC_EnableBufferInterrupts(DEMO_DAC_INSTANCE, mask);
+
+// ISR for the DAC interrupt.
+void DEMO_DAC_IRQ_HANDLER_FUNC(void)
+{
+    uint32_t flags = DAC_GetBufferStatusFlags(DEMO_DAC_INSTANCE);
+
+#if defined(FSL_FEATURE_DAC_HAS_WATERMARK_DETECTION) && FSL_FEATURE_DAC_HAS_WATERMARK_DETECTION
+    if (kDAC_BufferWatermarkFlag == (kDAC_BufferWatermarkFlag & flags))
+    {
+        g_DacBufferWatermarkInterruptFlag = true;
+    }
+#endif // FSL_FEATURE_DAC_HAS_WATERMARK_DETECTION
+    if (kDAC_BufferReadPointerTopPositionFlag == (kDAC_BufferReadPointerTopPositionFlag & flags))
+    {
+        g_DacBufferReadPointerTopPositionInterruptFlag = true;
+    }
+    if (kDAC_BufferReadPointerBottomPositionFlag == (kDAC_BufferReadPointerBottomPositionFlag & flags))
+    {
+        g_DacBufferReadPointerBottomPositionInterruptFlag = true;
+    }
+    DAC_ClearBufferStatusFlags(DEMO_DAC_INSTANCE, flags); /* Clear flags. */
+}
+
+~~~~~
+
+*/
+

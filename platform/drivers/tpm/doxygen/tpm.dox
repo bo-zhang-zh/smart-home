@@ -1,0 +1,131 @@
+/*!
+@defgroup tpm TPM: Timer PWM Module
+@details The KSDK provides a driver for the Timer PWM Module (TPM)
+         of Kinetis devices.
+
+The KSDK TPM driver supports the generation of PWM signals, input capture, and output compare modes.
+On some SoC's, the driver supports the generation of combined PWM signals, dual-edge capture, and quadrature
+decode modes. The driver also supports configuring each of the TPM fault inputs. The fault input is available only
+on some SoC's.
+
+## Initialization and deinitialization {#TPMInit}
+
+The function TPM_Init() initializes the TPM with specified configurations. The function TPM_GetDefaultConfig()
+gets the default configurations. On some SoC's, the initialization function issues a software reset to reset the
+TPM internal logic. The initialization function configures the TPM's behavior when it receives a trigger input and its operation
+in doze and debug modes.
+
+The function TPM_Deinit() disables the TPM counter and turns off the module clock.
+
+## PWM Operations {#TPMPwmOperation}
+
+The function TPM_SetupPwm() sets up TPM channels for the PWM output. The function can set up the PWM signal
+properties for multiple channels. Each channel has its own tpm_chnl_pwm_signal_param_t structure that is used
+to specify the output signals duty cycle and level-mode. However, the same PWM period and PWM mode is applied
+to all channels requesting a PWM output.
+The signal duty cycle is provided as a percentage of the PWM period. Its value should be between 0 and 100
+where 0=inactive signal (0% duty cycle) and 100=always active signal (100% duty cycle).
+When generating a combined PWM signal, the channel number passed refers to a channel pair number,
+for example 0 refers to channel 0 and 1, 1 refers to channels 2 and 3.
+
+The function TPM_UpdatePwmDutycycle() updates the PWM signal duty cycle
+of a particular TPM channel.
+
+The function TPM_UpdateChnlEdgeLevelSelect() updates the level select bits of a
+particular TPM channel. This can be used to disable the PWM output when making changes
+to the PWM signal.
+
+## Input capture operations {#TPMInpOperation}
+The function TPM_SetupInputCapture() sets up a TPM channel for input capture.
+The user can specify the capture edge.
+
+The function TPM_SetupDualEdgeCapture() can be used to measure the pulse width of
+a signal. This is available only for certain SoC's. A channel pair is used during
+the capture with the input signal coming through a channel that can be configured. The user
+can specify the capture edge for each channel and any filter value to be used when
+processing the input signal.
+
+## Output compare operations {#TPMCompOperation}
+The function TPM_SetupOutputCompare() sets up a TPM channel for output comparison.
+The user can specify the channel output on a successful comparison and a comparison
+value.
+
+## Quad decode  {#TPMQuadOperation}
+The function TPM_SetupQuadDecode() sets up TPM channels 0 and 1 for quad decode, which
+is available only for certain SoC's. The user can specify the quad decode mode, polarity,
+and filter properties for each input signal.
+
+## Fault operation  {#TPMFaultOperation}
+The function TPM_SetupFault() sets up the properties for each fault, which is available only for certain SoC's.
+The user can specify the fault polarity and whether to use a filter on a fault input. The overall fault filter value and
+fault control mode are set up during initialization.
+
+## Status {#TPMStatus}
+Provides functions to get and clear the TPM status.
+
+## Interrupt {#TPMInterrupt}
+Provides functions to enable/disable TPM interrupts and get current enabled interrupts.
+
+
+# Typical use case {#TPMCase}
+
+## PWM output {#TPMPWMOutput}
+Output the PWM signal on 2 TPM channels with different duty cycles. Periodically update the
+PWM signal duty cycle.
+~~~~~{.c}
+int main(void)
+{
+    bool brightnessUp = true; /* Indicates whether the LED is brighter or dimmer. */
+    tpm_config_t tpmInfo;
+    uint8_t updatedDutycycle = 0U;
+    tpm_chnl_pwm_signal_param_t tpmParam[2];
+
+    /* Configures the TPM parameters with frequency 24 kHZ. */
+    tpmParam[0].chnlNumber = (tpm_chnl_t)BOARD_FIRST_TPM_CHANNEL;
+    tpmParam[0].level = kTPM_LowTrue;
+    tpmParam[0].dutyCyclePercent = 0U;
+
+    tpmParam[1].chnlNumber = (tpm_chnl_t)BOARD_SECOND_TPM_CHANNEL;
+    tpmParam[1].level = kTPM_LowTrue;
+    tpmParam[1].dutyCyclePercent = 0U;
+
+    /* Board pin, clock, and debug console initialization. */
+    BOARD_InitHardware();
+
+    TPM_GetDefaultConfig(&tpmInfo);
+    /* Initializes the TPM module. */
+    TPM_Init(BOARD_TPM_BASEADDR, &tpmInfo);
+
+    TPM_SetupPwm(BOARD_TPM_BASEADDR, tpmParam, 2U, kTPM_EdgeAlignedPwm, 24000U, TPM_SOURCE_CLOCK);
+    TPM_StartTimer(BOARD_TPM_BASEADDR, kTPM_SystemClock);
+    while (1)
+    {
+        /* Delays to see the change of LED brightness. */
+        delay();
+
+        if (brightnessUp)
+        {
+            /* Increases a duty cycle until it reaches a limited value. */
+            if (++updatedDutycycle == 100U)
+            {
+                brightnessUp = false;
+            }
+        }
+        else
+        {
+            /* Decreases a duty cycle until it reaches a limited value. */
+            if (--updatedDutycycle == 0U)
+            {
+                brightnessUp = true;
+            }
+        }
+        /* Starts PWM mode with an updated duty cycle. */
+        TPM_UpdatePwmDutycycle(BOARD_TPM_BASEADDR, (tpm_chnl_t)BOARD_FIRST_TPM_CHANNEL, kTPM_EdgeAlignedPwm,
+                               updatedDutycycle);
+        TPM_UpdatePwmDutycycle(BOARD_TPM_BASEADDR, (tpm_chnl_t)BOARD_SECOND_TPM_CHANNEL, kTPM_EdgeAlignedPwm,
+                               updatedDutycycle);
+    }
+}
+~~~~~
+
+*/

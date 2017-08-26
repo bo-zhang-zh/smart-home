@@ -1,0 +1,6 @@
+/*!
+@page driver_log Driver Change Log
+
+@section adc12 ADC12
+  Current ADC12 driver version is 2.0.0
+*/

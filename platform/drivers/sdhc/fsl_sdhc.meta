@@ -1,0 +1,15 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<metadata>
+  <components>
+    <component name="platform.drivers.sdhc.support" requires="devices.modules.DriverType_SDHC"/>
+    <component name="platform.drivers.sdhc.support.ip" requires="devices.modules.D_IP_eSDHCV2_SYN_002"/>
+    <component name="platform.drivers.sdhc.support.ip" requires="devices.modules.esdhc_015"/>
+    <component description="SDHC Driver" name="platform.drivers.sdhc" provides="platform.drivers" requires="platform.drivers.sdhc.support" type="driver" version="2.1.1">
+      <source path="./">
+        <files mask="*.meta"/>
+        <files mask="fsl_sdhc.c"/>
+        <files mask="fsl_sdhc.h"/>
+      </source>
+    </component>
+  </components>
+</metadata>

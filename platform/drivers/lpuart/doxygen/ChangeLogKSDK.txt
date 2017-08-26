@@ -1,0 +1,19 @@
+/*!
+@page driver_log Driver Change Log
+
+@section lpuart LPUART
+  Current LPUART driver version is 2.2.1
+
+  - 2.1.0
+    - Update transactional APIs.
+
+  - 2.1.1
+    - Remove needless check of event flags and assert in LPUART_RTOS_Receive.
+    - Wait always for rx event flag in LPUART_RTOS_Receive.
+
+  - 2.2.0
+    - Add seven data bits and msb support
+
+  - 2.2.1
+    - Add seprarte rx,tx irq number support
+*/

@@ -1,0 +1,37 @@
+/*!
+@defgroup vref VREF: Voltage Reference Driver
+@details The KSDK provides a peripheral driver for the Crossbar Voltage Reference (VREF) block of Kinetis devices.
+
+
+The Voltage Reference(VREF) is intended to supply an accurate 1.2 V voltage output that can
+be trimmed in 0.5 mV steps. VREF can be used in applications to provide a reference
+voltage to external devices and to internal analog peripherals, such as
+the ADC, DAC, or CMP. The voltage reference has operating modes that provide
+different levels of supply rejection and power consumption.
+
+## VREF functional Operation {#VrefFunctionalOperation}
+
+ To configure the VREF driver, configure vref_config_t structure in one of two ways.
+     1. Use the VREF_GetDefaultConfig() function.
+     2. Sets the parameter in vref_config_t structure.
+
+To initialize the VREF driver, call the VREF_Init() function and pass a pointer to
+ the vref_config_t structure.
+
+To de-initialize the VREF driver, call the VREF_Deinit() function.
+
+# Typical use case and example {#VrefExample}
+
+This example shows how to generate a reference voltage by using the VREF module.
+
+~~~~~{.c}
+        vref_config_t vrefUserConfig;
+        VREF_GetDefaultConfig(&vrefUserConfig); /* Gets a default configuration. */
+        VREF_Init(VREF, &vrefUserConfig);       /* Initializes and configures the VREF module */
+
+        /* Do something */
+
+        VREF_Deinit(VREF); /* De-initializes the VREF module */
+~~~~~
+
+*/

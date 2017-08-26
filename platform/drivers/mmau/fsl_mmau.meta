@@ -1,0 +1,14 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<metadata>
+  <components>
+    <component name="platform.drivers.mmau.support" requires="devices.modules.DriverType_MMAU"/>
+    <component name="platform.drivers.mmau.support.ip" requires="devices.modules.P_IP_RPP_CM0P_PHOTON256_SYN_003"/>
+    <component description="MMAU Driver" name="platform.drivers.mmau" provides="platform.drivers" requires="platform.drivers.mmau.support" type="driver" version="2.0.0">
+      <source path="./">
+        <files mask="*.meta"/>
+        <files mask="fsl_mmau.c"/>
+        <files mask="fsl_mmau.h"/>
+      </source>
+    </component>
+  </components>
+</metadata>

@@ -1,0 +1,328 @@
+/*!
+@defgroup uart UART: Universal Asynchronous Receiver/Transmitter Driver
+*/
+
+/*!
+@defgroup uart_driver UART Driver
+@ingroup uart
+@details The KSDK provides a peripheral driver for the Universal Asynchronous Receiver/Transmitter (UART)
+         module of Kinetis devices.
+
+The UART driver includes two parts: functional APIs and transactional APIs.
+
+Functional APIs are used for UART initialization/configuration/operation for
+optimization/customization purpose. Using the functional API requires the
+knowledge of the UART peripheral and know how to organize functional APIs to
+meet the application requirements. All functional API use the peripheral base
+address as the first parameter. UART functional operation groups provide the
+functional APIs set.
+
+Transactional APIs can be used to enable the peripheral quickly and in the
+application if the code size and performance of transactional APIs can satisfy the
+requirements. If the code size and performance are critical requirements,
+see the transactional API implementation and write custom code. All
+transactional APIs use the uart_handle_t as the first parameter.
+Initialize the handle by calling the UART_CreateHandle() API.
+
+Transactional APIs support asynchronous transfer, which means that the functions
+UART_SendNonBlocking() and UART_ReceiveNonBlocking() set up an interrupt for data
+transfer. When the transfer completes, the upper layer is notified through a callback
+function with the kStatus_UART_TxIdle and kStatus_UART_RxIdle.
+
+Transactional receive APIs support the ring buffer. Prepare the
+memory for the ring buffer and pass in the start address and size while calling the
+UART_CreateHandle(). If passing  NULL, the ring buffer feature is disabled.
+When the ring buffer is enabled, the received data is saved to the ring buffer in the background.
+The UART_ReceiveNonBlocking() function first gets data from the ring buffer. If
+the ring buffer does not have enough data, the function first returns the data in the
+ring buffer and then saves the received data to user memory. When all data is received,
+the upper layer is informed through a callback with the kStatus_UART_RxIdle.
+
+If the receive ring buffer is full, the upper layer is informed through a callback with the
+kStatus_UART_RxRingBufferOverrun. In the callback function, the upper layer reads
+data out from the ring buffer. If not, the oldest data is overwritten by the new data.
+
+The ring buffer size is specified when creating the handle. Note that
+one byte is reserved for the ring buffer maintenance. When
+creating handle using the following code:
+
+~~~~~{.c}
+    UART_CreateHandle(&handle, UART0, &ringBuffer, 32);
+~~~~~
+
+In this example, the buffer size is 32, but only 31 bytes are used for
+saving data.
+
+# Typical use case {#UARTCase}
+
+## UART Send/receive using a polling method {#UARTCasePolling}
+
+~~~~~{.c}
+    uint8_t ch;
+    UART_GetDefaultConfig(&user_config);
+    user_config.baudRate_Bps = 115200U;
+    user_config.enableTx = true;
+    user_config.enableRx = true;
+
+    UART_Init(UART1,&user_config,120000000U);
+
+    while(1)
+    {
+        UART_TransferReceiveBlocking(UART1, &ch, 1);
+        UART_TransferSendBlocking(UART1, &ch, 1);
+    }
+~~~~~
+
+## UART Send/receive using an interrupt method {#UARTCaseInterrupt}
+
+~~~~~{.c}
+    uart_handle_t g_uartHandle;
+    uart_config_t user_config;
+    uart_transfer_t sendXfer;
+    uart_transfer_t receiveXfer;
+    volatile bool txFinished;
+    volatile bool rxFinished;
+    uint8_t sendData[] = ['H', 'e', 'l', 'l', 'o'];
+    uint8_t receiveData[32];
+
+    void UART_UserCallback(uart_handle_t *handle, status_t status, void *userData)
+    {
+        userData = userData;
+
+        if (kStatus_UART_TxIdle == status)
+        {
+            txFinished = true;
+        }
+
+        if (kStatus_UART_RxIdle == status)
+        {
+            rxFinished = true;
+        }
+    }
+
+    void main(void)
+    {
+        //...
+
+        UART_GetDefaultConfig(&user_config);
+        user_config.baudRate_Bps = 115200U;
+        user_config.enableTx = true;
+        user_config.enableRx = true;
+
+        UART_Init(UART1, &user_config, 120000000U);
+        UART_CreateHandle(&g_uartHandle, UART1, NULL, 0);
+        UART_SetTransferCallback(&g_uartHandle, UART_UserCallback, NULL);
+
+        // Prepare to send.
+        sendXfer.data = sendData
+        sendXfer.dataSize = sizeof(sendData)/sizeof(sendData[0]);
+        txFinished = false;
+
+        // Send out.
+        UART_SendNonBlocking(&g_uartHandle, &sendXfer);
+
+        // Wait send finished.
+        while (!txFinished)
+        {
+        }
+
+        // Prepare to receive.
+        receiveXfer.data = receiveData;
+        receiveXfer.dataSize = sizeof(receiveData)/sizeof(receiveData[0]);
+        rxFinished = false;
+
+        // Receive.
+        UART_ReceiveNonBlocking(&g_uartHandle, &receiveXfer, NULL);
+
+        // Wait receive finished.
+        while (!rxFinished)
+        {
+        }
+
+        // ...
+    }
+~~~~~
+
+## UART Receive using the ringbuffer feature {#UARTCaseRing}
+
+~~~~~{.c}
+    #define RING_BUFFER_SIZE 64
+    #define RX_DATA_SIZE     32
+
+    uart_handle_t g_uartHandle;
+    uart_config_t user_config;
+    uart_transfer_t sendXfer;
+    uart_transfer_t receiveXfer;
+    volatile bool txFinished;
+    volatile bool rxFinished;
+    uint8_t receiveData[RX_DATA_SIZE];
+    uint8_t ringBuffer[RING_BUFFER_SIZE];
+
+    void UART_UserCallback(uart_handle_t *handle, status_t status, void *userData)
+    {
+        userData = userData;
+
+        if (kStatus_UART_RxIdle == status)
+        {
+            rxFinished = true;
+        }
+    }
+
+    void main(void)
+    {
+        size_t bytesRead;
+        //...
+
+        UART_GetDefaultConfig(&user_config);
+        user_config.baudRate_Bps = 115200U;
+        user_config.enableTx = true;
+        user_config.enableRx = true;
+
+        UART_Init(UART1, &user_config, 120000000U);
+        UART_CreateHandle(&g_uartHandle, UART1, &ringBuffer, RING_BUFFER_SIZE);
+        UART_SetTransferCallback(&g_uartHandle, UART_UserCallback, NULL);
+
+        // Now the RX is working in background, receive in to ring buffer.
+
+        // Prepare to receive.
+        receiveXfer.data = receiveData;
+        receiveXfer.dataSize = RX_DATA_SIZE;
+        rxFinished = false;
+
+        // Receive.
+        UART_ReceiveNonBlocking(&g_uartHandle, &receiveXfer, &bytesRead);
+
+        if (bytesRead = RX_DATA_SIZE) /* Have read enough data. */
+        {
+            ;
+        }
+        else
+        {
+            if (bytesRead) /* Received some data, process first. */
+            {
+                ;
+            }
+
+            // Wait receive finished.
+            while (!rxFinished)
+            {
+            }
+        }
+
+        // ...
+    }
+~~~~~
+
+## UART Send/Receive using the DMA method {#UARTCaseDma}
+
+~~~~~{.c}
+    uart_handle_t g_uartHandle;
+    dma_handle_t g_uartTxDmaHandle;
+    dma_handle_t g_uartRxDmaHandle;
+    uart_config_t user_config;
+    uart_transfer_t sendXfer;
+    uart_transfer_t receiveXfer;
+    volatile bool txFinished;
+    volatile bool rxFinished;
+    uint8_t sendData[] = ['H', 'e', 'l', 'l', 'o'];
+    uint8_t receiveData[32];
+
+    void UART_UserCallback(uart_handle_t *handle, status_t status, void *userData)
+    {
+        userData = userData;
+
+        if (kStatus_UART_TxIdle == status)
+        {
+            txFinished = true;
+        }
+
+        if (kStatus_UART_RxIdle == status)
+        {
+            rxFinished = true;
+        }
+    }
+
+    void main(void)
+    {
+        //...
+
+        UART_GetDefaultConfig(&user_config);
+        user_config.baudRate_Bps = 115200U;
+        user_config.enableTx = true;
+        user_config.enableRx = true;
+
+        UART_Init(UART1, &user_config, 120000000U);
+
+        // Set up the DMA
+        DMAMUX_Init(DMAMUX0);
+        DMAMUX_SetSource(DMAMUX0, UART_TX_DMA_CHANNEL, UART_TX_DMA_REQUEST);
+        DMAMUX_EnableChannel(DMAMUX0, UART_TX_DMA_CHANNEL);
+        DMAMUX_SetSource(DMAMUX0, UART_RX_DMA_CHANNEL, UART_RX_DMA_REQUEST);
+        DMAMUX_EnableChannel(DMAMUX0, UART_RX_DMA_CHANNEL);
+
+        DMA_Init(DMA0);
+
+        /* Create DMA handle. */
+        DMA_CreateHandle(&g_uartTxDmaHandle, DMA0, UART_TX_DMA_CHANNEL);
+        DMA_CreateHandle(&g_uartRxDmaHandle, DMA0, UART_RX_DMA_CHANNEL);
+
+        UART_CreateHandleDMA(&g_uartHandle, UART1, &g_uartTxDmaHandle, &g_uartRxDmaHandle);
+        UART_SetTransferCallbackDMA(&g_uartDmaHandle, UART_UserCallback, NULL);
+
+        // Prepare to send.
+        sendXfer.data = sendData
+        sendXfer.dataSize = sizeof(sendData)/sizeof(sendData[0]);
+        txFinished = false;
+
+        // Send out.
+        UART_SendDMA(&g_uartHandle, &sendXfer);
+
+        // Wait send finished.
+        while (!txFinished)
+        {
+        }
+
+        // Prepare to receive.
+        receiveXfer.data = receiveData;
+        receiveXfer.dataSize = sizeof(receiveData)/sizeof(receiveData[0]);
+        rxFinished = false;
+
+        // Receive.
+        UART_ReceiveDMA(&g_uartHandle, &receiveXfer, NULL);
+
+        // Wait receive finished.
+        while (!rxFinished)
+        {
+        }
+
+        // ...
+    }
+~~~~~
+
+*/
+
+/*!
+@defgroup uart_dma_driver UART DMA Driver
+@ingroup uart
+*/
+
+/*!
+@defgroup uart_edma_driver UART eDMA Driver
+@ingroup uart
+*/
+
+/*!
+@defgroup uart_freertos_driver UART FreeRTOS Driver
+@ingroup uart
+*/
+
+/*!
+@defgroup uart_ucosii_driver UART µCOS/II Driver
+@ingroup uart
+*/
+
+/*!
+@defgroup uart_ucosiii_driver UART µCOS/III Driver
+@ingroup uart
+*/
+

@@ -1,0 +1,82 @@
+/*!
+@defgroup afe AFE: Analog Front End Driver
+@details The KSDK provides driver for the Analog Front End (AFE) module of Kinetis devices.
+
+The Analog Front End or AFE is an integrated module that is comprised of ΣΔADCs,
+PGA, filtering and phase compensation blocks. The AFE is responsible for measuring the
+phase voltage, phase current and neutral current.
+
+# Function groups {#AFEFuncGroups}
+## Channel configuration structures {#AFEChnStruct}
+The driver uses instances of the channel configuration structures to configuration and initialization
+AFE channel. This structure holds the settings of the AFE measurement channel.
+The settings include AFE hardware/software triggering, AFE continuous/Single conversion mode, AFE channel mode, AFE channel analog gain,
+AFE channel oversampling ration. The AFE channel mode selects whether the bypass mode is enabled or disabled and the external clock selection.
+
+## User configuration structures {#AFEUserStruct}
+The AFE driver uses instances of the user configuration structure afe_config_t for the AFE driver configuration.
+This structure holds the configuration which is common for all AFE channels.
+The settings include AFE low power mode, AFE result format, AFE clock divider mode, AFE clock source mode, and AFE start up delay of modulators.
+
+## AFE Initialization {#AFEInit}
+
+To initialize the AFE driver, for a typical use case, call the AFE_GetDefaultConfig() function
+which populates the structure. Then, call the AFE_Init() function and pass the base address of the AFE
+peripheral and a pointer to the user configuration structure.
+
+To configure the AFE channel, for a typical use case call the AFE_GetDefaultChnConfig() function
+which populates the structure. Then, call the AFE_SetChnConfig() function and pass the base address of the AFE
+peripheral and a pointer to the channel configuration structure.
+
+## AFE Conversion {#AFEConversion}
+
+The driver contains functions for software triggering, a channel delay after trigger setting, a result (raw or converted to right justified), reading
+and waiting functions.
+
+If the software triggering is enabled (hwTriggerEnable parameter in afe_chn_config_t is a false value), call the AFE_SoftTriggerConv() function
+to start conversion.
+
+# Typical use case {#AFETpyUC}
+
+## AFE Initialization {#AFEInit}
+
+~~~~~{.c}
+    /* Get AFE config default */
+    AFE_GetDefaultConfig(&afeExampleStruct);
+    afeExampleStruct.startupCount = 80U; /* startupCnt = (Clk_freq/Clk_div)*20e-6 */
+
+    /* Get channel config default */
+    AFE_GetDefaultChannelConfig(&afeChnExampleStruct);
+    /* Init AFE module */
+    AFE_Init(AFE, &afeExampleStruct);
+    /* AFE_Init AFE channel 0 */
+    AFE_SetChannelConfig(AFE, CHANNEL_INDEX, &afeChnExampleStruct);
+    /* Disable interrupt */
+    AFE_DisableChannelInterrupts(AFE, kAFE_Channel0InterruptEnable);
+    /* Disable DMA */
+    AFE_EnableChannelDMA(AFE, (uint32_t)kAFE_Channel0DMAEnable, false);
+~~~~~
+
+## SAFE Conversion {#AFEConversion}
+~~~~~{.c}
+    /* Software trigger conversion */
+    while (1)
+    {
+        /* Wait next triger from user */
+        PRINTF("Press any key to trigger AFE conversion\r\n");
+        GETCHAR();
+        /* Software trigger conversion */
+        AFE_DoSoftwareTriggerChannel(AFE, kAFE_Channel0Trigger);
+        /* Wait until conversion complete */
+        while ((kAFE_Channel0ConversionCompleteFlag & AFE_GetChannelStatusFlags(AFE)) == 0)
+        {
+        }
+        /* Read result conversion */
+        result0 = (int32_t)AFE_GetChannelConversionValue(AFE, CHANNEL_INDEX);
+        /* Print result */
+        PRINTF("result0  = %d \r\n", result0);
+    }
+~~~~~
+
+*/
+

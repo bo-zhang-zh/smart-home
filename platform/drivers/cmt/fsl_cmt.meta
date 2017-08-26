@@ -1,0 +1,14 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<metadata>
+  <components>
+    <component name="platform.drivers.cmt.support" requires="devices.modules.DriverType_CMT"/>
+    <component name="platform.drivers.cmt.support.ip" requires="devices.modules.D_IP_CMT_SYN_009"/>
+    <component description="CMT Driver" name="platform.drivers.cmt" provides="platform.drivers" requires="platform.drivers.cmt.support" type="driver" version="2.0.1">
+      <source path="./">
+        <files mask="*.meta"/>
+        <files mask="fsl_cmt.c"/>
+        <files mask="fsl_cmt.h"/>
+      </source>
+    </component>
+  </components>
+</metadata>

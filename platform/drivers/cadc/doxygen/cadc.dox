@@ -1,0 +1,107 @@
+/*!
+@defgroup cadc CADC: 12-bit Cyclic Analog-to-Digital Converter Driver
+@details The SDK provides Peripheral driver for the 12-bit Cyclic Analog-to-Digital Converter (CADC)
+         module of Kinetis devices.
+
+The analog-to-digital (ADC) converter function consists of two separate analog-to-digital converters, each with eight analog inputs and its own sample and hold circuit. A common digital control module configures and controls the functioning of the converters.
+
+To match the hardware feature, the CADC driver is designed with three parts: APIs for configuring common digital control module, APIs for configuring each converter and APIs for operating sample slots.
+
+The common digital control configuration is set when initializing the CADC module in application, as it should be done firstly before any other operation, and decide how the two converters work together. The converter configure APIs would set each converter's attributes and operate them. Finally, the sample slot API would configure the sample slot with input channel, gather them to be conversion sequence. Once the trigger (software trigger or external hardware trigger), the sequence is started and the conversion are executed.
+
+# Function groups {#CADCFunGrps}
+
+## Initialization and deinitialization{#CADCInit}
+
+This function group initializes/de-initializes the CADC. The initialization should be done firstly before any operation to the CADC module in application. It enables the clock, set the configuration for the common digital control. Also an API to fill the configuration with an available default setting is also provided.
+
+## Each converter {#CADCConv}
+
+This function group configures each of the two converter in CADC module.
+
+## Each sample {#CADCSample}
+
+This function group is for the operations to sample slot.
+
+# Typical use case {#CADCTpyUC}
+
+## Triggered parallel {#CADCTrgPal}
+
+~~~~~{.c}
+
+    cadc_config_t cadcConfigStruct;
+    cadc_converter_config_t cadcConverterConfigStruct;
+    cadc_sample_config_t cadcSampleConfigStruct;
+    uint16_t sampleMask;
+
+    //...
+
+    // Initialization for CADC.
+    CADC_GetDefaultConfig(&cadcConfigStruct);
+    CADC_Init(ADC, &cadcConfigStruct);
+
+    // Configure each converter.
+    CADC_GetDefaultConverterConfig(&cadcConverterConfigStruct);
+    CADC_SetConverterConfig(ADC, kCADC_ConverterA | kCADC_ConverterB, &cadcConverterConfigStruct);
+    // Enable the power for each converter.
+    CADC_EnableConverterPower(ADC, kCADC_ConverterA | kCADC_ConverterB, true);
+    while ( (kCADC_ConverterAPowerDownFlag | kCADC_ConverterBPowerDownFlag)
+            == ((kCADC_ConverterAPowerDownFlag | kCADC_ConverterBPowerDownFlag) & CADC_GetStatusFlags(ADC))  )
+    {}
+    // Open the clock to each converter.
+    CADC_EnableConverter(ADC, kCADC_ConverterA | kCADC_ConverterB, true);
+
+    // Configure the samples.
+    cadcSampleConfigStruct.channelGain = kCADC_ChannelGainx1;
+    cadcSampleConfigStruct.zeroCrossingMode = kCADC_ZeroCorssingDisabled;
+    cadcSampleConfigStruct.highLimitValue = 0xFFFFU;
+    cadcSampleConfigStruct.lowLimitValue = 0x0U;
+    cadcSampleConfigStruct.offsetValue = 0x0U;
+    cadcSampleConfigStruct.enableWaitSync = false;
+
+    // For converter A.
+    cadcSampleConfigStruct.channelNumber = DEMO_CADC_CHANNEL1_NUMBER;
+    cadcSampleConfigStruct.enableDifferentialPair = DEMO_CADC_CHANNEL1_ENABLE_DIFF;
+    CADC_SetSampleConfig(ADC, 0U, &cadcSampleConfigStruct);
+    cadcSampleConfigStruct.channelNumber = DEMO_CADC_CHANNEL2_NUMBER;
+    cadcSampleConfigStruct.enableDifferentialPair = DEMO_CADC_CHANNEL2_ENABLE_DIFF;
+    CADC_SetSampleConfig(ADC, 1U, &cadcSampleConfigStruct);
+
+    // For converter B.
+    cadcSampleConfigStruct.channelNumber = DEMO_CADC_CHANNEL3_NUMBER;
+    cadcSampleConfigStruct.enableDifferentialPair = DEMO_CADC_CHANNEL3_ENABLE_DIFF;
+    CADC_SetSampleConfig(ADC, 8U, &cadcSampleConfigStruct);
+    cadcSampleConfigStruct.channelNumber = DEMO_CADC_CHANNEL4_NUMBER;
+    cadcSampleConfigStruct.enableDifferentialPair = DEMO_CADC_CHANNEL4_ENABLE_DIFF;
+    CADC_SetSampleConfig(ADC, 9U, &cadcSampleConfigStruct);
+
+    // Enable the sample slot.
+    sampleMask = CADC_SAMPLE_MASK(0U) // For Converter A.
+               | CADC_SAMPLE_MASK(1U) // For Converter A.
+               | CADC_SAMPLE_MASK(8U) // For Converter B.
+               | CADC_SAMPLE_MASK(9U);// For Converter B.
+    CADC_EnableSample(ADC, sampleMask, true);
+    CADC_EnableSample(ADC, (uint16_t)(~sampleMask), false);// Disable other sample slot.
+
+    // Trigger the converter.
+    // Trigger converter A would execute both converter's conversion when in
+    // "kCADC_DualConverterWorkAsTriggeredParallel" work mode.
+    CADC_DoSoftwareTriggerConverter(ADC, kCADC_ConverterA);
+
+
+    // Wait the conversion to be done.
+    while (kCADC_ConverterAEndOfScanFlag != (kCADC_ConverterAEndOfScanFlag & CADC_GetStatusFlags(ADC)))
+    {}
+
+    if (sampleMask == (sampleMask & CADC_GetSampleReadyStatusFlags(ADC)) )
+    {
+        PRINTF("CADC Value1: %d\r\n", (int16_t)CADC_GetSampleResultValue(ADC, 0U));
+        PRINTF("CADC Value2: %d\r\n", (int16_t)CADC_GetSampleResultValue(ADC, 1U));
+        PRINTF("CADC Value3: %d\r\n", (int16_t)CADC_GetSampleResultValue(ADC, 8U));
+        PRINTF("CADC Value4: %d\r\n", (int16_t)CADC_GetSampleResultValue(ADC, 9U));
+    }
+    CADC_ClearStatusFlags(ADC, kCADC_ConverterAEndOfScanFlag);
+
+~~~~~
+
+*/

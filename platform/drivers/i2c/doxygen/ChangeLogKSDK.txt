@@ -1,0 +1,15 @@
+/*!
+@page driver_log Driver Change Log
+
+@section i2c I2C
+  Current I2C driver version is 2.0.1
+
+  - 2.0.1
+    - New Features:
+      - Add double buffer enable configuration for Socs which have the DFEN bit in S2 register
+      - Add flexible transmit/receive buffer size support in I2C_SlaveHandleIRQ
+      - Add start flag clear, address match and release bus operation in I2C_SlaveWrite/ReadBlocking API
+    - Bug Fix:
+      - change the kI2C_SlaveRepeatedStartEvent to kI2C_SlaveStartEvent
+
+*/

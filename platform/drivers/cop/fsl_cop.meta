@@ -1,0 +1,19 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<metadata>
+  <components>
+    <component name="platform.drivers.cop.support" requires="devices.modules.DriverType_SIM devices.modules.DriverFeature_SIM_COP"/>
+    <component name="platform.drivers.cop.support.ip" requires="devices.modules.D_SSL_LSIM_SYN_017"/>
+    <component name="platform.drivers.cop.support.ip" requires="devices.modules.D_SSL_LSIM_SYN_011"/>
+    <component name="platform.drivers.cop.support.ip" requires="devices.modules.D_SSL_LSIM_SYN_018"/>
+    <component name="platform.drivers.cop.support.ip" requires="devices.modules.D_SSL_LSIM_SYN_023"/>
+    <component name="platform.drivers.cop.support.ip" requires="devices.modules.D_SSL_LSIM_SYN_024"/>
+    <component name="platform.drivers.cop.support.ip" requires="devices.modules.D_SSL_LSIM_SYN_026"/>
+    <component description="COP Driver" name="platform.drivers.cop" provides="platform.drivers" requires="platform.drivers.cop.support" type="driver" version="2.0.0">
+      <source path="./">
+        <files mask="*.meta"/>
+        <files mask="fsl_cop.c"/>
+        <files mask="fsl_cop.h"/>
+      </source>
+    </component>
+  </components>
+</metadata>

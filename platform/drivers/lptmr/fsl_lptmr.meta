@@ -1,0 +1,17 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<metadata>
+  <components>
+    <component name="platform.drivers.lptmr.support" requires="devices.modules.DriverType_LPTMR"/>
+    <component name="platform.drivers.lptmr.support.ip" requires="devices.modules.D_IP_LPTIMER_SYN_011"/>
+    <component name="platform.drivers.lptmr.support.ip" requires="devices.modules.D_IP_LPTIMER_SYN_010"/>
+    <component name="platform.drivers.lptmr.support.ip" requires="devices.modules.D_IP_LPTIMER_SYN_012"/>
+    <component name="platform.drivers.lptmr.support.ip" requires="devices.modules.D_IP_LPTIMER_SYN_013"/>
+    <component description="LPTMR Driver" name="platform.drivers.lptmr" provides="platform.drivers" requires="platform.drivers.lptmr.support" type="driver" version="2.0.0">
+      <source path="./">
+        <files mask="*.meta"/>
+        <files mask="fsl_lptmr.c"/>
+        <files mask="fsl_lptmr.h"/>
+      </source>
+    </component>
+  </components>
+</metadata>

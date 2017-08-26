@@ -1,0 +1,16 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<metadata>
+  <components>
+    <component name="platform.drivers.dryice.support" requires="devices.modules.DriverType_DRY"/>
+    <component name="platform.drivers.dryice.support.ip" requires="devices.modules.D_IP_DRYICE_NN_C90LP_011"/>
+    <component name="platform.drivers.dryice.support.ip" requires="devices.modules.D_IP_DRYICE_NN_C90LP_012"/>
+    <component name="platform.drivers.dryice.support.ip" requires="devices.modules.D_IP_DRYICE_NN_C90LP_013"/>
+    <component description="DRYICE Driver" name="platform.drivers.dryice" provides="platform.drivers" requires="nda platform.drivers.dryice.support dryice_for_Kinetis_SDK_v2.0_readme" type="driver" version="2.0.0">
+      <source path="./">
+        <files mask="fsl_dryice.meta"/>
+        <files mask="fsl_dryice.c"/>
+        <files mask="fsl_dryice.h"/>
+      </source>
+    </component>
+  </components>
+</metadata>

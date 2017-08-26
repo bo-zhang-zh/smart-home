@@ -1,0 +1,16 @@
+/*!
+@page driver_log Driver Change Log
+
+@section port PORT
+  Current PORT driver version is 2.0.2
+  
+  - 2.0.1:
+    - Miscellaneous Changes:
+        - Adds "const" in function parameter
+        - Updates some enumeration variables' names
+        
+  - 2.0.2:
+    - Miscellaneous Changes:
+        - Adds feature guard macros in the driver    
+
+*/
